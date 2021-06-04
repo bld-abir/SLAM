@@ -18,4 +18,4 @@ On a les fichiers *ScanMatchingExample_ICP.m* et *ScanMatchingExample_NDT.m* qui
 2. La **rotation** des données odométrique autour de 'Z' bi un angle 'alphao(6)' pour qu'elles correspondent l'la tranformation appliquée à la carte issue des scans.
 3. Génére deux programmes pour l'icp :
    * l'un qui se contente de cartographier à partir de données odométriques, et de donées du télémetre laser, on pourra lui rajouter une optimistion grâce à l'échantionnge bi downsample. 
-   * L'autre, fait l'optimisation en piquant à matchscans, ses fonctions et ses commandes. Ce qui revient à étudier matchscans en détails.
+   * L'autre, fait l'optimisation en piquant à matchscans ses fonctions et ses commandes, et on concerve les données du télémètre laser même pour les poses. Ce qui revient à étudier matchscans en détails.
