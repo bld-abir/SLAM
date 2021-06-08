@@ -40,10 +40,6 @@ map = robotics.OccupancyGrid(15, 15, 5);
 map.GridLocationInWorld = [-7.5 -7.5]%origine of map
 
 numScans = numel(laserMsg);
-% initialPose = [13.9011 8.6925 0];
-% poseList = zeros(numScans,3);
-% poseList(1,:) = initialPose;
-% transform = initialPose;
 %%
 for idx = 6:numScans
     % Process the data in pairs.
@@ -54,11 +50,6 @@ for idx = 6:numScans
 
     [Rmat, Tvec] = icp2(referenceScan.Cartesian, currentScan.Cartesian,5,10,4);
     alpha = asin(Rmat(2,1));
-%     alpha = atan2(Rmat(2,1),Rmat(1,1));
-%     transform=[Tvec(1),Tvec(2), alpha];
-
-%     absolutePose = exampleHelperComposeTransform(poseList(idx-5,:), transform);
-%     poseList(idx,:) = absolutePose;
 %        
     odomList(idx,1)=odomMsg{idx}.Pose.Pose.Position.X;
     odomList(idx,2)=odomMsg{idx}.Pose.Pose.Position.Y;
