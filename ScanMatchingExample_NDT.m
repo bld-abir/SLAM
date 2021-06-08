@@ -31,21 +31,6 @@ filePath = fullfile(fileparts(mfilename('fullpath')), 'data', 'scanMatchingData.
 load(filePath);
 %load('/home/blad/Bureau/MATLAB/R2018a/toolbox/robotics/robotexamples/robotalgs/data/scanMatchingData.mat')
 
-% % % % % odomList = zeros(20,2);
-% % % % % 
-% % % % % for i = 1:20
-% % % % %     odom = odomMsg(i);
-% % % % %     odomList(i,:) = [odomMsg{1, 1}.Pose.Pose.Position.X odomMsg{1, 1}.Pose.Pose.Position.Y];
-% % % % %     
-% % % % %     if i < 10
-% % % % %         odomMsg{1, 1}.Twist.Twist.Linear.X, odomMsg{1, 1}.Twist.Twist.Linear.Y, odomMsg{1, 1}.Twist.Twist.Linear.Z
-% % % % %     else
-% % % % %         odomMsg{1, 1}.Twist.Twist.Linear.X, odomMsg{1, 1}.Twist.Twist.Linear.Y, -odomMsg{1, 1}.Twist.Twist.Linear.Z
-% % % % %     end
-% % % % %     pause(1);
-% % % % % end
-% % % % % 
-% % % % % plot(odomList(:,1),odomList(:,2))
 %
 % The laser scan data was collected by a mobile robot in an indoor environment. 
 % An approximate floorplan of the area, along with the robot's path
@@ -81,10 +66,7 @@ transform = matchScans(currentScan, referenceScan);
 % transform the current scan by the calculated pose using |<docid:robotics_ref.bvlvwih-1 transformScan>|. 
 % This transformed laser scan can be used to visualize the result.
 transScan = transformScan(currentScan, transform);
-% [Rmat, Tvec] = icp2(referenceScan.Cartesian, currentScan.Cartesian);
-% alpha = asin(Rmat(2,1));
-% transform=[Tvec(1),Tvec(2), alpha]
-% transScan = transformScan(currentScan, transform);
+
 %% 
 % Display the reference scan alongside the transformed current laser scan.
 % If the scan matching was successful, the two scans should be
