@@ -3,6 +3,8 @@
 
 ## 3D Scan Matching 
 On a les fichiers *pointCloudIcp.m* et *pointCloudNdt.m* qui font du **scan matching** à base de ICP et de NDT réspéctivement dans le but de recréer l'environnement de '*leavingRoom*'. On peut comparer le rendu des algo **ICP (point to point & point to plan)** et **NDT** à parir de ces deux là. 
+On s'est basé sur : [Matlab 3-D Point Cloud Registration and Stitching](https://fr.mathworks.com/help/vision/ug/3-d-point-cloud-registration-and-stitching.html) et de [Matlab Example pcregisterndt](https://fr.mathworks.com/help/vision/ref/pcregisterndt.html)
+
 
 ### À faire 
 1. Étudier les fonctions *pcregistericp* et *pcregisterndt*. Je crois qu'en plus de l'optimisation, il y a un proscess qui assure la **roblustesse** des résultats, on pourra décrire tout ça mɛa la **M-estimation** dans les méthodes **IRLS**.
