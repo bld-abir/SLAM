@@ -1,0 +1,1147 @@
+\documentclass{report}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\usepackage{graphicx} % Pour manipuler des images
+\usepackage{lmodern} % Pour changer le pack de police.
+\usepackage{fancyhdr} % Pr les entetes & pieds de pages
+
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+
+\usepackage{indentfirst}
+\usepackage{verbatim}  % Afin d'incerer du code via la cmd 
+%\begin{verbatimtab}[10]
+%	votre code
+%\end{verbatimtab}
+\usepackage{wasysym} % Pour le trait acadian
+\usepackage{textcomp} % Pour un autre trait acadian
+\usepackage{moreverb}  % Afin de choisir le nmbre d'espace dand une tabulation => ex î
+\usepackage{listings}  % Afin de mettre en forme le text, on met ce qui suit avnt la cmd begin :
+%\lstset{ % voir d'abord : https://en.wikibooks.org/wiki/LaTeX/Packages/Listings
+%https://openclassrooms.com/fr/courses/1617396-redigez-des-documents-de-qualite-avec-latex/1619118-les-notes#/id/r-1623814
+%	language=nom_du_langage,        % choix du langage
+%	basicstyle=\footnotesize,       % taille de la police du code
+%	numbers=left,                   % placer le numéro de chaque ligne à gauche (left) 
+%	numbers=right,                  % placer le numéro de chaque ligne à droite (right)
+%	numberstyle=\normalsize,        % taille de la police des numéros
+%	numbersep=7pt,                  % distance entre le code et sa numérotation
+%	backgroundcolor=\color{white},  % couleur du fond 
+%	% Possibilité d'utilisation du package color
+%}
+
+\usepackage{url} % Pour écrire des adresses cliquables.
+
+% \usepackage{lmodern} % Pour changer le pack de police.
+% \usepackage[top=5cm, bottom=5cm, left=6cm, right=3cm]{geometry} % Les marges.
+
+\usepackage{titlesec}
+\titleformat{\chapter}[hang]{\bf\huge}{\thechapter}{2pc}{}
+\title{M\'{e}moire}
+%\author{Abir \bsc{Blad}}
+\date{2020}
+
+\begin{document}
+\pagestyle{fancy}
+%Pour corriger les eventuelles erreurs :
+%Utiliser la commande \thispagestyle{}
+\lhead{\rightmark }
+\chead{ }
+\rhead{ }
+\lfoot{Section \thesection}
+\cfoot{\thepage}
+\rfoot{Chapitre \thechapter}	
+	
+\maketitle % Page de garde.
+%\frontmatter
+\renewcommand{\contentsname}{Sommaire} % Dans le corps du document,avant la commande %tableofcontents.
+\renewcommand{\listfigurename}{Liste de Figures}
+\renewcommand{\listtablename}{Liste de Tableaux}
+\renewcommand{\chaptername}{Chapitre}
+
+% Les 2 prochaines ligens de code pour que le compteur des chapitre se remette à 0 por chaque nouvelle partie
+\makeatletter \@addtoreset{chapter}{part}\makeatother
+
+\chapter*{Remerciements}
+Ce sera là qu'on va parler des étapes d'évolution avec les parties prenantes dans la rédaction du mémoire
+\chapter*{Abstract}
+\chapter*{Résumé}
+%\underline{\textbf{Nombre de mots:}} Souvent pas plus d'une page A4 selon les directives du programme d'études
+%\\
+%
+%\underline{\textbf{Note:}}\\
+%\textbullet Le résumé se rédige qu'après la fin de la rédaction.\\
+%\textbullet Assurez-vous que votre résumé montre clairement en quoi consiste le document en général (également pour les personnes sans connaissances préalables).\\
+%Et ...!\\
+%\textbullet Ne pas utiliser d'exemples.\\
+%\textbullet Ne pas présenter de nouvelles informations.\\
+%\textbullet Écrire court et percutant.\\
+%
+%\textbf{Paragraphe 1 : Description du problème}\\
+%- Quel est le problème ?\\
+%- Quel est l'objectif ?\\
+%- Quelle est la question principale ? Si il y a des hypothèses, les présenter ici.\\
+%N'écrivez pas toutes vos sous-questions ici.\\
+%
+%\textbf{Paragraphe 2 : Méthodes}\\
+%- Quelle (s) méthode (s) / quel concept d'étude a été utilisé ?\\
+%
+%\textbf{Paragraphe 3 : Résultats}\\
+%- Les résultats les plus importants\\
+%
+%\textbf{Paragraphe 4 : Conclusion}\\
+%- Quelle est la réponse à la question / définition de problème ?\\
+
+%\textbf{Paragraphe 5 : Discussion}\\
+%- La recherche est-elle valide ?\\
+%- Quelles sont les limites possibles de la recherche ?\\
+%- Suggestions pour une recherche de suivi, s'il y en a\\
+%
+%\textbf{Paragraphe 6 : Recommandations}\\
+%- Des recommandations? À présenter ici brièvement.\\
+\tableofcontents
+\listoffigures 
+\listoftables
+\chapter*{Liste des Acronymes}
+\begin{figure}[h]
+	\begin{tabular}{l l}
+		\textbf{2D}	& Deux Dimensions \\
+		\textbf{3D}	& Trois Dimensions \\ 
+		\textbf{ADAS}	& Advanced Driver Assistance Systems \\ 
+		\textbf{AHRS}	& Attitude \& Heading Reference System\\ 
+		\textbf{BoF}	& Bag of Features\\ 
+		\textbf{BoVW}	& Bag of Visual Words\\ 
+		\textbf{CPU}	& Central Processing Unit \\ 
+		\textbf{DSO}	& Direct Sparse Odometry \\ 
+		\textbf{DTAM}	&  Dense Tracking and Mapping \\ 
+		\textbf{EKF}	& Extended Kalman Filter \\
+		\textbf{GPS}	& Global Positioning System \\ 	
+		\textbf{ICP}	& Iterative Closest Point \\ 
+		\textbf{IDC}	& Iterative Dual Correspondences \\ 
+		\textbf{ICRA}	& International Conference on Robotics and Automation \\ 	
+		\textbf{IEEE}	& Institute of Electrical and Electronics Engineers \\ 	
+		\textbf{IMU}	& Inertial measurement unit \\ 	
+		\textbf{INS}	& Information Network System  \\ 	
+		\textbf{IR}	& Infra-Rouge \\ 
+		\textbf{IROS}	& International Conference on Intelligent Robots and Systems \\ 
+		\textbf{KF}	& Kalman Filter \\	
+		\textbf{LRF}	& Laser Range Finder \\ 
+		\textbf{LSD-SLAM}	& Large-Scale Direct Monocular SLAM \\ 	
+		\textbf{MATLAB}	& MATrix LABoratory  \\ 
+		\textbf{NDT}	& Normal Distributions Transform \\ 
+		\textbf{ORB-SLAM}	& Oriented FAST and Rotated BRIEF SLAM \\ 
+		\textbf{PhD}	& Philosophiæ Doctor \\ 
+		\textbf{PTAM}	& Parallel Tracking and Mapping \\ 	
+		\textbf{RANSAC}	& RANdom SAmple Consensus  \\ 
+		\textbf{RGB-D}	& Red Green Blue Depth \\ 		
+		\textbf{ROS}	& Robot Operating System \\ 	
+		\textbf{SfM}	& Structure for Motion\\ 
+		\textbf{SIMD}	& Single Instruction Multiple Data  \\ 
+		\textbf{LF}	& Likelihood-field matching Instruction Multiple Data  \\ 
+		\textbf{SLAM}	& Simultanious Localization and Mapping \\ 
+		
+	\end{tabular} 
+	\label{tab:1}
+\end{figure}
+
+\begin{figure}[h]
+	\begin{tabular}{l l}
+		\textbf{SNSS}	& Global Navigation Satelite System\\ 
+		\textbf{SVO}	& Semi-direct Visual Odometry \\ 
+		\textbf{ToF}	& Time of Flight \\ 
+		\textbf{UAV}	& Unmanned Aerial Vehicle \\ 
+		\textbf{vSLAM}	& Visual SLAM  \\ 
+		
+	\end{tabular} 
+	\label{tab:2}
+\end{figure}
+
+%\mainmatter
+\renewcommand{\partname}{Partie}
+\chapter{Introduction}
+\renewcommand{\chaptername}{Chapitre}
+\section{État de l'art}
+
+Durant les 3 dernières décennies, Les applications de la Localisation et Cartographie Simultanés (SLAM) ont prit du terrain dans les applications telles qu'en réalité augmentée\cite{ref1} et conduite autonome\cite{ref2}. Via SLAM, on peut non seulement estimer la trajectoire d'un objet en mouvement, mais en plus ça permet de reconstruire la scène environnante en 3D et en temps réel\cite{ref3}\cite{ref4}. À ce jour une variété importante de SLAMs utilisant des capteurs -tel que lasers, IMUs, et caméras- ont été proposés\cite{ref6}.\\
+
+Avant, les robots mobiles étaient principalement commandés par des opérateurs humains au lieu de disposer d'une navigation automatisée. Certains robots sont aptes à faire certaines tâches sans interventions humaines, mais en suivant des procédures prédéfinies, tels que le robot aspirateur. Avec le développement de la technologie et en suivant les bons algorithmes, les robots sont devenus de plus en plus intelligents, de sorte à ce qu'on attende d'eux de devenir capables de prendre en main des tâches complexes de manière autonome telle que l'assistance de personnes, le transport de marchandises, l'exploration de zones dangereuses, etc.\\
+
+La décomposition du problème de la mobilité pour les robots mobiles autonomes amène à définir une architecture classique en robotique, organisée suivant un fonctionnement séquentiel perception, décision et action\cite{reff25} ou selon \cite{reff70} le cycle see-think-act (voir la figure 1.1).\\
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{sta}
+	\caption[See-Think-Act]{Le cycle perception, décision et action ou bien see-think-act\cite{reff70}}
+	\label{fig:1}
+\end{figure}
+
+Et donc, dans ce genre de scénarios, la capacité de Localisation et et de Cartographie Simultanées (SLAM) est une exigence de base pour les robots\cite{reference1}.\\
+\section{Contexte}
+% Contexte de thèse
+Dans la vision du développement technologique et de la démocratisation de la robotique et de l'automatique, le milieu estudiantin à Laghouat, bien qu'intéressé, il reste sceptique, et a des appréhensions face à l'engagement dans l'aventure de manière effective et efficace. L'objectif serait donc de fournir une brique à la base de l'édifice en fournissant un modèle réutilisable d'interface homme robot.\\
+
+Mon objectif est de rédiger un mémoire claire, détaillée, et dans laquelle on peu aisément trouver les ressources nécessaires à retrouver les mêmes résultats.
+
+Le thème étant de parvenir à retravailler des algorithmes déjà existants dans la localisation et le mapping simultanés pour qu'un dispositif électronique mobile parvienne à se situer dans l'espace. %Ces algorithmes seront adaptés de Matlab à un code en C++ implémentable sur ROS pour contrôler directement un Robot. 
+
+%Afin de faire face à l'une des principales difficultés qu'on perçoit avec les différents algorithmes utilisés dans ce mémoire, je vais avoir recours à une méthode simple qui peut être onéreuse en pratique, mais qui nous assure une certaine fiabilité dans les résultats, cette méthode consiste à avoir un seconde dispositif qui va faire un parcours similaire au premier, qu'on va utiliser comme source d'information secondaire. Les informations récoltées vont être comparées pour optimiser le processus de fermeture de boucle afin de corriger les estimations de position et de cartographie.
+\section{Les principales contributions du mémoire}
+\section{Organisation du manuscrit}
+Avec un parc de robots personnels de plus de 5 millions d'unités, et un cumul des ventes de robots professionnels s'élevant à \$13,2 milliards de dollars en 2009, la robotique de service va dépasser les \$22 milliards en 2013 et subir sa plus rapide accélération dans les 3 prochaines années.\\
+
+La robotique de service désigne les robots qui rendent service à l'humain en se substituant à lui. La variété des tâches accomplies par ces robots est immense : on retrouve des robots de service dans presque tous les milieux hostiles : spatial, sous-marins, nucléaire, déminage, défense, sécurité, etc. En les retrouve également en remplacement des hommes dans les situations pénibles, dans le bâtiment ou l'agriculture. Ces robots sont dits de type professionnels : ils sont en général très cher unitairement et produits en nombre d'unités restreint par modèle. On retrouve ensuite des robots de service jusque dans nos maisons sous la forme d'aspirateur ou tondeuse automatique, ou encore sous forme de jouets, ou kit pour l'éducation. Leur prix est très faible pour entrer en masse chez les particuliers.
+
+% Le tableau de la figure 1.1 représente quelques exemples d'utilisations de la robotique intelligente.
+
+%\begin{figure}[h]
+%	\centering
+%	\includegraphics[width=\linewidth]{1}
+%	\caption[VSLAM]{legende 6wila}
+%	\label{fig:2}
+%\end{figure}
+
+\part{Généralités sur les systèmes SLAM}
+\chapter{Définition et Origines}
+\indent Afin d'effectuer une navigation autonome, un robot qui se meut dans un environnement inconnu doit reconstruire incrémentalement une carte cohérente de son environnement tout en estimant sa position de sorte à éviter tout risque de collision ou de bug. Dans le cas de la localisation, la méthode probabiliste est largement appliquée dans le calcul du déplacement du robot qui est équipé de capteurs proprioceptifs tel qu'un encodeur à roues et un capteur d'inertie\cite{reference1}.\\
+
+L'émergence du SLAM probabiliste a certainement été durant la conférence « IEEE Robotics and Automation Conference » en 1986 à San Francisco, Californie. Plusieurs chercheurs tentaient d'appliquer des méthodes théoriques d'estimation au problème de localisation et cartographie.\\
+
+Les travaux de Smith et Cheeseman\cite{ref66} et de Durant-Whyte\cite{ref77} constituent une base des méthodes statistiques de description des relations entre les positions d'amers\footnote{Cela se réfère à tous les points d'intérêt qui peuvent être observés par le robot.} dans un environnement et l'estimation de l'incertitude géométrique de la carte. L'un des éléments clés de ces travaux traite du degré de corrélation entre les estimations des positions des amers dans une carte\cite{reference2}.\\
+
+L'inconvénient avec la méthode probabiliste, c'est qu'elle cumule les erreurs qui ne sont pas bornées au fur et à mesure que le robot se meut. Dans un environnement extérieur, on peut facilement palier à cette erreur en introduisant un système GPS afin d'estimer les erreurs accumulées. Cela dit, dans un environnement intérieur, le signal GPS est bloqué et est inutilisable en tant que référence globale. C'est pour cela que les capteurs externes (LRF, capteurs ultra-soniques, cameras, et capteurs RGBD) sont essentiels non seulement pour cartographier l'environnement, mais aussi afin de corriger la localisation. Inévitablement, les données qui sont obtenues via l'usage des capteurs externes afin d'explorer les alentours est aussi corrompu par les bruits. Dans le but de réaliser simultanément et correctement la cartographie et la localisation, les donnés acquises de différents capteurs doivent être fusionnées afin d'obtenir une estimation optimale. Ce problème est connu sous la dénomination de « Problème SLAM », qui a attiré l'attention de plusieurs chercheurs durant les dernières décennies\cite{reference1}, notamment grâce aux conférences internationales (ICRA, IROS...) qui attirent de plus en plus la communauté scientifique\cite{reference2}.\\
+
+On a besoin d'une carte fiable pour se localiser, tandis qu'on a besoin de données de géolocalisation pour cartographier l'environnement. Ce problème aux dimensions de la question philosophique de la poule et de l'\oe{}uf, fait du SLAM un problème assez compliqué à aborder. Une brève histoire de la recherche sur le SLAM et des solutions typiques de problèmes SLAM sont présentés dans\cite{reff1}. Les problèmes majeurs dans la recherche SLAM, tel que la théorie de la complexité, l'association de données, et la représentation de l'environnement sont discutés dans\cite{reff2}. Un aperçu général et une analyse détaillée du SLAM sont abordés dans \cite{reff3} et \cite{reff4}.\\ 
+
+\chapter{Formulation}
+Le SLAM est composé d'un ensemble de méthodes permettant à un robot de construire une carte d'un environnement et en même temps de se localiser en utilisant cette carte. La trajectoire du véhicule et la position des amers dans la carte sont estimées au fur et à mesure, sans avoir besoin de connaissances a priori .
+
+Considérons un robot se déplaçant dans un environnement inconnu, en observant un certain nombre d'amers grâce à un capteur embarqué sur le robot. La figure 2.2.1 montre une illustration du problème.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{3}
+	\caption[L'idée de base du SLAM]{L'idée de base du SLAM}
+	\label{fig:2.2.3.1}
+\end{figure}
+\medskip
+
+À l'instant $ k $ on définit les quantités suivantes :
+
+\quad - $ x_{k} $ : le vecteur d'état. Il contient la position du robot
+
+\quad - $ u_{k} $ : le vecteur de contrôle. L'application de $ u_{k} $ à l'instant $ k-1 $ mène le robot de l'état $ x_{k-1} $ à l'état $ x_{k} $
+
+\quad - $ m_{i} $ : vecteur contenant la position de l'amer $ i $
+
+\quad - $ z_{k} $ : l'observation à l'instant $ k $
+\medskip
+
+On définit aussi les ensembles suivants :
+
+\quad - $ X_{0:k}=\{x_{0}, x_{1}, \ldots, x_{k}\} = \{X_{0:k-1}, x_{k}\} $ : l'ensemble des vecteurs d'état jusqu'à l'instant $ k $
+
+\quad - $ U_{0:k}=\{u_{0}, u_{1}, \ldots, u_{k}\} = \{U_{0:k-1}, u_{k}\} $ : l'ensemble des vecteurs de commande jusqu'à l'instant $ k $
+
+\quad - $ Z_{0:k}=\{z_{0}, z_{1}, \ldots, z_{k}\} = \{Z_{0:k-1}, z_{k}\} $ : l'ensemble des observations jusqu'à l'instant $ k $
+
+\quad - $ m=\{m_{1}, m_{2}, \ldots, m_{n}\} $ : la carte de l'environnement contenant une liste d'objets statiques
+\section{Localisation}
+Le problème de localisation du robot consiste à estimer sa position dans un environnement donné, en utilisant l'historique de ses observations, l'historique des commandes et la connaissance de l'environnement. La figure 2.2 schématise ce principe.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{4}
+	\caption[La localisation]{La localisation : le système cherche à estimer sa position en utilisant les	informations sur l'environnement dont il dispose}
+	\label{fig:2.2.1.1}
+\end{figure}
+
+On peut analytiquement représenter cette opération par l'estimation de la probabilité de distribution :
+\[ P(x_{k}|Z_{0:k}, U_{0:k}, m)\]
+
+L'estimation d'une telle quantité définit la localisation globale, dans la mesure où on utilise toutes les données de l'historique des observations et des commandes pour estimer la position. On obtient ainsi une estimation robuste de la position a posteriori, mais on augmente largement la complexité des calculs.
+
+Afin de simplifier l'algorithme, on peut définir une localisation locale, où on utilise uniquement les données de l'instant $(k-1)$ pour estimer la position à l'instant $ k $ . On représente analytiquement cette opération par l'estimation de la distribution de probabilité :
+\[ P(x_{k}|z_{k-1}, u_{k-1}, x_{k-1},m)\]
+
+En utilisant cette méthode, on simplifie largement la complexité de l'algorithme, mais on risque de dévier de la position correcte du robot, sans pouvoir corriger cela.
+
+\section{Cartographie}
+\label{Cartographie}
+Le problème de cartographie consiste à déterminer la carte d'un environnement, en utilisant les données des capteurs et l'historique des positions réelles du robot. Sur le schéma de la figure 2.3, le système connaît sa position exacte et estime la carte de l'environnement en utilisant les données de ses capteurs.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{5}
+	\caption[La cartographie]{La cartographie : le système crée la carte de l'environnement en se basant sur sa position connue et les informations de ses capteurs}
+	\label{fig:2.2.1.1}
+\end{figure}
+
+On peut exprimer cela analytiquement ainsi :
+\[ P(m_{k}|Z_{0:k}, X_{0:k})\]
+
+Les positions réelles du robot peuvent être obtenues en utilisant des balises dans un environnement interne ou un récepteur GPS en externe. Ces positions doivent être précises et correctes afin d'obtenir une bonne cartographie.
+\subsection{Représentation de la carte}
+Le choix de la représentation de la carte de l'environnement est une étape importante dans le SLAM. On peut distinguer trois approches fondamentales de représentation de l'environnement :
+
+\quad - L'approche directe ;
+
+\quad - L'approche basée sur les caractéristiques géométriques (feature-based) ;
+
+\quad - L'approche basée sur une grille d'occupation (grid-based) ;
+
+\quad - L'approche topologique basée sur des graphes représentant des informations de plus haut niveau comme certaines places caractéristiques de l'environnement (coins, croisement de deux couloirs, jonctions en T, etc.) ;
+
+\quad - L'approche hybride.
+\medskip
+
+La carte de l'environnement peut aussi être représentée par une approche topologique. Mais cette méthode n'est pas analysée, dans la mesure où elle est basée sur un partitionnement des cartes de types feature-based ou grid-based en régions cohérentes.
+\subsection{Approche Directe}
+La méthode de représentation directe de la carte de l'environnement est généralement adaptée à l'utilisation des capteurs Laser . Cette méthode utilise les données brutes des mesures du capteur pour représenter l'environnement sans aucune extraction d'amers ou de caractéristiques prédéfinies (lignes, coins, etc).
+
+Dans le cas d'un capteur laser, chaque mesure est constituée d'un ensemble de points d'impact du faisceau laser sur les objets de l'environnement. On peut ainsi construire une carte simplement en superposant les différents points de mesure. On obtient ainsi une représentation en nuage de points. La figure \ref{fig:} montre un exemple d'une carte en nuage
+de points.\begin{table}
+	
+	\caption{}
+\end{table}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{9}
+	\caption[Carte en nuage de points]{Carte en nuage de points}
+	\label{fig:2.5}
+\end{figure}
+\subsection{Featured Based}
+Le principe de cette méthode est d'utiliser une liste ou un vecteur de tous les objets de l'environnement, cette liste contient des informations sur les objets tel que leur nature, position et orientation. Il s'agit d'une représentation cartésienne de l'environnement (un exemple d'une carte géométrique est illustré dans la figure 1.4).
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{10}
+	\caption[Carte featured-based]{Carte basée sur l'extraction de caractéristiques géométriques de l'environnement}
+	\label{fig:10}
+\end{figure}
+
+En se déplaçant, le robot prend des mesures de son environnement en utilisant son système de perception, afin d'extraire des informations sur l'éventualité de la présence d'une primitive, c'est ce qui s'appelle extraction de primitive. Ces primitives peuvent êtres de différentes formes géométriques tel que des points, des lignes, des polygones, etc.
+
+Une fois la carte géométrique est construite, elle peut être utilisée par le robot pour sa localisation dans l'environnement. Cette méthode de modélisation est largement utilisée dans les environnements d'intérieur structurés.
+
+Cette solution est avantageuse pour sa grande résolution en plus du fait qu'elle ne nécessite pas une grande capacité de mémoire, la position des objets peut être stockée avec une grande précision. Quoi que l'espace mémoire requis pour le stockage augmente avec la taille de l'environnement du robot.
+
+Pour détecter les caractéristiques géométriques, plusieurs méthodes existent. Les plus
+connues sont :
+
+\quad - La méthode split-and-merge pour la détection des segments de lignes
+
+\quad -  La transformation de Hough pour la détection des lignes ou des cercles
+
+\quad -  RANSAC pour la détection des lignes ou des cercles. 
+\medspace
+
+Ce type de cartes est limité aux objets et formes modélisés et prédéfinis. Il est donc incompatible avec les environnements trop complexes et non structurés .
+\subsection{Grid Based}
+La méthode de modélisation par grille d'occupation caractérise l'environnement par un ensemble de sous-régions, appelées cellules. Chaque cellule indique la probabilité (entre 0 et 1) de la présence d'obstacles dans la sous-région correspondante(voir la figure 1.5).
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{7}
+	\caption[Grille d'occupation binaire]{Exemple de grille d'occupation binaire. Les cellules blanches correspondent à des zones de l'environnement ne contenant aucun obstacle, les cellules grises correspondent à des zones occupées par des obstacle}
+	\label{fig:7}
+\end{figure}
+
+Moravec, Elfes et Matthies ont été parmi les premiers à utiliser le principe des grilles d'occupation. L'objectif de leurs travaux est de construire de manière autonome la carte de l'environnement d'un robot mobile. Pour cela, le robot évolue dans un environnement inconnu non structuré et s'y déplace en évitant les obstacles. Il doit construire une carte du lieu seulement à partir des informations données par des capteurs à ultrasons (dans leur cas) montés sur le robot.
+
+La mise à jour de l'état de chaque cellule se fait à la réception de nouvelles données.\\
+
+On trouve dans la littérature plusieurs méthodes pour réaliser cette opération :\\
+
+\quad - Le filtrage bayésien : cette méthode a notamment été utilisée afin de modéliser la connaissance sur l'état de la cellule. Dans cette approche, on attribue à chaque cellule une probabilité entre 0 et 1. Une probabilité de 0 signifie qu'on a la certitude que la cellule est libre. La probabilité de 1 signifie qu'on a la certitude qu'elle est occupée.\\
+
+\quad - La théorie de Dempster-Shafer : dans cette approche on associe à chaque cellule deux poids probabiliste, $ P_{f} $ et $ P_{e} $. $ P_{f} $ est une mesure de l'importance des informations fournies par les capteurs extéroceptifs qui vont dans le sens de l'hypothèse « la cellule est occupée ». $ P_{e} $ mesure l'importance des informations contraires. $ P_{f} $ et $ P_{e} $ varient entre 0 et 1, et leur somme est toujours inférieur ou égale à 1. Ainsi, un couple $ (P_{f}, P_{e})=(0,0) $ indique l'absence d'information sur la cellule (c'est la valeur d'initialisation de la carte), alors que le couple $ (P_{f}, P_{e})=(1,0) $ par exemple indique que la cellule est occupée avec certitude.\\
+
+\quad - La logique floue : l'état d'occupation de la cellule est modélisé par un ensemble flou. Chaque cellule peut exprimer à la fois deux états partiels\\
+( $ E $ = vide et $ O  $ = occupée ) et le degré d'appartenance entre eux se détermine en utilisant la théorie des possibilités. Dans cette approche, chaque cellule peut avoir des données conflictuelles $ ( E \cap O ) $ fournies par le capteur, elle sera considérée comme une cellule ni libre ni occupée. Afin d'éliminer l'ambiguïté sur l'état de ce type de cellule, on a besoin de plus de données en provenance des capteurs.
+
+\subsection{L'approche topologique}
+Les cartes topologiques permettent de représenter l'environnement du robot sous forme de graphe (voir la figure 1.6). Les n\oe{}uds du graphe correspondent à des lieux, i.e. des positions que le robot peut atteindre. Les arêtes liant les n\oe{}uds marquent la possibilité pour le robot de passer directement d'un lieu à un autre et mémorisent en général la manière de réaliser ce passage\cite{ref7}.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{6}
+	\caption[Carte topologique]{Exemple de carte topologique (en noir)}
+	\label{fig:6}
+\end{figure}
+\subsection{L'approche hybride}
+Les modélisations métriques (telle que l'approche géométrique et l'approche grid-based) sont complémentaires. Il est possible de considérer conjointement ces deux approches, ce qui se traduit par des modélisations hybrides. Ces dernières sont généralement des modélisations topologiques auxquelles on ajoute des données métriques. Nous pouvons par exemple trouver des cartes hybride basées sur les grilles d'occupation à laquelle on ajoute des données topologiques afin de faciliter la planification de trajectoires\cite{ref7}.
+
+\subsection{Comparaison}
+Malgré sa simplicité, l'approche directe peut représenter tous les types des environnements. Mais elle présente l'inconvénient d'une grande consommation de mémoire et d'un manque de précision concernant la représentation de l'incertitude dans les mesures des capteurs.
+
+Les cartes feature-based constituent une représentation compacte de l'environnement. Elles sont néanmoins basées sur l'extraction de caractéristiques connues et prédéfinies, ce qui limite leur utilisation aux environnements structurés et internes.
+
+Les grilles d'occupation utilisent aussi une grande quantité de mémoire, mais elles offrent la possibilité de représenter tous les types d'environnements avec une prise en charge des caractéristiques des capteurs. Ce type d'approches est le mieux adaptés aux capteurs de profondeur comme les lasers ou les sonars.
+\section{Perception, Capteurs et Calib}
+La perception consiste globalement à recueillir les informations sensorielles dans le but d'acquérir une connaissance et une compréhension du milieu d'évolution. Elle est préalable et indispensable aux tâches suivantes qui sont généralement pour un robot mobile autonome les tâches de localisation et de cartographie (voir la figure suivante).
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{2}
+	\caption[Chaîne fonctionnelle]{Chaîne fonctionnelle d'un système de navigation}
+	\label{fig:2}
+\end{figure}
+\subsection{Les systèmes de perception}
+Le choix d'un système de perception est souvent dépendant du milieu d'évolution du robot mobile ainsi que du coût de l'intégration des capteurs sur le robot. La précision désirée et la fréquence d'acquisition sont autant des facteurs qui augmentent le coût d'un capteur.\\
+
+La classification des capteurs est généralement faite par rapport à deux familles :
+
+\begin{itemize}
+	\item \begin{description}
+	\item[Les capteurs proprioceptifs :] qui fournissent des informations propres au comportement interne du robot, \textit{i.e.} déterminer son état à un instant donné.
+	\end{description}
+\end{itemize}
+\begin{itemize}
+	\item \begin{description}
+	\item[Les capteurs extéroceptifs :] qui fournissent des informations sur le monde extérieur au robot.
+	\end{description}
+\end{itemize}
+\subsection{Les capteurs proprioceptifs}
+Ces capteur fournissent, par intégration, des informations élémentaires sur les paramètres cinématiques ou dynamique du robot. Les informations sensorielles gérées dans ce cadre sont généralement des vitesses, des accélérations, des angles de giration, des angles d'attitude.
+les capteurs proprioceptifs peuvent être regroupés en deux familles :
+\begin{itemize}
+	\item \begin{description}
+		\item[Les capteurs de déplacement :] qui comprennent (\textit{les odomètres, les accéléromètres, les radars Doppler, les mesureurs optiques, etc.}). Cette catégorie permet de mesurer des déplacements élémentaires, des variations de vitesse ou d'accélération sur des trajectoires rectilignes ou curvilignes.
+	\end{description}
+\end{itemize}
+\begin{itemize}
+	\item \begin{description}
+		\item[Les capteurs d'attitude :] qui mesurent deux types de données : les angles de cap et les angles de roulis et de tangage. Ils sont principalement constitués par (\textit{les gyroscopes, les gyromètres, les capteurs inertiels composites, les inclinomètres, les magnétomètres, etc.}). Ces capteurs sont en majorité de type inertiel.
+	\end{description}
+\end{itemize}
+\subsection{Les capteurs extéroceptifs}
+Les capteurs extéroceptifs sont employés en robotique mobile pour collecter des informations sur l'environnement d'évolution du système mobile. Ils sont le complément indispensable aux capteurs proprioceptifs présentés précédemment. Ils sont utilisés pour conditionner et traiter les informations sensorielles. Ils sont notamment utilisés dans les domaines d'application tels que \textit{l'évitement d'obstacle, la localisation, la navigation et la modélisation d'environnements}. Les principaux capteurs utilisés en robotique mobile sont\cite{ref7} : 
+\begin{itemize}
+	\item \begin{description}
+		\item[Les capteurs Passifs :] tel que les capteurs de contact (bumpers, capteurs d'effort), les magnétomètres, et les capteurs de vision.
+	\end{description}
+\end{itemize}
+\begin{itemize}
+	\item \begin{description}
+		\item[Les capteurs actifs :] tel que les systèmes basés balises (localisation dans un repère fixe), les capteurs temps-de-vol (les sonars ou ultrasons et les télémètres lasers), les capteurs IR, les radars (ondes radio).
+	\end{description}
+\end{itemize}
+
+\section{Localisation et Cartographie simultanées}
+La formulation probabiliste du problème de SLAM nécessite le calcul, à chaque instant $ k $, de la quantité de probabilité :
+\[ P(x_{k}, m|Z_{0:k}, U_{0:k}, x_{0})\]
+
+Ce calcul est généralement effectué récursivement. On commence par la probabilité $ P(x_{k-1}, m|Z_{0:k-1}, U_{0:k-1}) $, puis on utilise le théorème de Bayes pour déduire la quantité $ P(x_{k}, m|Z_{0:k}, U_{0:k}) $ à partir de $ z_{k} $ et $ u_{k} $. Afin d'effectuer cette déduction, nous avons besoin de connaître $ P(x_{k}|x_{k-1}, u_{k}) $ et $ P(z_{k}|x_{k}, m) $. Le terme $ P(z_{k}|x_{k}, m) $ désigne le modèle d'observation. Il définit la probabilité d'avoir une mesure $ z_{k} $ connaissant l'état du véhicule $ x_{k} $ et une carte de l'environnement $ m $. Le terme $ P(x_{k}|x_{k-1}, u_{k}) $ définit le modèle de transition (modèle de mouvement du véhicule robotisé). Il permet de prévoir l'état $ x_{k} $ du système, qui ne dépend que de l'état précédent $ x_{k-1} $ et de la commande de contrôle appliquée. Dans ce cas, le processus de transition entre les états du système $ x_{k} $ est dit Markovien.
+
+On définit donc le problème du SLAM en deux parties par les équations suivantes :
+
+\quad - Une partie de \textbf{mise-à-jour de la position} :
+\[ P(x_{k}, m|Z_{0:k}, U_{0:k}, x_{0})=\int P(x_{k}|x_{k-1}, U_{k})\times P(x_{k-1}, m|Z_{0:k-1}, U_{0:k-1}, x_{0}) dx_{k-1}\]
+
+\quad - Une partie de \textbf{mise-à-jour de l'observation} :
+\[ P(x_{k}, m|Z_{0:k}, U_{0:k}, x_{0})=\dfrac{P(z_{k}|x_{k}, m)\times P(x_{k}, m|Z_{0:k-1}, U_{0:k}, x_{0})}{P(z_{k}|Z_{0:k-1}, U_{0:k})}\]
+
+En utilisant ainsi l'estimation a posteriori à l'instant $ (k-1) $
+donnée par le terme $ P(x_{k-1}, m|Z_{0:k-1}, U_{0:k-1}, x_{0}) $,
+on peut calculer la prédiction et déduire ensuite l'estimation a posteriori à l'instant $ k $.
+On a donc :
+\begin{equation*}
+\begin{split} 
+P(x_{k}, m|Z_{0:k}, U_{0:k}, x_{0})=\ng{}\times P(z_{k}|x_{k}, m) \times \int P(x_{k}|x_{k-1}, U_{k})\\ \times P(x_{k-1}, m|Z_{0:k-1}, U_{0:k-1}, x_{0}) dx_{k-1}
+\end{split}
+\end{equation*}
+%\[ P(x_{k}, m|Z_{0:k}, U_{0:k}, x_{0})=\ng{}\times P(z_{k}|x_{k}, m)\]\[\times \int P(x_{k}|x_{k-1}, U_{k})\]\[\times P(x_{k-1}, m|Z_{0:k-1}, U_{0:k-1}, x_{0}) dx_{k-1}\]
+
+Sachant que $ \ng{} $ est une constante de normalisation dépendant du modèle d'observation et du modèle de transition.
+
+\[ \ng{} = \dfrac{1}{P(z_{k}|Z_{0:k-1}, U_{0:k})}\]
+
+Cette structure du SLAM est représentée sur le schéma de la figure suivante. Sur ce schéma, les cercles gris représentent les données connues, tandis que les cercles blancs désignent les quantités à estimer.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{19}
+	\caption[Représentation du problème SLAM]{Représentation graphique du problème de SLAM}
+	\label{fig:19}
+\end{figure}
+
+\chapter{Le SLAM}
+SLAM (localisation et cartographie simultanées) est une méthode utilisée pour les véhicules autonomes qui vous permet de créer une carte et de localiser votre véhicule sur cette carte en même temps. Les algorithmes SLAM permettent au véhicule de cartographier des environnements inconnus. Les ingénieurs utilisent les informations de la carte pour effectuer des tâches telles que la planification de trajectoire et l'évitement d'obstacles.
+
+SLAM fait l'objet de recherches techniques depuis de nombreuses années. Mais avec de vastes améliorations de la vitesse de traitement informatique et la disponibilité de capteurs à faible coût tels que des caméras et des télémètres laser, SLAM est maintenant utilisé pour des applications pratiques dans un nombre croissant de domaines.
+
+Pour comprendre pourquoi SLAM est important, examinons certains de ses avantages et des exemples d'application.
+
+\section{Exemples de SLAM}
+Considérons un aspirateur robot domestique. Sans SLAM, il se déplacerait aléatoirement dans une pièce et ne pourra peut-être pas nettoyer toute la surface du sol, d'autant plus que cette approche consomme une énergie excessive, de sorte que la batterie s'épuise plus rapidement. D'autre part, les robots avec SLAM peuvent utiliser des informations telles que le nombre de tours de roue et des données provenant de caméras et d'autres capteurs d'imagerie pour déterminer la quantité de mouvement nécessaire. C'est ce qu'on appelle la localisation. Le robot peut également utiliser simultanément la caméra et d'autres capteurs pour créer une carte des obstacles dans son environnement et éviter de nettoyer deux fois la même zone. C'est ce qu'on appelle la cartographie.
+
+SLAM est utile dans de nombreuses autres applications telles que la navigation dans une flotte de robots mobiles pour organiser des étagères dans un entrepôt, le stationnement d'une voiture autonome dans un endroit vide ou la livraison d'un colis en naviguant sur un drone dans un environnement inconnu. Permettant la localisation et le mappage simultanés avec d'autres tâches telles que la fusion de capteurs, le suivi d'objet, la planification de chemin et le suivi de chemin.
+
+\section{Les Méthodes de SLAM}
+D'une manière générale, il existe deux types de composants technologiques utilisés pour réaliser le SLAM. Le premier type est le traitement du signal des capteurs, y compris le traitement frontal, qui dépend largement des capteurs utilisés. Le deuxième type est l'optimisation du graphe de pose, y compris le traitement back-end, qui est indépendant du capteur. Dans ce mémoire on va se focaliser plutôt sur le traitement de signal des capteurs.
+
+Afin de comprendre ce type de technologie appelée traitement frontal, nous prendrons l'exemple du Visual SLAM et Lidar SLAM, deux différentes méthodes d'aborder le SLAM.
+
+\subsection{SLAM visuel}
+Comme son nom l'indique, le SLAM visuel (ou vSLAM) utilise des images acquises à partir d'appareils photo et d'autres capteurs d'image. Visual SLAM peut utiliser des caméras simples (caméras grand angle, fish-eye et sphériques), des caméras à \oe{}il composé (caméras stéréo et multi-caméras) et des caméras RVB-D (caméras de profondeur et ToF).
+
+Visual SLAM peut être mis en \oe{}uvre à faible coût avec des caméras relativement bon marché. De plus, comme les caméras fournissent un grand volume d'informations, elles peuvent être utilisées pour détecter un point de repère (positions précédemment mesurées). La détection de points de repère peut également être combinée avec une optimisation basée sur des graphiques, ce qui permet une flexibilité dans la mise en \oe{}uvre SLAM.
+
+Le SLAM monoculaire est lorsque vSLAM utilise une seule caméra comme seul capteur, ce qui rend difficile la définition de la profondeur. Cela peut être résolu en détectant des marqueurs AR, des damiers ou d'autres objets connus dans l'image pour la localisation ou en fusionnant les informations de la caméra avec un autre capteur tel que des unités de mesure inertielle (IMU), qui peuvent mesurer des quantités physiques telles que la vitesse et l'orientation. La technologie liée au vSLAM comprend la structure à partir du mouvement (SfM), l'odométrie visuelle et l'ajustement des faisceaux.
+
+Les algorithmes Visual SLAM peuvent être globalement classés en deux catégories. Les méthodes creuses correspondent aux points caractéristiques des images et utilisent des algorithmes tels que PTAM et ORB-SLAM. Les méthodes denses utilisent la luminosité globale des images et utilisent des algorithmes tels que DTAM, LSD-SLAM, DSO et SVO.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{13}
+	\caption{Structure du mouvement}
+	\label{fig:13}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{12}
+	\caption[RGB-D SLAM]{Enregistrement de nuages de points pour RGB-D SLAM}
+	\label{fig:12}
+\end{figure}
+
+\subsection{LiDAR SLAM}
+La détection et la télémétrie de la lumière (lidar) est une méthode qui utilise principalement un capteur laser (ou capteur de distance).
+
+Par rapport aux caméras, ToF et autres capteurs, les lasers sont nettement plus précis et sont utilisés pour les applications avec des véhicules en mouvement à grande vitesse tels que les voitures autonomes et les drones. Les valeurs de sortie des capteurs laser sont généralement des données de nuages de points 2D (x, y) ou 3D (x, y, z). Le nuage de points du capteur laser fournit des mesures de distance de haute précision et fonctionne très efficacement pour la construction de cartes avec SLAM. Généralement, le mouvement est estimé séquentiellement en faisant correspondre les nuages de points. Le mouvement calculé (distance parcourue) est utilisé pour localiser le véhicule. Pour l'appariement de nuages de points lidar, des algorithmes de transformation itérative de point le plus proche (ICP) et de distribution normale (NDT) sont utilisés. Les cartes de nuages de points 2D ou 3D peuvent être représentées sous forme de carte quadrillée ou de carte voxel.
+
+En revanche, les nuages de points ne sont pas aussi finement détaillés que les images en termes de densité et ne fournissent pas toujours des fonctionnalités suffisantes pour l'appariement. Par exemple, dans les endroits où il y a peu d'obstacles, il est difficile d'aligner les nuages de points et cela peut entraîner une perte de trace de l'emplacement du véhicule. De plus, la correspondance de nuages de points nécessite généralement une puissance de traitement élevée, il est donc nécessaire d'optimiser les processus pour améliorer la vitesse. En raison de ces défis, la localisation des véhicules autonomes peut impliquer la fusion d'autres résultats de mesure tels que l'odométrie des roues, le système mondial de navigation par satellite (GNSS) et les données IMU. Pour des applications telles que les robots d'entrepôt, le SLAM lidar 2D est couramment utilisé, tandis que le SLAM utilisant des nuages de points lidar 3D peut être utilisé pour les drones et le stationnement automatisé.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{16}
+	\caption{SLAM avec LiDAR 2D}
+	\label{fig:16}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{18}
+	\caption{SLAM avec 3D LiDAR}
+	\label{fig:18}
+\end{figure}
+
+\section{Algorithmes}
+Nous allons présenter dans cette partie trois méthodes largement utilisées pour la résolution du problème de SLAM. La majorité des autres méthodes et algorithmes en dérivent. Le premier exemple est le SLAM par Filtre de Kalman Etendu (EKF). C'est la plus ancienne méthode, encore largement utilisée. Le deuxième exemple utilise des techniques de filtrage statistique qu'on nomme généralement des filtres particulaires, ces deux premiers filtres sont très semblables étant donné leur structure commune qui découle du Filtre de Bayes. La troisième méthode présentée se base sur la recherche du maximum de vraisemblance (Maximum Likelihood) ou méthode de pose-graphe.
+
+
+%\subsection*{Estimation des états}
+%À la base l'objectif primaire de ces algorithmes des filtrage est l'estimation des états $ p(x|z,u) $, ou plus exactement de l'état $ x $ d'un système dont on a pour donnes les observations $ z $ et les commandes $ u $, et on chercherait à définir l'état, il se pourrait que l'état soit la position du robot dans un environnement donné, ou la position d'un amers, l'état de la porte (si elle ouverte ou fermée). C'est n'import quel état qu'on veuille estimer, qu'on puisse percevoir, et qu'on veuille agir dessus en exécutant des actions. 
+%
+%Dans ces algorithmes on va commercer par un état initial dans lequel on va supposer n'avoir aucune 
+
+\subsection{Filtre de Bayes}
+Le filtre de Bayes est une technique d'estimation récursive d'état utilisée dans divers domaines de la robotique, comme par exemple dans la conduite de voitures autonomes, afin d'estimer l'état présent d'un système que ce soit des observations, des mesures ou des commandes de contrôle.\\
+
+Ce qu'on appelle le filtre de Bayes est en effet une structure importante, cela dit, ce n'est pas une réalisation ou un filtre en soi utilisable dans la localisation ou l'estimation de la position du système dans un moment donné.
+
+L rôle effectif du filtre de Kalman est d'emmètre une estimation d'état en temps réel (en ligne). Ceci implique qu'on va prédire une approximation de l'état en temps $ t+1 $ à base des données qu'on a au temps $ t $, ces données étant les plus récentes acquises par l'observateur et émises par le modèle de commande.\\
+
+Cette méthode récursive d'estimation d'état consiste globalement en l'estimation de l'état futur à partir d'une projection de l'état précédent. L'aspect récursive de cette approche apparaît dans la dérivation de l'équation de Bayes
+\[ P(x_{t}, z_{1 : t-1}) = \sum_{x_{t-1}} p(x_{t} | x_{t-1}) p(x_{t-1} | z_{1 : t-1})\]
+\[ P(x_{t}, z_{1 : t}) = p(x_{t} | z_{t : t-1}) p(z_{t} | x_{t})\]
+On commence par appliquer le processus de Markov sur plusieurs itérations de même que la loi des probabilités totales, et ce qu'après ça qu'on procède à la dérivation d'une équation.\\
+
+Le filtre de Bayes utilise le modèle de commande avec soi le modèle d'observation ou le modèle de mesure ou les deux.
+
+Le modèle d'observation décrit la probabilité d'obtenir l'observation $ z $ sachant l'état $ x $.
+\[ p(z|x)\]
+
+Le modèle de commande nous informe sur la probabilité d'évolution de l'état de $ x_{t} $ à $ x_{t+1} $ sachant commande $ u $.
+\[ p(x_{t+1}|x_{t}, u)\]
+
+Alors on peut voir que la commande $ u $ peut représenter par exemple la force de pression d'appui sur la pédale de l'accélérateur, ou la commande guidage d'un robot mobile.
+
+Les données captées qui feraient guise d'entrées peuvent être issues d'un télémètre laser ou une caméra montrée sur le véhicule, et le filtre récursif nous permet d'estimer les états de notre système récursivement.
+
+Il existe diverses concrétisations du filtre de Bayes, les concrétisations les plus connues étant : le filtre de Kalman, le filtre de Kalman Étendu (EKF), le filtre de Kalman Incrémental (IKF), le filtre particulaire, le filtre de Monte Carlo, les filtres discrets tel que le filtre Histogramme. 
+
+Tous ces filtres suivent la même structure pour faire une estimation d'état en temps réel. Cependant, chacun fait des suppositions distinctes sur la problématique initiale. Exemples : Le filtre de Kalman présuppose que le monde est gaussien et que tous les systèmes sont linéaires ; Le filtre de Kalman Étendu fait la relaxation des hypothèses sur la linéarité, et linéarise les systèmes non linéaires avant de les traiter ; Le filtre particulaire lui fait la relaxation de la nature gaussienne permettant ainsi de représenter des systèmes qui répondent à des lois de probabilité arbitraires ce qui nécessite d'ailleurs une capacité et un coût de calcul supérieur. En effet, ces réalisations ont leurs avantages et leurs inconvénients, c'est pour cela que le choix de la méthode à appliquer en cas de besoin repose sur les caractéristiques de notre système\cite{cours_bayes}\cite{youtube_Bayes}.
+\subsection{Filtre de Kalman}
+Kalman propose une solution récursive au filtrage des données linéaires.
+Cette méthode, améliorée ensuite par Kalman lui-même et Bucy, ouvre de nouvelles pistes de recherche dans le domaine de la navigation autonome des robots mobiles. L'approche de base du filtre de Kalman est basée sur un cycle récursif nécessitant trois hypothèses pour assurer un fonctionnement, prouvé théoriquement, optimal (voir figure \ref{fig:17}) :
+
+\quad - Un modèle d'évolution linéaire du système ;
+
+\quad - Une relation linéaire entre l'état et les mesures ;
+
+\quad - Un bruit blanc gaussien.
+\bigskip
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{17}
+	\caption[Cycle du filtre de Kalman]{\textit{Le cycle du filtre de Kalman basé sur les deux étapes récursives : Prédiction et Correction}}
+	\label{fig:17}
+\end{figure}
+
+Le cycle du filtre de Kalman est constitué de deux étapes fondamentales :\\
+
+
+\textbf{Étape de prédiction} : durant laquelle on estime l'état du système à l'instant $ t $ en utilisant l'estimation corrigée de l'instant $ (t-1) $.
+
+\textbf{Étape de correction} : durant laquelle on corrige l'estimation de l'état du système à l'instant $ t $ en utilisant les informations sensorielles reçu à l'instant $ t $.
+\bigskip
+
+Le filtre de Kalman Étendu est une amélioration du filtre de Kalman basique qui consiste à linéariser les modèles non linéaires afin que les conditions requises pour appliquer le filtre de Kalman soient satisfaites. La première implémentation de l'EKF a été faite par Stanley Schmidt dans le cadre du programme spatial Apollo. D'ailleurs, l'ancien nom du filtre était \textit{le filtre de Kalman-Schmidt}.
+
+Dans le cadre du SLAM, cette méthode a été introduite pour la première fois pour estimer en un seul processus de la position du robot et de la localisation des amers dans l'environnement. Les erreurs dans l'estimation sont représentées par une matrice de covariance mise à jour régulièrement en utilisant un filtre de Kalman Étendu à chaque fois que le robot change de position. La taille de cette matrice grandit quadratiquement au fil des observations du robot.
+
+Dans un algorithme de SLAM par EKF, on décrit le modèle de transition sous la forme :
+\[ P (x_{k}|x_{k-1}, u_{k}) \Longleftrightarrow f (x_{k-1}, u_{k}) + w_{k} \]
+Dans cette équation, $ f $ représente le modèle du véhicule robotisé et $ w_{k} \sim N(0, Q_{k}) $ est un bruit gaussien de moyenne nulle et de variance $ w_{k} $.
+
+Le modèle d'observation se présente sous la forme :
+\[ P (z_{k}|x_{k}, m) \Longleftrightarrow h (x_{k}, m) + v_{k} \]
+où $ h $ décrit le modèle d'observation et $ v_{k} \sim N(0, R_{k}) $ un bruit gaussien de moyenne nulle et de variance $ R_{k} $.
+
+L'annexe B décrit plus en détails les formulations mathématiques du KF et de l'EKF.
+
+La convergence d'un filtre de Kalman est prouvée analytiquement dans le cadre linéaire. Mais elle n'est pas toujours réalisable dans des cas réels où les données sont fortement non linéaires. Ce problème apparaît également avec un EKF ou un UKF\footnote{L'UKF n'est applicable que dans le cas de bruits gaussiens, et nécessite plus de puissance de calculque l'EKF} (Unscented Kalman Filter).
+
+L'implémentation d'un filtre de Kalman évolue généralement quadratiquement en $ O(n^{2}) $ (où n est le nombre d'amers de la carte) dans le temps et l'utilisation des ressources mémoire du système. Ainsi, avec l'évolution du système, l'algorithme atteindra un point où il ne pourra pas mettre à jour sa carte en temps réel. Ce problème vient du fait que chaque amer de l'environnement est corrélé à tous les autres. Cette corrélation se justifie par le fait que l'observation de chaque nouvel amer est faite par les capteurs du robot, l'erreur de localisation de l'amer est ainsi liée à l'erreur de localisation du robot lui-même et aux erreurs des autres amers dans la carte.
+
+Afin de réduire ces exigences en puissance du matériel, le filtre de Kalman étendu compressé (CEKF) a été introduit. Il traite et maintient les informations liées à un espace local avec un coût de calcul proportionnel au carré du nombre d'amer de la carte locale. Ces informations sont ensuite transférées à la carte globale d'une manière similaire à l'algorithme ordinaire, mais en une seule itération. Le CEKF réduit l'utilisation de mémoire, mais nécessite la détection d'amers robustes et souffre du problème d'association des données. Ce problème est renforcé par l'inconsistance due aux différentes approximations de linéarisation introduites dans le filtrage de Kalman. Plusieurs recherches ont ainsi tenté de proposer des extensions de cette méthode, permettant d'améliorer l'association des données. On trouve notamment quelques travaux de Burgard, Fox et Thrun utilisant des techniques de statistiques avancées comme l'algorithme d'Espérance-Maximisation de Dempster. Mais cela engendre encore plus de calculs et augmente la complexité de l'algorithme.
+
+\subsection{Filtre particulaire}
+Un filtre particulaire est un filtre récursif qui permet d'estimer l'état a posteriori en utilisant un ensemble de particules. Contrairement aux filtres paramétriques comme le filtre de Kalman, un filtre particulaire représente une distribution par un ensemble d'échantillons créés à partir de cette distribution. Un filtre particulaire est ainsi capable de traiter les systèmes fortement non linéaires avec un bruit non gaussien.
+
+La complexité des calculs du filtrage particulaire augmente exponentiellement avec le nombre d'amers de l'environnement, ce qui constitue un problème majeur dans le cadre d'une application temps-réel. Afin de résoudre ce genre de problèmes, certains travaux de recherche combinent le filtrage particulaire avec d'autres méthodes. C'est le cas des travaux de Monte Carlo dans FastSLAM.
+
+L'algorithme FastSLAM décompose le problème du SLAM en deux parties : un problème de localisation du robot et une collection de problèmes d'estimation d'amers liés à l'estimation de la position du robot. Dans cette configuration, chaque particule se charge de l'association des données locales qui lui sont liées. Par comparaison, un filtre EKF traite une seule hypothèse d'association de données pour tout le filtre. FastSLAM nécessite ainsi moins de mémoire et de temps de calcul que l'EKF.
+
+L'utilisation du filtrage particulaire souffre également des difficultés rencontrées lors de la définition du nombre de particules. En effet, la qualité de l'estimation est fortement corrélée à la discrétisation de l'espace de recherche. Mais il est difficile de trouver un nombre optimal de particules.
+
+\subsection{Graph SLAM}
+Le GraphSLAM, ou Pose Graph, a été introduit pour la première fois par Lu et Milios en 1997\cite{lu1997}.
+Cette approche constitue depuis une dizaine d'années un axe de recherche très actif au sein de la communauté de robotique. L'estimation de l'état du système est formulée par un problème d'optimisation.
+Ce dernier fait appel à plusieurs techniques issues essentiellement de l'algèbre linéaire et de la théorie
+des graphes. Le GraphSLAM est une technique de SLAM basé optimisation de graphe, il modélise le problème de SLAM à
+l'aide d'un graphe. Comme l'illustre la figure 1.2, la trajectoire et la carte des amers sont représentées
+par des n\oe{}uds. Associées à un bruit Gaussien, les mesures des capteurs donnent des contraintes spatiales
+entre les n\oe{}uds. Ces contraintes spatiales sont modélisées par des arêtes. On distingue deux types
+d'arêtes : arêtes de mouvement et arêtes d'observation. Une arête de mouvement relie deux n\oe{}uds
+robot (pose) consécutifs. Une arête d'observation provient d'une observation d'un amer. Un amer est
+relié à une pose (n\oe{}ud robot) s'il a été observé depuis celle-ci.
+
+\subsection{Comparaison}
+
+L'intérêt majeur des approches basées sur le filtrage de Kalman est la possibilité d'estimer l'état du système a posteriori en se basant sur les amers de l'environnement et les positions du robot. Leur grande faiblesse vient des contraintes et des hypothèses fortes qu'on doit appliquer aux différents modèles utilisés. En plus, il n'est pas toujours facile d'extraire des amers corrects et intéressants dans un environnement non-structuré ou externe.
+
+L'utilisation d'un filtre particulaire Rao-Blackwellisé permet de maintenir une estimation a posteriori de l'état du système d'une manière plus rapide que le KF. Le filtrage particulaire peut également être utilisé avec des cartes grid-based ou feature-based. Cette méthode souffre néanmoins de plusieurs problèmes à cause de sa complexité grandissantes et ses difficultés de paramétrage.
+% Reste à developper la comparaison
+\section{Défis courants avec SLAM} 
+
+Bien que SLAM soit utilisé pour certaines applications pratiques, plusieurs défis techniques empêchent une adoption plus générale. Chacun a une contre-mesure qui peut aider à surmonter l'obstacle.
+
+\subsection[Exactitude des résultats]{Les erreurs de localisation s'accumulent, provoquant un écart important par rapport aux valeurs réelles} 
+
+SLAM estime le mouvement séquentiel, qui comprend une certaine marge d'erreur. L'erreur s'accumule au fil du temps, provoquant un écart substantiel par rapport aux valeurs réelles. Cela peut également entraîner la réduction ou la distorsion des données cartographiques, rendant les recherches ultérieures difficiles. Prenons un exemple de conduite autour d'un passage de forme carrée. À mesure que l'erreur s'accumule, les points de départ et d'arrivée du robot ne correspondent plus. C'est ce qu'on appelle un problème de fermeture de boucle. Des erreurs d'estimation de pose comme celles-ci sont inévitables. Il est important de détecter la fermeture de boucle et de déterminer comment corriger ou annuler l'erreur accumulée.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{15}
+	\caption[Minimisation de l'erreur de mesure]{\textit{Exemple de construction d'un graphe de pose et de minimisation des erreurs}}
+	\label{fig:3.2.1}
+\end{figure}
+
+Une \textbf{contre - mesure} consiste à se souvenir de certaines caractéristiques d'un lieu précédemment visité comme point de repère et à minimiser l'erreur de localisation. Les graphiques de pose sont construits pour aider à corriger les erreurs. En résolvant la minimisation des erreurs comme un problème d'optimisation, des données cartographiques plus précises peuvent être générées. Ce type d'optimisation est appelé ajustement groupé dans Visual SLAM.
+
+\subsection[Problème de positionnement]{La localisation échoue et la position sur la carte est perdue} 
+
+La cartographie d'images et de nuages de points ne tient pas compte des caractéristiques du mouvement d'un robot. Dans certains cas, cette approche peut générer des estimations de position discontinues. Par exemple, un résultat de calcul montrant qu'un robot se déplaçant à 1 m/s a soudainement fait un bond de 10 mètres en avant. Ce type d'échec de localisation peut être évité soit en utilisant un algorithme de récupération, soit en fusionnant le modèle de mouvement avec plusieurs capteurs pour effectuer des calculs basés sur les données du capteur.
+
+Il existe plusieurs méthodes pour utiliser un modèle de mouvement avec fusion de capteurs. Une méthode courante consiste à utiliser le filtrage de Kalman pour la localisation. Étant donné que la plupart des robots à entraînement différentiel et des véhicules à quatre roues utilisent généralement des modèles de mouvement non linéaires, des filtres de Kalman étendus et des filtres à particules (localisation Monte Carlo) sont souvent utilisés. Des filtres Bayes plus flexibles tels que des filtres Kalman non parfumés peuvent également être utilisés dans certains cas. Certains capteurs couramment utilisés sont des dispositifs de mesure inertielle tels que l'IMU, le système de référence d'attitude et de cap ou AHRS , les systèmes de réseau d'information ou INS, les capteurs accélérométriques, les capteurs gyroscopiques et les capteurs magnétiques. Les encodeurs de roue attachés au véhicule sont souvent utilisés pour l'odométrie.
+
+Lorsque la localisation échoue, une \textbf{contre - mesure} à récupérer consiste à se souvenir d'un point de repère comme une image clé d'un lieu précédemment visité. Lors de la recherche d'un point de repère, un processus d' extraction d' entités est appliqué de manière à pouvoir numériser à grande vitesse. Certaines méthodes basées sur des caractéristiques d'image incluent un sac de caractéristiques (BoF) et un sac de mots visuels (BoVW). Plus récemment, l'apprentissage en profondeur est utilisé pour comparer les distances des entités.
+
+\subsection[Coût de calcul élevé]{Coût de calcul élevé pour le traitement d'image, le traitement des nuages de points et l'optimisation} 
+
+Le coût de calcul est un problème lors de la mise en \oe{}uvre de SLAM sur le matériel d'un véhicule. Le calcul est généralement effectué sur des microprocesseurs intégrés compacts et à faible consommation d'énergie qui ont une puissance de traitement limitée. Pour obtenir une localisation précise, il est essentiel d'exécuter le traitement d'image et la correspondance des nuages de points à haute fréquence. De plus, les calculs d'optimisation tels que la fermeture de boucle sont des processus de calcul élevés. Le défi est de savoir comment exécuter un traitement aussi coûteux en calcul sur des micro-ordinateurs embarqués.
+
+Une \textbf{contre - mesure} consiste à exécuter différents processus en parallèle. Des processus tels que l'extraction de caractéristiques, qui est le prétraitement du processus de correspondance, sont relativement adaptés à la parallélisation. L'utilisation de processeurs multic\oe{}urs pour le traitement, le calcul de données multiples à instruction unique (SIMD) et de GPU intégrés peut encore améliorer les vitesses dans certains cas. De plus, étant donné que l'optimisation du graphe de pose peut être effectuée sur un cycle relativement long, abaisser sa priorité et effectuer ce processus à intervalles réguliers peut également améliorer les performances.
+\section{Conclusion}
+Depuis l'identification de la problématique du SLAM de nombreuses approches pour y répondre ont apparues. Historiquement, les approches filtrées, de Kalman puis particulaire, sont apparues les premières dans un contexte de SLAM général puis ont été adaptées au cas du SLAM visuel et monoculaire. Dans ce contexte sont ensuite apparues les approches Structure From Motion , issues de la communauté de vision.
+\part{Scan Matching}
+\chapter{Généralités sur le Scan Matching}
+\section{Point Cloud}
+Un point cloud, ou un nuage de point est un ensemble de points dans un espace 3D. Ces nuages de points sont obtenus notamment à partir de scanners 3D, tels que des scans de télémètres laser. On retrouve ce concept dans la navigation et la perception des robots, l'estimation de la profondeur, la vision stéréo, l'enregistrement visuel et les systèmes avancés d'aide à la conduite (ADAS)\cite{Matlab_cp}.
+https://youtu.be/ktRqKxddjJk?t=1363
+Densité, selection/segmentation, frequence
+https://youtu.be/ktRqKxddjJk?t=1009
+\section{Scan Matching}
+Le scan matching est un processus important dans plusieurs domaines. Il est utilisé pour la construction de modèles à partir d?analyses partielles dans des disciplines aussi diverses que L'imagerie médicale, L'archéologie, la robotique, etc. Il
+est également utile pour permettre la localisation du robot mobile. Il existe plusieurs algorithmes avec qui divergent dans leurs approches, qui ont pour but de faire du scan matching dont les plus connus : L'algorithme itératif du point le plus proche (ICP), la double correspondance itérative (IDC), la transformation
+de distribution normale (Normal Distribution Transform, NDT) et la méthode de champs de vraisemblance (LF)\cite{ref7}.
+
+Afin de déterminer la localisation, on pourrait croire que l'odométrie suffirait à acquérir assez d'information sur le déplacement de notre robot, pour dessiner son itinéraire. Cependant, on pourra constater dans le chapitre suivant, que l'odométrie brute à elle seule est bien trop pauvre pour créer un environnement que le robot pourra exploiter pour naviguer dans un milieu cartographié via des données issues exclusivement de l'odométrie. 
+
+\link{https://www.youtube.com/watch?v=nvFcN2-NqRc&t=61s}
+
+La superposition de nuages de points, est dite en \textit{Image Registration}, ou en encore \textit{Scan Matching} (dans ce mémoire, on va privilégier cette dernière dénomination). C'est le processus d'alignement de deux ou plusieurs nuages de points 3D de la même scène dans un système de coordonnées commun. La cartographie est le processus de construction d'une carte de l'environnement autour d'un robot ou d'un capteur (voir \ref{Cartographie} à la page \pageref{Cartographie}). Le scan matching et la localisation sont utilisés pour reconstruire une scène 3D ou créer la carte d'une route à des fins de localisation. 
+Bien que le scan matching est généralement utilisé pour la cartographie, il existe d'autres applications du scan matching, qui peuvent ne pas nécessiter de cartographie, telles que la poursuite de mouvement déformable. 
+
+Les algorithmes de \textit{Computer Vision Toolbox} de Matlab fournissent des fonctions d'enregistrement et de cartographie de nuages de points en 3D. Le flux de travail comprend le prétraitement, l'enregistrement, la correction de la dérive et l'alignement des nuages de points. Nous utiliserons cette outil dans le chapitre suivant, de même que nous appliquerons des algorithmes de scan matching sans recourir à ces fonctions notamment dans le cas en 2D\cite{Matlab_cp}.
+\\
+\section{Le Scan Matching étape par étape} 
+
+L'algorithme de cartographie et de localisation basé sur le scan matching adopté par la  \textit{Computer Vision Toolbox} de Matlab a une approche assez générale via laquelle on peut comprendre le concept aussi à l'aide d'un schéma explicatif dans la figure \ref{fig:22}. Il faut noter qu'il existe plus d'une méthode, et plus d'un outil pour faire du SLAM, mais les étapes qui vont suivre sont communes à plusieurs autres algorithmes qui ont pour objectif de superposer des nuages de points afin de dessiner une carte à partir d'une séquence de nuage de points, afin de localiser par la suite le véhicule sur la carte prédéfinie\cite{Matlab_cp} :
+
+\begin{itemize}
+	\item \begin{description}
+		\item[Prétraiter les nuages de points :] Pour préparer les nuages de points à l'enregistrement, il faut procéder à leur échantillonnage et à la suppression des éléments indésirables et du bruit.
+	\end{description}
+\end{itemize}
+
+\begin{itemize}
+	\item \begin{description}
+		\item[Scan Matching :] Superposer chaque nuage de points à celui qui le précède. Ces superpositions sont utilisés en odométrie, qui est le processus d'accumulation d'estimations successives de superpositions de trames de nuages de points. L'utilisation de l'odométrie seule peut conduire à une dérive entre les poses de vérité-mesurée et de vérité-terrain.
+	\end{description}
+\end{itemize}
+
+\begin{itemize}
+	\item \begin{description}
+		\item[Détecter les boucles :] Effectuer une détection de fermeture de boucle pour minimiser la dérive. La détection de fermeture de boucle est le processus d'identification du retour du capteur à un emplacement précédemment visité, qui forme une boucle dans la trajectoire du capteur.
+	\end{description}
+\end{itemize}
+
+\begin{itemize}
+	\item \begin{description}
+		\item[Corriger la dérive :] Utiliser les boucles détectées pour minimiser la dérive grâce à l'optimisation du graphe de pose, qui consiste à créer progressivement un graphe de pose en ajoutant des n\oe{}uds et des arêtes, puis à optimiser le graphe de pose une fois qu'il dispose de suffisamment de boucles. L'optimisation du graphe de pose se traduit par un ensemble de poses absolues optimisées.
+	\end{description}
+\end{itemize}
+
+\begin{itemize}
+	\item \begin{description}
+		\item[Assembler la carte :] Assembler une carte de nuages de points en alignant les nuages de points enregistrés à l'aide de leurs poses absolues optimisées. Sinon utiliser une carte de nuages de points prédéfinie pour la localisation du véhicule dans la carte. 
+	\end{description}
+\end{itemize}
+
+\begin{itemize}
+	\item \begin{description}
+		\item[Localiser :] Trouver la pose du véhicule sur la base de la carte assemblée.
+	\end{description}
+\end{itemize}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=300]{22}
+	\caption[Schamtisation du Scan Matching (Matlab)]{Schématisation du fonctionnement du Scan Matching selon le site web de Matlab}
+	\label{fig:22}
+\end{figure}
+
+\chapter{ICP}
+\url{https://www.youtube.com/watch?v=QWDM4cFdKrE&t=125s}
+https://nbviewer.jupyter.org/github/niosus/notebooks/blob/master/icp.ipynb\\
+
+L'ICP est largement utilisé pour L'alignement des nuages de points. Il a été introduit en 1992 par Besl et McKay\cite{icp_bib_1}.\\
+
+Cette technique de SLAM est basée sur le scan matching, cet algorithme permet le recalage entre deux données géométriques (dans ce cas des nuages points), les étapes de L'algorithme sont :
+
+\quad - La sélection des points à aligner ;
+
+\quad - L'association des points ;
+
+\quad - La pondération des paires de points obtenues pour estimer la transformation
+de repère ;
+
+\quad - Le rejet des mauvaises associations (points aberrants).
+\bigskip
+
+Généralement la sélection de points se fait aléatoirement et pour l'association la distance euclidienne entre chaque point est calculée et la plus petite distance permet de les associer\cite{icp_bib_1}.\\
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{algoICP}
+	\caption[L'organigramme général d?ICP]{L'organigramme général d?ICP}
+	\label{fig:algoICP}
+\end{figure}
+
+Puis vient l'étape de la pondération où chaque paire de points est attachée à un poids qui permet de déterminer si l'association est juste, la valeur 1 correspond donc à une association correcte et 0 à une fausse association. Ces points seront rejetés pour éviter une fausse estimation, L'organigramme de la figure \ref{fig:algoICP} représente les grandes étapes de L'ICP.\\
+
+Pour pouvoir faire L'association de points, on doit disposer initialement de deux scans consécutifs et chaque scan sera projeté sur le précédent pour pouvoir les comparer, une matrice de transformation homogène est nécessaire pour cela, et pour finir le seuil de sortie de la boucle est un seuil de nombre d?itérations permettant de déduire une position correcte, On peut aussi voir l'approche détaillée de l'algorithme adapté en fonction matlab et qui est disponible dans la toolbox "...."\ cite : [1] Chen, Y. and G. Medioni. ?Object Modelling by Registration of Multiple Range Images.? Image Vision Computing. Butterworth-Heinemann . Vol. 10, Issue 3, April 1992, pp. 145-155.
+
+[2] Besl, Paul J., N. D. McKay. ?A Method for Registration of 3-D Shapes.? IEEE Transactions on Pattern Analysis and Machine Intelligence. Los Alamitos, CA: IEEE Computer Society. Vol. 14, Issue 2, 1992, pp. 239-256.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{point_cloud_registration_icp}
+	\caption[L'organigramme général d'ICP]{L'organigramme général d'ICP}
+	\label{fig:point_cloud_registration_icp}
+\end{figure}
+
+
+\section{Variantes}
+\url{https://youtu.be/ktRqKxddjJk?t=887}
+
+\url{https://www.youtube.com/c/CyrillStachniss/search?query=ICP}
+\subsection{ICP Point à Point}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{icp1}
+	\caption[bla]{blablabla}
+	\label{fig:icp1}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{icp2}
+	\caption[bla]{blablabla}
+	\label{fig:icp2}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{icp3}
+	\caption[bla]{blablabla}
+	\label{fig:icp3}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{icp4}
+	\caption[bla]{blablabla}
+	\label{fig:icp4}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{icp5}
+	\caption[bla]{blablabla}
+	\label{fig:icp5}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{icp6}
+	\caption[bla]{blablabla}
+	\label{fig:icp6}
+\end{figure}
+
+\subsection{ICP Point à Ligne}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{icp7}
+	\caption[bla]{blablabla}
+	\label{fig:icp7}
+\end{figure}
+
+\subsection{GICP}
+\subsection{Comparaison}
+Et comme on pourra le constater dans le chapitre suivant, on a 
+\chapter{NDT}
+La transformation de distribution normale (NDT) peut être décrite comme une méthode pour représenter de façon compacte une surface. Cette méthode à été proposé par Biber et Straßer en 2003 \cite{ndt_1} comme une méthode pour l?alignement des scans 2D. Biber et Straßer ont ensuite développé la méthode dans un document commun avec Sven Fleck \cite{ndt_2}, également dans le contexte de l?alignement et de la cartographie. Dans leurs travail, le nuage de points est transformé en une représentation de surface lisse, décrite comme un ensemble de fonctions locales de densité de probabilité (PDF), chacune décrivant la forme d?une section de surface\cite{ndt_3}.
+
+La NDT est une méthode qui consiste à associer deux scan laser 2D l?un par rapport à l?autre. Il s?agit également de faire correspondre plusieurs scans lasers l?un par rapport à l?autre, en utilisant uniquement les résultats de la correspondance par paire dans une étape d?optimisation globale. Nous pouvons appliquer cet algorithme au suivi de position (Position Tracking) (\textit{i.e.} estimer le mouvement d?un objet mobile) et au problème de localisation et de cartographie simultanée (SLAM)\cite{ndt_2}. Semblable à une grille d?occupation, la NDT établit une subdivision régulière de plan. Mais là où la grille d?occupation représente la probabilité d?une cellule sont occupés, la NDT représente la probabilité de mesure d?un échantillon pour chaque position dans la cellule\cite{ref7}.
+
+\section{Représentation par des densités de probabilités}
+\subsection{Collecte des points 2D}
+\subsection{Calcul de la moyenne}
+\subsection{Calcul de la covariance}
+\section{Limitations numériques}
+\section{L'alignement avec NDT}
+\section{Le processus d?optimisation avec la méthode de Newton}
+\subsection*{Problèmes de méthode de Newton}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{algoNDT}
+	\caption[L'organigramme général d?NDT]{L'organigramme général d?NDT}
+	\label{fig:algoNDT}
+\end{figure}
+\part{Simulations}
+Dans ce chapitre nous allons tester les algorithmes ICP et NDT dans l'optique de comparer leurs performances en 2D et en 3D. Afin de choisir le 
+\chapter{Scan Matching en 2D}
+
+\section{ICP Vs. NDT}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{pose_graph_full_slam}
+	\caption[pose graph full slam]{À corriger, ce ne sont pas les 10 premiers scans qui ont été pris en compte. C plutot kamel les 690 scans}
+	\label{fig:pose_graph_full_slam}
+\end{figure}
+ (exempleScanMatching)\\
+1 => NDT\\
+3 => ICP\\
+2 => Full Slam (Lidar SLAM)\\
+4 => odometrie
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{2D_init}
+	\caption[2 Nuages de Point en 2D]{Les deux nuages de points en 2D à superposer}
+	\label{fig:2D_init}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{2D_ICP}
+	\caption[Scan Matching 2D ICP]{Scan Matching des deux nuages de points via l'algorithme de l'ICP}
+	\label{fig:2D_ICP}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{2D_NDT}
+	\caption[Scan Matching 2D NDT]{Scan Matching des deux nuages de points via l'algorithme NDT}
+	\label{fig:2D_NDT}
+\end{figure}
+\subsection{Compariason}
+Nous pouvons constater une meilleure performance de l'algorithme de la NDT de par la qualité de la superposition, et de l'exactitude de la mise en correspondance des nuages de points . 
+
+Après avoir simuler 
+\subsection{Occupancy Grid Map}
+Comparaison entre le full slam w le slam en temps réel (icp et ndt)
+
+Comprendre bien l'algo du full slam. On sait qu'il a générer les positions à partir des données du Télémètre laser. Le tout dans un algorithme de Pose Graph.
+
+https://fr.mathworks.com/videos/implement-simultaneous-localization-and-mapping-slam-with-matlab-1520292583530.html?s_eid=PSM_15028
+
+Cite As id : \cite{Slam_2021}
+Mihir Acharya (2021). Implement Simultaneous Localization and Mapping (SLAM) with (https://www.mathworks.com/matlabcentral/fileexchange/66284-implement-simultaneous-localization-and-mapping-slam-with), MATLAB Central File Exchange. Retrieved May 25, 2021.
+
+
+https://youtu.be/saVZtgPyyJQ
+
+À voir si l'environnement n'est vraiment pas complet. Ça serait intéressant de tester les mêmes algo en 2D sur un autre environnement ly on dispose de la réalité terrain ta3ou.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.75\linewidth]{occupancyGridMap_ndt}
+	\caption[occupancyGridMap NDT]{occupancyGridMap NDT occupancyGridMap NDT}
+	\label{fig:occupancyGridMap_NDT}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{grid_map_full_slam}
+	\caption[grid map full slam]{grid map full slam grid map full slam}
+	\label{fig:gridmapfullslam}
+\end{figure}
+
+\subsection{Comparaison}
+Ils sembles tous identiques. 
+\chapter{Scan Matching en 3D}
+\section{ICP en 3D}
+Point to Point Vs. Point to Line
+Le temps de réponse est quasiment identique, et on ne remarque pas de différence entre le scan matching de deux nuages points, bessa7 quand on prend une "frame" de nuages de points alors, on constate la différence :
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{3D_icp_fig_5_po_to_pt}
+	\caption[Scan Matching : ICP Point à Point]{Résultat de la cartographie via scan matching basé sur la variante Point à Point de l'Algorithme ICP}
+	\label{fig:3D_icp_fig_5_po_to_pt}
+\end{figure}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{3D_icp_fig_5_po_to_pl}
+	\caption[Scan Matching : ICP Point à Point]{Résultat de la cartographie via scan matching basé sur la variante Point à Ligne de l'Algorithme ICP}
+	\label{fig:3D_icp_fig_5_po_to_pl}
+\end{figure}
+
+\section{ICP Vs. NDT}
+ICP point à Point Vs. NDT
+Remarque : le fait de rallonger le pas diminue le temps et rend les résultat complètement sans sens. Il est impératif de trouver le juste milieu entre optimisation de la qualité de la carte et optimisation du temps de réponse.
+\subsection{Scan Matching de 2 nuages de points}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{3D_fig_3}
+	\caption[Vérité Tarrain]{2 images représentant la vérité terrain correspondant à 2 nuages de points consécutifs}
+	\label{fig:3D_fig_3}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{3D_fig_1}
+	\caption[État initial de Scan Matching]{État initial de Scan Matching : 2 nuages de points consécutifs}
+	\label{fig:3D_fig_1}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{3D_icp_fig_2}
+	\caption[Scan Matching à base de l'ICP]{Scan Matching des 2 nuages de points via l'algorithme de l'ICP}
+	\label{fig:3D_icp_fig_2}
+\end{figure}
+
+\subsection{Comparaison}
+ICP 3 secondes et des miettes
+NDT ma bin 6 et 7 sec
+
+\subsection{Scan Matching pour cartographier un environnement}
+Une séquence de ... de scans qui ont été superposés l'un après l'autre pour reconstruire une carte de l'environnement qui était jusque là inconnu.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{3D_fig_4}
+	\caption[État initial de Scan Matching]{État initial de Scan Matching : 1er nuage de point}
+	\label{fig:3D_fig_4}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{3D_ndt_fig_5}
+	\caption[Scan Matching à base de l'NDT]{Scan Matching des 2 nuages de poits via l'algorithme de l'NDT}
+	\label{fig:3D_ndt_fig_5}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{3D_icp_fig_5}
+	\caption[Scan Matching à base de l'ICP]{Scan Matching pour cartographier un environnement via l'algorithme de l'ICP}
+	\label{fig:3D_ndt_fig_2}
+	
+\subsection{Comparaison}
+ICP 16 secondes 
+NDT 60 sec min jusqu'à 90
+\end{figure}
+\part{Annexes}
+\appendix
+\chapter{Annexe 1  : Le filtre de Kalman}
+\section{Le filtre de Kalman-Shcmidt}
+Le filtre de Kalman traite le problème d'estimation de l'état $ x $ d'un processus discret déterminé par l'équation suivante :
+\begin{equation}\label{key}
+x_{t} = Ax_{t-1} + Bu_{t} + w_{t-1}
+\end{equation}
+
+avec des mesures $ z $ ayant un bruit gaussien $ v $ qu'on peut exprimer ainsi :
+\begin{equation}\label{key}
+z_{t} = Hx_{t} + v_{t}
+\end{equation}
+
+où :
+
+\quad - $ v_{t} $ représente le bruit des mesures $ v \sim \textit{N} (0, R) $
+
+\quad - $ w_{t} $ représente le bruit du processus $ w \sim \textit{N} (0, Q) $
+
+\subsection{Équations de prédiction et de mise à jour}
+L'état du système au moment de la réception de la prochaine mesure peut être prédit :
+\begin{equation}\label{key}
+x_{t+1/t} = Ax_{t/t} + Bu_{t}
+\end{equation}
+La covariance de la prédiction de l'état :
+\begin{equation}\label{key}
+P_{t+1/t} = AP_{t/t}A^{T} + Q_{t}
+\end{equation}
+\subsection{Équation de mise à jour des mesures}
+L'innovation pondérée par le gain du filtre, plus l'état prédit, à partir de l'estimation de l'état mise à jour :
+\begin{equation}\label{key}
+x_{t+1/t+1} = x_{t+1/t} + W_{t+1}v_{t+1}
+\end{equation}
+La covariance de l'état mise à jour :
+\begin{equation}\label{key}
+P_{t+1/t+1} = P_{t+1/t} - W_{t+1}S_{t+1}S_{t+1}^{T}
+\end{equation}
+où :
+\quad - L'innovation $ v $ est la différence entre la mesure réelle et la mesure prédite :
+\begin{equation}\label{key}
+v_{t+1} = z_{t+1} - Hx_{t+1/t}
+\end{equation}
+\quad - Le gain de Kalman $ W $ est :
+\begin{equation}\label{key}
+W_{t+1} = P_{t+1/t}H_{t+1/t}^{T}S_{t+1}^{-1}
+\end{equation}
+\quad - La covariance de l'innovation $ S $ est :
+\begin{equation}\label{key}
+S_{t+1} = H_{t+1/t}P_{t+1/t}H_{t+1/t}^{T}+R_{t+1}
+\end{equation}
+où $ R $ est la covariance du bruit de mesure.
+
+\section{Le Filtre de Kalman étendu : EKF}
+Les équations de transition et de mesure ne sont pas toujours linéaires. Le filtre EKF est une extension du filtre de Kalman permettant de traiter ces problèmes de non linéarité. Les simplifications mathématiques introduites ont toutefois un inconvénient : les distributions de probabilités ne sont plus modélisées correctement et la linéarisation cause des inconsistances. Cependant, en pratique, les résultats sont souvent satisfaisants.
+\subsection{Équation de prédiction et de mise à jour}
+\begin{equation}\label{key}
+x_{t+1/t} = f(x_{t/t},u_{t})
+\end{equation}
+\begin{equation}\label{key}
+P_{t+1/t} =(\nabla_{x}f)_{t/t}P_{t/t}(\nabla_{x}f)_{t/t}^{T}+Q_{t}
+\end{equation}
+où :
+\quad - $ f $ est l'équation de mise à jour de l'état
+\quad - $ x_{t/t} $ est l'estimation de l'état à l'instant $ t $ en se basant sur l'information à l'instant $ t $
+\quad - $ x_{t+1/t} $ est l'estimation de l'état à l'instant $ t+1 $ en se basant sur le modèle de transition (sans intégrer l'information de mesure)
+\quad - $ P $ correspond à la matrice de covariance
+\quad - $ Q $ représente la matrice de covariance du bruit du processus
+
+\subsection{Équations de mise à jour des mesures}
+\begin{equation}\label{key}
+x_{t+1/t+1} = x_{t+1/t}+W_{t+1}v_{t+1}
+\end{equation}
+\begin{equation}\label{key}
+P_{t+1/t+1} = P_{t+1/t}+W_{t+1}S_{t+1}W_{t+1}^{T}
+\end{equation}
+Les équations de mise à jour des mesures ajoutent des informations à partir des nouvelles mesures afin de corriger les estimations faites à partir du modèle de transition. $ v $ est appelée l'innovation et correspond à l'ensemble de l'information non prédite ayant été obtenue à partir des mesures. $ W $ est le gain de Kalman, et il exprime le degré de confiance qu'on a dans les mesures.
+\begin{equation}\label{key}
+v_{t+1} = z_{t+1}-hx_{t+1/t}
+\end{equation}
+\begin{equation}\label{key}
+W_{t+1} =P_{t+1/t}(\nabla_{x}h)_{t/t}^{T}+S_{t+1}^{-1}
+\end{equation}
+\begin{equation}\label{key}
+S_{t+1} =(\nabla_{x}h)_{t+1/t}P_{t+1/t}(\nabla_{x}h)_{t+1/t}^{T}+R_{t+1}
+\end{equation}
+$ R $ est la covariance du bruit de mesure.
+
+\subsubsection{Filtre d'information étendu}
+Remarque le filtre d'information traite les systèmes qui acquièrent des données linéaires. Cependant le Filtre d'information étendu linéarise les systèmes non linéaire une fois, donc il donne de bons résultats localement donc si la linéarisation est correctement faite.
+
+\subsubsection{Approche FastSlam}
+\subsubsection{Approche Amers}
+
+\part{Partie}
+%\backmatter
+\chapter{Index/Bibliographie}
+
+\bibliographystyle{unsrt} % Le style est mis entre accolades.
+\bibliography{bibli.bib} % mon fichier de base de données s'appelle bibli.bib
+
+\end{document}
+%**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************
+%Normal : {\normalfont un lapin}
+%Gras : \textbf{un lapin}
+%Italique : \textit{un lapin}
+%Penché : \textsl{un lapin}
+%Machine à écrire : \texttt{un lapin}
+%Petites majuscules: \textsc{un lapin}
+%Exposant : Un canard\textsuperscript{2}
+%Encadrer : \fbox{un lapin}
+%Soulignement : \ul{un lapin}
+%Soulignement double : \uuline{un lapin}
+%Soulignement wavy : \uwave{un lapin}
+%Barrer : \st{un lapin}
+%Mettre en valeur : \emph{texte}
+%**************************************************************************************************************************************
+%Pour les couleurs : https://openclassrooms.com/fr/courses/1617396-redigez-des-documents-de-qualite-avec-latex/1618993-les-polices
+%**************************************************************************************************************************************
+%\begin{quote}
+%	Tout individu a droit à la vie, à la liberté et à la sûreté de sa personne. \end{quote}
+%
+%\begin{quotation}
+%	Tout individu a droit à la vie, à la liberté et à la sûreté de sa personne.  \end{quotation}
+%**************************************************************************************************************************************
+%\url{adresse}
+%**************************************************************************************************************************************
+%% Commande permettant de définir l'écart
+%\setlength{\fboxsep}{8mm}
+%% Commande permettant de définir l'épaisseur du trait
+%\setlength{\fboxrule}{2mm}
+%\fbox{Un lapin}
+%**************************************************************************************************************************************
+%un canard\footnote{bestiole qui fait coin}
+%**************************************************************************************************************************************
+%un canard\footnotemark[1] \\
+%un ornithorynque\footnotemark[18] \\
+%
+%\footnotetext[1]{bestiole qui fait coin} 
+%\footnotetext[18]{bestiole qui fait rire} 
+%**************************************************************************************************************************************
+%Les références internes :
+%https://openclassrooms.com/fr/courses/1617396-redigez-des-documents-de-qualite-avec-latex/1619118-les-notes#/id/r-1623874
+%
+%\label{patate} 
+%Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+%Donec nec condimentum libero. Phasellus 
+%\chapter{Chapitre}
+%\section{Section}
+%\subsection{Une sous-section}
+%Ici nous parlerons de la sous-section \ref{patate} vue à la page \pageref{patate}.
+%**************************************************************************************************************************************
+%Image dans un coin du texte en symbiose :
+%https://openclassrooms.com/fr/courses/1617396-redigez-des-documents-de-qualite-avec-latex/1619748-les-figures#/id/r-1624449
+%**************************************************************************************************************************************
