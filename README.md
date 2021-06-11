@@ -3,11 +3,13 @@
 
 ## 3D Scan Matching 
 On a les fichiers *pointCloudIcp.m* et *pointCloudNdt.m* qui font du **scan matching** à base de ICP et de NDT réspéctivement dans le but de recréer l'environnement de '*leavingRoom*'. On peut comparer le rendu des algo **ICP (point to point & point to plan)** et **NDT** à parir de ces deux là. 
+On s'est basé sur : [Matlab 3-D Point Cloud Registration and Stitching](https://fr.mathworks.com/help/vision/ug/3-d-point-cloud-registration-and-stitching.html) et de [Matlab Example pcregisterndt](https://fr.mathworks.com/help/vision/ref/pcregisterndt.html)
+
 
 ### À faire 
 1. Étudier les fonctions *pcregistericp* et *pcregisterndt*. Je crois qu'en plus de l'optimisation, il y a un proscess qui assure la **roblustesse** des résultats, on pourra décrire tout ça mɛa la **M-estimation** dans les méthodes **IRLS**.
-2. Comprendre pourquoi les résultas divergents dans l'ICP koul ma je change de marge initale dans la boucle, d'autant plus que c la même chose avec le modèle 2D
-3. Au lieu de se casser la tête avec le dataset el ɣaleṭ, demander à Aḥmine sa sequence 00. Et d'appliquer les mêmes commandes kima *getKitti* que je devrais importer ici. Je devrais aussi mettre en commentaire kamel les chemin en local, pour ne pas me perdre. Maintenant rani ḥafḍet'houm, mais ça ne sera plus le cas d'ici 4~5 jours
+2. Demander la sequence 00. Et d'appliquer les mêmes commandes kima *getKitti* que je devrais importer ici. Je devrais aussi mettre en commentaire kamel les chemins en local, pour ne pas me perdre. 
+
 ___________
 
 ## 2D Scan Matching
