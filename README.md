@@ -9,6 +9,7 @@ On s'est basé sur : [Matlab 3-D Point Cloud Registration and Stitching](https:/
 ### À faire 
 1. [x] Étudier les fonctions *pcregistericp* et *pcregisterndt*. Je crois qu'en plus de l'optimisation, il y a un proscess qui assure la **roblustesse** des résultats, on pourra décrire tout ça mɛa la **M-estimation** dans les méthodes **IRLS**.
 2. [x] Demander la sequence 00. Et d'appliquer les mêmes commandes kima *getKitti* que je devrais importer ici. Je devrais aussi mettre en commentaire kamel les chemins en local, pour ne pas me perdre. 
+3. [x] Convertir La comparaison ICPs en 3D.
 
 ___________
 
