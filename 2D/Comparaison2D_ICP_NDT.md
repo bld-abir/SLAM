@@ -1,7 +1,7 @@
 # SLAM 2d
 
 ## Scan Matching de 2 Scans :
-Lorsqu'on utilise l'algorithme de l'ICP sans aucune optimisation, rien qu'en utilisant les moindres carrés, on obtient un très mauvais résultat, comparé aux résultats qu'on retrouve avec la NDT.
+Lorsqu'on utilise l'algorithme de l'ICP sans aucune optimisation, rien qu'en utilisant les moindres carrés, on obtient un très mauvais résultat, comparés aux résultats qu'on retrouve avec la NDT.<Br/>
 Par contre, en optimisant la robustesse de l'algorithme de l'ICP, que ce soit avec la M-Estimation de Cauchy ou Weiner, on retrouve avec l'ICP de meilleurs résultats que via la NDT.
 
 ## SLAM pour localiser et cartographier un environnement inconnu :
