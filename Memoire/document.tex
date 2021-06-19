@@ -1,6 +1,7 @@
 \documentclass{report}
 \usepackage[latin1]{inputenc}
 \usepackage[T1]{fontenc}
+%\usepackage[cyr]{aeguill}
 \usepackage[francais]{babel}
 \usepackage{graphicx} % Pour manipuler des images
 \usepackage{lmodern} % Pour changer le pack de police.
@@ -123,6 +124,7 @@ Ce sera là qu'on va parler des étapes d'évolution avec les parties prenantes dan
 		\textbf{IDC}	& Iterative Dual Correspondences \\ 
 		\textbf{ICRA}	& International Conference on Robotics and Automation \\ 	
 		\textbf{IEEE}	& Institute of Electrical and Electronics Engineers \\ 	
+		\textbf{IML}	& Incremental Maximum Likelihood \\
 		\textbf{IMU}	& Inertial measurement unit \\ 	
 		\textbf{INS}	& Information Network System  \\ 	
 		\textbf{IR}	& Infra-Rouge \\ 
@@ -133,15 +135,7 @@ Ce sera là qu'on va parler des étapes d'évolution avec les parties prenantes dan
 		\textbf{MATLAB}	& MATrix LABoratory  \\ 
 		\textbf{NDT}	& Normal Distributions Transform \\ 
 		\textbf{ORB-SLAM}	& Oriented FAST and Rotated BRIEF SLAM \\ 
-		\textbf{PhD}	& Philosophiæ Doctor \\ 
-		\textbf{PTAM}	& Parallel Tracking and Mapping \\ 	
-		\textbf{RANSAC}	& RANdom SAmple Consensus  \\ 
-		\textbf{RGB-D}	& Red Green Blue Depth \\ 		
-		\textbf{ROS}	& Robot Operating System \\ 	
-		\textbf{SfM}	& Structure for Motion\\ 
-		\textbf{SIMD}	& Single Instruction Multiple Data  \\ 
-		\textbf{LF}	& Likelihood-field matching Instruction Multiple Data  \\ 
-		\textbf{SLAM}	& Simultanious Localization and Mapping \\ 
+		
 		
 	\end{tabular} 
 	\label{tab:1}
@@ -149,6 +143,15 @@ Ce sera là qu'on va parler des étapes d'évolution avec les parties prenantes dan
 
 \begin{figure}[h]
 	\begin{tabular}{l l}
+		\textbf{PhD}	& Philosophiæ Doctor \\ 
+		\textbf{PTAM}	& Parallel Tracking and Mapping \\ 	
+		\textbf{RANSAC}	& RANdom SAmple Consensus  \\ 
+		\textbf{RGB-D}	& Red Green Blue Depth \\ 		
+		\textbf{ROS}	& Robot Operating System \\ 	
+		\textbf{SfM}	& Structure for Motion\\ 
+		\textbf{SIMD}	& Single Instruction Multiple Data  \\ 
+		\textbf{LF}	    & Likelihood-field matching Instruction Multiple Data  \\ 
+		\textbf{SLAM}	& Simultanious Localization and Mapping \\ 
 		\textbf{SNSS}	& Global Navigation Satelite System\\ 
 		\textbf{SVO}	& Semi-direct Visual Odometry \\ 
 		\textbf{ToF}	& Time of Flight \\ 
@@ -214,7 +217,7 @@ L'inconvénient avec la méthode probabiliste, c'est qu'elle cumule les erreurs qu
 
 On a besoin d'une carte fiable pour se localiser, tandis qu'on a besoin de données de géolocalisation pour cartographier l'environnement. Ce problème aux dimensions de la question philosophique de la poule et de l'\oe{}uf, fait du SLAM un problème assez compliqué à aborder. Une brève histoire de la recherche sur le SLAM et des solutions typiques de problèmes SLAM sont présentés dans\cite{reff1}. Les problèmes majeurs dans la recherche SLAM, tel que la théorie de la complexité, l'association de données, et la représentation de l'environnement sont discutés dans\cite{reff2}. Un aperçu général et une analyse détaillée du SLAM sont abordés dans \cite{reff3} et \cite{reff4}.\\ 
 
-\chapter{Formulation}
+\chapter{Formulation}\label{sec:formulation}
 Le SLAM est composé d'un ensemble de méthodes permettant à un robot de construire une carte d'un environnement et en même temps de se localiser en utilisant cette carte. La trajectoire du véhicule et la position des amers dans la carte sont estimées au fur et à mesure, sans avoir besoin de connaissances a priori .
 
 Considérons un robot se déplaçant dans un environnement inconnu, en observant un certain nombre d'amers grâce à un capteur embarqué sur le robot. La figure 2.2.1 montre une illustration du problème.
@@ -252,7 +255,7 @@ Le problème de localisation du robot consiste à estimer sa position dans un envi
 	\centering
 	\includegraphics[width=\linewidth]{4}
 	\caption[La localisation]{La localisation : le système cherche à estimer sa position en utilisant les	informations sur l'environnement dont il dispose}
-	\label{fig:2.2.1.1}
+	\label{fig:localisation}
 \end{figure}
 
 On peut analytiquement représenter cette opération par l'estimation de la probabilité de distribution :
@@ -279,7 +282,7 @@ On peut exprimer cela analytiquement ainsi :
 \[ P(m_{k}|Z_{0:k}, X_{0:k})\]
 
 Les positions réelles du robot peuvent être obtenues en utilisant des balises dans un environnement interne ou un récepteur GPS en externe. Ces positions doivent être précises et correctes afin d'obtenir une bonne cartographie.
-\subsection{Représentation de la carte}
+\subsection{Représentation de la carte}\label{sec:representation-de-la-carte}
 Le choix de la représentation de la carte de l'environnement est une étape importante dans le SLAM. On peut distinguer trois approches fondamentales de représentation de l'environnement :
 
 \quad - L'approche directe ;
@@ -534,7 +537,7 @@ Le filtre de Bayes est une technique d'estimation récursive d'état utilisée dans
 
 Ce qu'on appelle le filtre de Bayes est en effet une structure importante, cela dit, ce n'est pas une réalisation ou un filtre en soi utilisable dans la localisation ou l'estimation de la position du système dans un moment donné.
 
-L rôle effectif du filtre de Kalman est d'emmètre une estimation d'état en temps réel (en ligne). Ceci implique qu'on va prédire une approximation de l'état en temps $ t+1 $ à base des données qu'on a au temps $ t $, ces données étant les plus récentes acquises par l'observateur et émises par le modèle de commande.\\
+Le rôle effectif du filtre de Kalman est d'emmètre une estimation d'état en temps réel (en ligne). Ceci implique qu'on va prédire une approximation de l'état en temps $ t+1 $ à base des données qu'on a au temps $ t $, ces données étant les plus récentes acquises par l'observateur et émises par le modèle de commande.\\
 
 Cette méthode récursive d'estimation d'état consiste globalement en l'estimation de l'état futur à partir d'une projection de l'état précédent. L'aspect récursive de cette approche apparaît dans la dérivation de l'équation de Bayes
 \[ P(x_{t}, z_{1 : t-1}) = \sum_{x_{t-1}} p(x_{t} | x_{t-1}) p(x_{t-1} | z_{1 : t-1})\]
@@ -611,18 +614,69 @@ L'algorithme FastSLAM décompose le problème du SLAM en deux parties : un problèm
 
 L'utilisation du filtrage particulaire souffre également des difficultés rencontrées lors de la définition du nombre de particules. En effet, la qualité de l'estimation est fortement corrélée à la discrétisation de l'espace de recherche. Mais il est difficile de trouver un nombre optimal de particules.
 
-\subsection{Graph SLAM}
-Le GraphSLAM, ou Pose Graph, a été introduit pour la première fois par Lu et Milios en 1997\cite{lu1997}.
-Cette approche constitue depuis une dizaine d'années un axe de recherche très actif au sein de la communauté de robotique. L'estimation de l'état du système est formulée par un problème d'optimisation.
-Ce dernier fait appel à plusieurs techniques issues essentiellement de l'algèbre linéaire et de la théorie
-des graphes. Le GraphSLAM est une technique de SLAM basé optimisation de graphe, il modélise le problème de SLAM à
-l'aide d'un graphe. Comme l'illustre la figure 1.2, la trajectoire et la carte des amers sont représentées
-par des n\oe{}uds. Associées à un bruit Gaussien, les mesures des capteurs donnent des contraintes spatiales
-entre les n\oe{}uds. Ces contraintes spatiales sont modélisées par des arêtes. On distingue deux types
-d'arêtes : arêtes de mouvement et arêtes d'observation. Une arête de mouvement relie deux n\oe{}uds
-robot (pose) consécutifs. Une arête d'observation provient d'une observation d'un amer. Un amer est
-relié à une pose (n\oe{}ud robot) s'il a été observé depuis celle-ci.
+\subsection{Maximum de Vraisemblance(IML)}
+Alors que qu'un filtre particulaire ou un filtre de Kalman constituent des solutions probabilistes du problème de SLAM, la recherche incrémentale du maximum de vraisemblance (notée IML pour Incremental Maximum Likelihood) est une approche d'optimisation, où on teste plusieurs hypothèses à la recherche de celle qui maximise la vraisemblance.
 
+Contrairement aux différentes déclinaisons du filtre de Kalman ou des approches à maximisation globale de vraisemblance (Expectation Maximization \cite{iml}), qui essaient d'établir une estimation a posteriori sur les positions du robot et sur la carte, l'idée de l'IML est de construire une seule carte incrémentalement à chaque réception des données des capteurs sans garder un suivi de l'incertitude. Ce principe assure la simplicité de l'IML, qui reste son grand avantage comparé aux autres méthodes de SLAM.
+
+En théorie l'Incremental Maximum Likelihood (IML) consiste à rechercher à chaque instant la meilleure correspondance entre l'observation courante (les données provenant du laser) et la carte courante (combinant la connaissance de l'environnement), et à remettre à jour la carte conformément à cette mise en correspondance. L'idée générale de cet
+algorithme est présentée dans le schéma de la figure \ref{fig:iml}.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{iml}
+	\caption[Principe général de l'IML]{\textit{Principe général de l'IML}}
+	\label{fig:iml}
+\end{figure}
+L'IML est un processus évidemment divergent, puisqu'on utilise la localisation du robot
+pour mettre à jour la carte, et la carte mise à jour pour trouver la localisation du robot.
+
+Mathématiquement, l'idée de base de l'IML est de maintenir une série de cartes $ ( \hat{m}_1 , \hat{m}_2 , . . . ) $\footnotetext[1]{Attention : la notation $ m_k $ utilisée ici est différente de la définition donnée dans \ref{sec:formulation}. Dans la section \ref{sec:formulation}, $ m_k $ désigne l'amer $ k $ de la carte, alors que dans cette section, elle désigne la carte construite à l'étape $ k $.} et une série de positions du robot $ ( \hat{x}_1 , \hat{x}_2 , . . . ) $ maximisant la vraisemblance. La position du robot à l'instant $ k $ est calculée en utilisant l'estimation à l'instant $ k-1 $ en maximisant la vraisemblance :
+\begin{equation}\label{eqIML_1}
+\{\hat{x}_k, \hat{m}_k\} = \underset{{x}_k,{m}_k}{argmax}{P({z}_k|{x}_k,{m}_k) \times P({x}_k,{m}_k|{u}_k,{\hat{x}}_{k-1},{\hat{m}}_{k-1})}
+\end{equation}
+La carte de l'environnement $ {m}_k $ est construite lorsque la position $ {x}_k $ est connue. Ainsi, en pratique, il suffit de chercher dans l'espace des positions du robot. Afin de déterminer la position $ \hat{x}_k $ maximisant la vraisemblance, l'IML nécessite simplement une recherche dans l'espace de toutes les positions $ {x}_k $ lorsque l'algorithme reçoit de nouvelles données des capteurs :
+\begin{equation}\label{eqIML_2}
+\hat{x}_k = \underset{{x}_k}{argmax}{P({z}_k|{x}_k,{m}_{k-1}) \times P({x}_k|{u}_k,{\hat{x}}_{k-1})}
+\end{equation}
+Dans l'équation \ref{eqIML_2}, le terme $ P({z}_k|{x}_k,\hat{m}_{k-1}) $ décrit la probabilité d'observer les dernières mesures $ {z}_k $ des capteurs en utilisant la carte $ {m}_k $ construite à l'étape $ k-1 $ et la position du robot $ {x}_k $. Le terme $ P({z}_k|{u}_k,\hat{x}_{k-1}) $ représente la probabilité que le système soit à l'état $ {x}_k $ en supposant connu l'état $ \hat{x}_{k-1} $ et la commande $ {u}_k $. Le résultat $ \hat{x}_k $ trouvé est utilisé afin de mettre à jour la carte en utilisant les données correspondantes $ z_k $ :
+\begin{equation}\label{eqIML_3}
+\hat{m}_k = \hat{m}_{k-1}\cup\{\hat{x}_k,z_k\}
+\end{equation}
+La maximisation de l'équation \ref{eqIML_2} revient à trouver la position $ x_k $ du robot qui permet de satisfaire le modèle de mouvement du véhicule assurant une meilleure concordance entre les données des capteurs $ z_k $ et la carte $ m_{k-1} $. Dans les différents travaux de recherche portants sur le SLAM par recherche du maximum de vraisemblance, on a souvent recourt aux méthodes de mise en correspondance des scans Laser (scan matching).
+
+Ces méthodes diffèrent selon la représentation de la carte choisie (section \ref{sec:representation-de-la-carte}). On peut ainsi utiliser un scan-matching direct \cite{directScanMatch}, se baser sur les caractéristiques géométriques de l'environnement [50] ou profiter de la grille probabiliste de la carte [51]. L'une des techniques les plus utilisées dans le cadre du scan matching est l'ICP.
+
+La simplicité et la rapidité du SLAM par recherche du maximum de vraisemblance permet de construire des cartes de l'environnement en temps réel, mais cette approche ne peut pas garder une notion d'incertitude dans les estimations. En plus, la nature incrémentale de l'algorithme limite les traitements sur une seule étape de calcul et néglige l'ensemble des données capturées dans les autres étapes (contrairement au filtre de Kalman par exemple).
+
+Lorsqu'une position $ x_k $ du robot et une carte $ m_k $ ont été déterminées, elles sont fixées et ne peuvent plus être changées ou corrigées en utilisant les prochaines données (cas de fermeture de boucle par exemple). L'erreur d'estimation de la position $ x_k $ peut ainsi grandir sans limite. Afin de corriger de problème, des propositions comme celle de Hähnel [52] ont été émise, il propose d'utiliser un arbre d'associations pour suivre plusieurs hypothèses de la carte de l'environnement. Si cette idée peut améliorer la qualité des résultats de l'algorithme, elle risque tout comme les autres propositions de nécessiter plus de charges de calcul, ce qui peut freiner l'utilisation temps-réel de l'IML dans le SLAM\cite{reference2}.
+
+C'est justement ce qui fait de Pose Graph une approche de \textit{full SLAM} (ou \textit{off line SLAM}), or qu'on ne peut pas l'applique en temps réel.
+\subsubsection{Graph SLAM}
+Le GraphSLAM (pour \textit{graph based SLAM}), ou Pose Graph, a été introduit pour la première fois par Lu et Milios en 1997\cite{lu1997}, c'est un problème d'estimation de maximum de vraisemblance incrémentale, c'est sa variante la plus utilisée\cite{poseGraph}.
+
+Cette approche constitue depuis une dizaine d'années un axe de recherche très actif au sein de la communauté de robotique. L'estimation de l'état du système est formulée par un problème d'optimisation.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{poseGraphPosesEtAmers}
+	\caption[Exemple Graph SLAM]{\textit{Exemple illustratif de la méthode Graph SLAM}}
+	\label{fig:poseGraphPosesEtAmers}
+\end{figure}
+Ce dernier fait appel à plusieurs techniques issues essentiellement de l'algèbre linéaire et de la théorie des graphes. Le GraphSLAM est une technique de SLAM basé optimisation de graphe, il modélise le problème de SLAM à l'aide d'un graphe. Comme l'illustre la figure \ref{fig:poseGraphPosesEtAmers}, la trajectoire et la carte des amers sont représentées par des n\oe{}uds. Associées à un bruit Gaussien, les mesures des capteurs donnent des contraintes spatiales entre les n\oe{}uds. Ces contraintes spatiales sont modélisées par des arêtes. On distingue deux types d'arêtes : arêtes de mouvement et arêtes d'observation. Une arête de mouvement relie deux n\oe{}uds robot (pose) consécutifs. Une arête d'observation provient d'une observation d'un amer. Un amer est relié à une pose (n\oe{}ud robot) s'il a été observé depuis celle-ci.
+
+Tandis que la marginalisation consistait à éliminer des entrées de la matrice de variances-
+covariances (inverse de la matrice d?information) dans le but de diminuer la densité du système (le
+rendre plus épars).
+
+Le complément de Schur dans le GraphSLAM consiste à réduire le graphe en marginalisant les amers. La marginalisation d?un amer implique la connexion deux à deux les poses depuis lesquelles cet amer a été observé. Le graphe réduit peut être également obtenu par une mise en correspondance directe des faisceaux Laser entre deux poses donnant, ainsi, la distance relative entre ces poses.
+
+Pour efficacement résoudre de larges systèmes, leur technique consiste à utiliser un squelette du graphe (skeleton graph). Celui-ci est composé d?un sous-ensemble
+de frames suite à la marginalisation des amers.
+
+La figure \ref{fig:poseGraphPosesEtAmers} illustre également la procédure de marginalisation des amers que l?on peut appeler aussi réduction de graphe. Celle-ci est réalisée en utilisant le complément de Schur qui réduit la taille du système et ainsi son temps de résolution. Il transforme le système construit en un nouveau système plus petit, et ne contenant que les poses. 
+
+Néanmoins, la marginalisation des amers génère de nouvelles contraintes entre les poses. Le nouveau système peut, donc, être moins épars, voire très dense par rapport au système initial. Le temps de résolution peut alors augmenter et devient très important. D?autre part, ce phénomène de remplissage peut être masqué par la forte réduction de la taille du système si le nombre d?amers est très grand par rapport au nombre de poses
 \subsection{Comparaison}
 
 L'intérêt majeur des approches basées sur le filtrage de Kalman est la possibilité d'estimer l'état du système a posteriori en se basant sur les amers de l'environnement et les positions du robot. Leur grande faiblesse vient des contraintes et des hypothèses fortes qu'on doit appliquer aux différents modèles utilisés. En plus, il n'est pas toujours facile d'extraire des amers corrects et intéressants dans un environnement non-structuré ou externe.
@@ -659,7 +713,7 @@ Le coût de calcul est un problème lors de la mise en \oe{}uvre de SLAM sur le ma
 
 Une \textbf{contre - mesure} consiste à exécuter différents processus en parallèle. Des processus tels que l'extraction de caractéristiques, qui est le prétraitement du processus de correspondance, sont relativement adaptés à la parallélisation. L'utilisation de processeurs multic\oe{}urs pour le traitement, le calcul de données multiples à instruction unique (SIMD) et de GPU intégrés peut encore améliorer les vitesses dans certains cas. De plus, étant donné que l'optimisation du graphe de pose peut être effectuée sur un cycle relativement long, abaisser sa priorité et effectuer ce processus à intervalles réguliers peut également améliorer les performances.
 \section{Conclusion}
-Depuis l'identification de la problématique du SLAM de nombreuses approches pour y répondre ont apparues. Historiquement, les approches filtrées, de Kalman puis particulaire, sont apparues les premières dans un contexte de SLAM général puis ont été adaptées au cas du SLAM visuel et monoculaire. Dans ce contexte sont ensuite apparues les approches Structure From Motion , issues de la communauté de vision.
+Depuis l'identification de la problématique du SLAM de nombreuses approches pour y répondre ont apparues. Historiquement, les approches filtrées, de Kalman puis particulaire, sont apparues les premières dans un contexte de SLAM général puis ont été adaptées au cas du SLAM visuel et monoculaire. Dans ce contexte sont ensuite apparues les approches \textit{Structure From Motion}, issues de la communauté de vision.
 \part{Scan Matching}
 \chapter{Généralités sur le Scan Matching}
 \section{Point Cloud}
@@ -668,13 +722,11 @@ https://youtu.be/ktRqKxddjJk?t=1363
 Densité, selection/segmentation, frequence
 https://youtu.be/ktRqKxddjJk?t=1009
 \section{Scan Matching}
-Le scan matching est un processus important dans plusieurs domaines. Il est utilisé pour la construction de modèles à partir d?analyses partielles dans des disciplines aussi diverses que L'imagerie médicale, L'archéologie, la robotique, etc. Il
-est également utile pour permettre la localisation du robot mobile. Il existe plusieurs algorithmes avec qui divergent dans leurs approches, qui ont pour but de faire du scan matching dont les plus connus : L'algorithme itératif du point le plus proche (ICP), la double correspondance itérative (IDC), la transformation
-de distribution normale (Normal Distribution Transform, NDT) et la méthode de champs de vraisemblance (LF)\cite{ref7}.
+Le scan matching est un processus important dans plusieurs domaines. Il est utilisé pour la construction de modèles à partir d?analyses partielles dans des disciplines aussi diverses que L'imagerie médicale, L'archéologie, la robotique, etc. Il est également utile pour permettre la localisation du robot mobile. Il existe plusieurs algorithmes avec qui divergent dans leurs approches, qui ont pour but de faire du scan matching dont les plus connus : L'algorithme itératif du point le plus proche (ICP), la double correspondance itérative (IDC), la transformation de distribution normale (Normal Distribution Transform, NDT) et la méthode de champs de vraisemblance (LF)\cite{ref7}.
 
 Afin de déterminer la localisation, on pourrait croire que l'odométrie suffirait à acquérir assez d'information sur le déplacement de notre robot, pour dessiner son itinéraire. Cependant, on pourra constater dans le chapitre suivant, que l'odométrie brute à elle seule est bien trop pauvre pour créer un environnement que le robot pourra exploiter pour naviguer dans un milieu cartographié via des données issues exclusivement de l'odométrie. 
 
-\link{https://www.youtube.com/watch?v=nvFcN2-NqRc&t=61s}
+%\link{https://www.youtube.com/watch?v=nvFcN2-NqRc&t=61s}
 
 La superposition de nuages de points, est dite en \textit{Image Registration}, ou en encore \textit{Scan Matching} (dans ce mémoire, on va privilégier cette dernière dénomination). C'est le processus d'alignement de deux ou plusieurs nuages de points 3D de la même scène dans un système de coordonnées commun. La cartographie est le processus de construction d'une carte de l'environnement autour d'un robot ou d'un capteur (voir \ref{Cartographie} à la page \pageref{Cartographie}). Le scan matching et la localisation sont utilisés pour reconstruire une scène 3D ou créer la carte d'une route à des fins de localisation. 
 Bien que le scan matching est généralement utilisé pour la cartographie, il existe d'autres applications du scan matching, qui peuvent ne pas nécessiter de cartographie, telles que la poursuite de mouvement déformable. 
@@ -720,10 +772,9 @@ L'algorithme de cartographie et de localisation basé sur le scan matching adopté
 		\item[Localiser :] Trouver la pose du véhicule sur la base de la carte assemblée.
 	\end{description}
 \end{itemize}
-
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=300]{22}
+	\includegraphics[width=\linewidth]{22}
 	\caption[Schamtisation du Scan Matching (Matlab)]{Schématisation du fonctionnement du Scan Matching selon le site web de Matlab}
 	\label{fig:22}
 \end{figure}
@@ -751,7 +802,7 @@ Généralement la sélection de points se fait aléatoirement et pour l'association 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{algoICP}
-	\caption[L'organigramme général d?ICP]{L'organigramme général d?ICP}
+	\caption[L'organigramme général d'ICP]{L'organigramme général d'ICP}
 	\label{fig:algoICP}
 \end{figure}
 
@@ -770,10 +821,12 @@ Pour pouvoir faire L'association de points, on doit disposer initialement de deu
 
 
 \section{Variantes}
+
 \url{https://youtu.be/ktRqKxddjJk?t=887}
 
 \url{https://www.youtube.com/c/CyrillStachniss/search?query=ICP}
-\subsection{ICP Point à Point}
+\subsection{Vanilla ICP}
+Vanilla ICP ou ICP originale est 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{icp1}
@@ -816,7 +869,7 @@ Pour pouvoir faire L'association de points, on doit disposer initialement de deu
 	\label{fig:icp6}
 \end{figure}
 
-\subsection{ICP Point à Ligne}
+\subsection{ICP Point à Plan}
 
 \begin{figure}[h]
 	\centering
@@ -826,10 +879,21 @@ Pour pouvoir faire L'association de points, on doit disposer initialement de deu
 \end{figure}
 
 \subsection{GICP}
+
 \subsection{Comparaison}
+L'ICP point à plan de même que le GICP estiment que les objets scannés sont des surfaces et non pas des points distincts.
+Selon ces deux variantes de l'ICP, lorsqu'on dispose d'un télémètre laser qui fait la "computation" des points sur les surfaces des objets scannés, ça n'implique pas pour autant qu'on scanne toujours les mêmes points.
+C'est pourtant bel et bien ce que l'ICP point à point fait, il essaie de minimiser la distance entre deux scans. Alors que les objets que nous balayons sont des surfaces, et donc que les les points qui sont généés et traités résident quelquepart sur cette surface, et c'est exactement ce que Le GICP et l'ICP point à plan prennent en considération.
+
+Point à Plan :
+Cette variante de l'ICP est très proche de l'ICP point à point, cependant les différences qui les séparent mènent à des changements considérables dans la fonction de coût qu'on cherche à minimiser. 
+
+Dans l'ICP point à point nous prenons des nuages de points et recherchons dans l'autre nuage de points une correspondance pour tous chacun points. Par la suite, nous allons essayer de minimiser les distances carrées entre ces deux nuages de points.
+Tandis que dans l'ICP point à plan, on prend additionnellement en compte les normales des surfaces des scans qu'on souhaite superposer ou aligner, puis on projette le vecteur d'erreur point à point (e.i. l'écart entre chacun des deux points les plus proches des deux nuages de points) sur la normale de la surface qui contient le vecteur d'erreur. Ce n'est fondamentalement rien de plus que de calculer le produit scalaire 
+
 Et comme on pourra le constater dans le chapitre suivant, on a 
 \chapter{NDT}
-La transformation de distribution normale (NDT) peut être décrite comme une méthode pour représenter de façon compacte une surface. Cette méthode à été proposé par Biber et Straßer en 2003 \cite{ndt_1} comme une méthode pour l?alignement des scans 2D. Biber et Straßer ont ensuite développé la méthode dans un document commun avec Sven Fleck \cite{ndt_2}, également dans le contexte de l?alignement et de la cartographie. Dans leurs travail, le nuage de points est transformé en une représentation de surface lisse, décrite comme un ensemble de fonctions locales de densité de probabilité (PDF), chacune décrivant la forme d?une section de surface\cite{ndt_3}.
+La transformation de distribution normale (NDT) peut être décrite comme une méthode pour représenter de façon compacte une surface. Cette méthode à été proposé par Biber et Straßer en 2003 \cite{ndt_1} comme une méthode pour l'alignement des scans 2D. Biber et Straßer ont ensuite développé la méthode dans un document commun avec Sven Fleck \cite{ndt_2}, également dans le contexte de l'alignement et de la cartographie. Dans leurs travail, le nuage de points est transformé en une représentation de surface lisse, décrite comme un ensemble de fonctions locales de densité de probabilité (PDF), chacune décrivant la forme d?une section de surface\cite{ndt_3}.
 
 La NDT est une méthode qui consiste à associer deux scan laser 2D l?un par rapport à l?autre. Il s?agit également de faire correspondre plusieurs scans lasers l?un par rapport à l?autre, en utilisant uniquement les résultats de la correspondance par paire dans une étape d?optimisation globale. Nous pouvons appliquer cet algorithme au suivi de position (Position Tracking) (\textit{i.e.} estimer le mouvement d?un objet mobile) et au problème de localisation et de cartographie simultanée (SLAM)\cite{ndt_2}. Semblable à une grille d?occupation, la NDT établit une subdivision régulière de plan. Mais là où la grille d?occupation représente la probabilité d?une cellule sont occupés, la NDT représente la probabilité de mesure d?un échantillon pour chaque position dans la cellule\cite{ref7}.
 
@@ -839,12 +903,12 @@ La NDT est une méthode qui consiste à associer deux scan laser 2D l?un par rappo
 \subsection{Calcul de la covariance}
 \section{Limitations numériques}
 \section{L'alignement avec NDT}
-\section{Le processus d?optimisation avec la méthode de Newton}
+\section{Le processus d'optimisation avec la méthode de Newton}
 \subsection*{Problèmes de méthode de Newton}
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=\linewidth]{algoNDT}
-	\caption[L'organigramme général d?NDT]{L'organigramme général d?NDT}
+	\includegraphics[width=\linewidth]{algoNdt}
+	\caption[L'organigramme général d'NDT]{L'organigramme général d'NDT}
 	\label{fig:algoNDT}
 \end{figure}
 \part{Simulations}
@@ -887,13 +951,14 @@ Dans ce chapitre nous allons tester les algorithmes ICP et NDT dans l'optique de
 \subsection{Compariason}
 Nous pouvons constater une meilleure performance de l'algorithme de la NDT de par la qualité de la superposition, et de l'exactitude de la mise en correspondance des nuages de points . 
 
-Après avoir simuler 
+Même si on utilise les données odometriques, avec l'ICP pour reconstruire la carte de l'environnement à base des données recueillies par le télémètre laser, sachant que les données odométriques sont pertinentes et offrent une base solide pour dessiner avec une assez bonne exactitude afin de permettre au robot de naviguer en se basant sur l'odométrie pour le calcul de sa trajectoire. Les résultats obtenus via la NDT sont toujours meilleurs que ceux obtenus via l'ICP.
+
 \subsection{Occupancy Grid Map}
 Comparaison entre le full slam w le slam en temps réel (icp et ndt)
 
 Comprendre bien l'algo du full slam. On sait qu'il a générer les positions à partir des données du Télémètre laser. Le tout dans un algorithme de Pose Graph.
 
-https://fr.mathworks.com/videos/implement-simultaneous-localization-and-mapping-slam-with-matlab-1520292583530.html?s_eid=PSM_15028
+%https://fr.mathworks.com/videos/implement-simultaneous-localization-and-mapping-slam-with-matlab-1520292583530.html?s_eid=PSM_15028
 
 Cite As id : \cite{Slam_2021}
 Mihir Acharya (2021). Implement Simultaneous Localization and Mapping (SLAM) with (https://www.mathworks.com/matlabcentral/fileexchange/66284-implement-simultaneous-localization-and-mapping-slam-with), MATLAB Central File Exchange. Retrieved May 25, 2021.
@@ -931,7 +996,7 @@ Le temps de réponse est quasiment identique, et on ne remarque pas de différence
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{3D_icp_fig_5_po_to_pl}
-	\caption[Scan Matching : ICP Point à Point]{Résultat de la cartographie via scan matching basé sur la variante Point à Ligne de l'Algorithme ICP}
+	\caption[Scan Matching : ICP Point à Point]{Résultat de la cartographie via scan matching basé sur la variante Point à Plan de l'Algorithme ICP}
 	\label{fig:3D_icp_fig_5_po_to_pl}
 \end{figure}
 
@@ -995,12 +1060,12 @@ NDT 60 sec min jusqu'à 90
 \chapter{Annexe 1  : Le filtre de Kalman}
 \section{Le filtre de Kalman-Shcmidt}
 Le filtre de Kalman traite le problème d'estimation de l'état $ x $ d'un processus discret déterminé par l'équation suivante :
-\begin{equation}\label{key}
+\begin{equation}\label{A.1}
 x_{t} = Ax_{t-1} + Bu_{t} + w_{t-1}
 \end{equation}
 
 avec des mesures $ z $ ayant un bruit gaussien $ v $ qu'on peut exprimer ainsi :
-\begin{equation}\label{key}
+\begin{equation}\label{A.2}
 z_{t} = Hx_{t} + v_{t}
 \end{equation}
 
@@ -1012,33 +1077,33 @@ où :
 
 \subsection{Équations de prédiction et de mise à jour}
 L'état du système au moment de la réception de la prochaine mesure peut être prédit :
-\begin{equation}\label{key}
+\begin{equation}\label{A.3}
 x_{t+1/t} = Ax_{t/t} + Bu_{t}
 \end{equation}
 La covariance de la prédiction de l'état :
-\begin{equation}\label{key}
+\begin{equation}\label{A.4}
 P_{t+1/t} = AP_{t/t}A^{T} + Q_{t}
 \end{equation}
 \subsection{Équation de mise à jour des mesures}
 L'innovation pondérée par le gain du filtre, plus l'état prédit, à partir de l'estimation de l'état mise à jour :
-\begin{equation}\label{key}
+\begin{equation}\label{A.5}
 x_{t+1/t+1} = x_{t+1/t} + W_{t+1}v_{t+1}
 \end{equation}
 La covariance de l'état mise à jour :
-\begin{equation}\label{key}
+\begin{equation}\label{A.6}
 P_{t+1/t+1} = P_{t+1/t} - W_{t+1}S_{t+1}S_{t+1}^{T}
 \end{equation}
 où :
 \quad - L'innovation $ v $ est la différence entre la mesure réelle et la mesure prédite :
-\begin{equation}\label{key}
+\begin{equation}\label{A.7}
 v_{t+1} = z_{t+1} - Hx_{t+1/t}
 \end{equation}
 \quad - Le gain de Kalman $ W $ est :
-\begin{equation}\label{key}
+\begin{equation}\label{A.8}
 W_{t+1} = P_{t+1/t}H_{t+1/t}^{T}S_{t+1}^{-1}
 \end{equation}
 \quad - La covariance de l'innovation $ S $ est :
-\begin{equation}\label{key}
+\begin{equation}\label{A.9}
 S_{t+1} = H_{t+1/t}P_{t+1/t}H_{t+1/t}^{T}+R_{t+1}
 \end{equation}
 où $ R $ est la covariance du bruit de mesure.
@@ -1046,10 +1111,10 @@ où $ R $ est la covariance du bruit de mesure.
 \section{Le Filtre de Kalman étendu : EKF}
 Les équations de transition et de mesure ne sont pas toujours linéaires. Le filtre EKF est une extension du filtre de Kalman permettant de traiter ces problèmes de non linéarité. Les simplifications mathématiques introduites ont toutefois un inconvénient : les distributions de probabilités ne sont plus modélisées correctement et la linéarisation cause des inconsistances. Cependant, en pratique, les résultats sont souvent satisfaisants.
 \subsection{Équation de prédiction et de mise à jour}
-\begin{equation}\label{key}
+\begin{equation}\label{A.10}
 x_{t+1/t} = f(x_{t/t},u_{t})
 \end{equation}
-\begin{equation}\label{key}
+\begin{equation}\label{A.11}
 P_{t+1/t} =(\nabla_{x}f)_{t/t}P_{t/t}(\nabla_{x}f)_{t/t}^{T}+Q_{t}
 \end{equation}
 où :
@@ -1060,20 +1125,20 @@ où :
 \quad - $ Q $ représente la matrice de covariance du bruit du processus
 
 \subsection{Équations de mise à jour des mesures}
-\begin{equation}\label{key}
+\begin{equation}\label{A.12}
 x_{t+1/t+1} = x_{t+1/t}+W_{t+1}v_{t+1}
 \end{equation}
-\begin{equation}\label{key}
+\begin{equation}\label{A.13}
 P_{t+1/t+1} = P_{t+1/t}+W_{t+1}S_{t+1}W_{t+1}^{T}
 \end{equation}
 Les équations de mise à jour des mesures ajoutent des informations à partir des nouvelles mesures afin de corriger les estimations faites à partir du modèle de transition. $ v $ est appelée l'innovation et correspond à l'ensemble de l'information non prédite ayant été obtenue à partir des mesures. $ W $ est le gain de Kalman, et il exprime le degré de confiance qu'on a dans les mesures.
-\begin{equation}\label{key}
+\begin{equation}\label{A.14}
 v_{t+1} = z_{t+1}-hx_{t+1/t}
 \end{equation}
-\begin{equation}\label{key}
+\begin{equation}\label{A.15}
 W_{t+1} =P_{t+1/t}(\nabla_{x}h)_{t/t}^{T}+S_{t+1}^{-1}
 \end{equation}
-\begin{equation}\label{key}
+\begin{equation}\label{A.16}
 S_{t+1} =(\nabla_{x}h)_{t+1/t}P_{t+1/t}(\nabla_{x}h)_{t+1/t}^{T}+R_{t+1}
 \end{equation}
 $ R $ est la covariance du bruit de mesure.
