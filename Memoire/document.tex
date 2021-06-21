@@ -151,6 +151,7 @@ Ce sera là qu'on va parler des étapes d'évolution avec les parties prenantes dan
 		\textbf{SfM}	& Structure for Motion\\ 
 		\textbf{SIMD}	& Single Instruction Multiple Data  \\ 
 		\textbf{LF}	    & Likelihood-field matching Instruction Multiple Data  \\ 
+		\textbf{SfM}	& Structure From Motion \\
 		\textbf{SLAM}	& Simultanious Localization and Mapping \\ 
 		\textbf{SNSS}	& Global Navigation Satelite System\\ 
 		\textbf{SVO}	& Semi-direct Visual Odometry \\ 
@@ -615,9 +616,9 @@ L'algorithme FastSLAM décompose le problème du SLAM en deux parties : un problèm
 L'utilisation du filtrage particulaire souffre également des difficultés rencontrées lors de la définition du nombre de particules. En effet, la qualité de l'estimation est fortement corrélée à la discrétisation de l'espace de recherche. Mais il est difficile de trouver un nombre optimal de particules.
 
 \subsection{Maximum de Vraisemblance(IML)}
-Alors que qu'un filtre particulaire ou un filtre de Kalman constituent des solutions probabilistes du problème de SLAM, la recherche incrémentale du maximum de vraisemblance (notée IML pour Incremental Maximum Likelihood) est une approche d'optimisation, où on teste plusieurs hypothèses à la recherche de celle qui maximise la vraisemblance.
+Alors que qu'un filtre particulaire ou un filtre de Kalman constituent des solutions probabilistes du problème de SLAM, la recherche incrémentale du maximum de vraisemblance (notée IML pour Incremental Maximum Likelihood) est une approche d'optimisation, où on teste plusieurs hypothèses à la recherche de celle qui maximise la vraisemblance.\\
 
-Contrairement aux différentes déclinaisons du filtre de Kalman ou des approches à maximisation globale de vraisemblance (Expectation Maximization \cite{iml}), qui essaient d'établir une estimation a posteriori sur les positions du robot et sur la carte, l'idée de l'IML est de construire une seule carte incrémentalement à chaque réception des données des capteurs sans garder un suivi de l'incertitude. Ce principe assure la simplicité de l'IML, qui reste son grand avantage comparé aux autres méthodes de SLAM.
+Contrairement aux différentes déclinaisons du filtre de Kalman ou des approches à maximisation globale de vraisemblance (Expectation Maximization \cite{iml}), qui essaient d'établir une estimation a posteriori sur les positions du robot et sur la carte, l'idée de l'IML est de construire une seule carte incrémentalement à chaque réception des données des capteurs sans garder un suivi de l'incertitude. Ce principe assure la simplicité de l'IML, qui reste son grand avantage comparé aux autres méthodes de SLAM.\\
 
 En théorie l'Incremental Maximum Likelihood (IML) consiste à rechercher à chaque instant la meilleure correspondance entre l'observation courante (les données provenant du laser) et la carte courante (combinant la connaissance de l'environnement), et à remettre à jour la carte conformément à cette mise en correspondance. L'idée générale de cet
 algorithme est présentée dans le schéma de la figure \ref{fig:iml}.
@@ -629,7 +630,7 @@ algorithme est présentée dans le schéma de la figure \ref{fig:iml}.
 	\label{fig:iml}
 \end{figure}
 L'IML est un processus évidemment divergent, puisqu'on utilise la localisation du robot
-pour mettre à jour la carte, et la carte mise à jour pour trouver la localisation du robot.
+pour mettre à jour la carte, et la carte mise à jour pour trouver la localisation du robot.\\
 
 Mathématiquement, l'idée de base de l'IML est de maintenir une série de cartes $ ( \hat{m}_1 , \hat{m}_2 , . . . ) $\footnotetext[1]{Attention : la notation $ m_k $ utilisée ici est différente de la définition donnée dans \ref{sec:formulation}. Dans la section \ref{sec:formulation}, $ m_k $ désigne l'amer $ k $ de la carte, alors que dans cette section, elle désigne la carte construite à l'étape $ k $.} et une série de positions du robot $ ( \hat{x}_1 , \hat{x}_2 , . . . ) $ maximisant la vraisemblance. La position du robot à l'instant $ k $ est calculée en utilisant l'estimation à l'instant $ k-1 $ en maximisant la vraisemblance :
 \begin{equation}\label{eqIML_1}
@@ -643,17 +644,17 @@ Dans l'équation \ref{eqIML_2}, le terme $ P({z}_k|{x}_k,\hat{m}_{k-1}) $ décrit 
 \begin{equation}\label{eqIML_3}
 \hat{m}_k = \hat{m}_{k-1}\cup\{\hat{x}_k,z_k\}
 \end{equation}
-La maximisation de l'équation \ref{eqIML_2} revient à trouver la position $ x_k $ du robot qui permet de satisfaire le modèle de mouvement du véhicule assurant une meilleure concordance entre les données des capteurs $ z_k $ et la carte $ m_{k-1} $. Dans les différents travaux de recherche portants sur le SLAM par recherche du maximum de vraisemblance, on a souvent recourt aux méthodes de mise en correspondance des scans Laser (scan matching).
+La maximisation de l'équation \ref{eqIML_2} revient à trouver la position $ x_k $ du robot qui permet de satisfaire le modèle de mouvement du véhicule assurant une meilleure concordance entre les données des capteurs $ z_k $ et la carte $ m_{k-1} $. Dans les différents travaux de recherche portants sur le SLAM par recherche du maximum de vraisemblance, on a souvent recourt aux méthodes de mise en correspondance des scans Laser (scan matching).\\
 
-Ces méthodes diffèrent selon la représentation de la carte choisie (section \ref{sec:representation-de-la-carte}). On peut ainsi utiliser un scan-matching direct \cite{directScanMatch}, se baser sur les caractéristiques géométriques de l'environnement [50] ou profiter de la grille probabiliste de la carte [51]. L'une des techniques les plus utilisées dans le cadre du scan matching est l'ICP.
+Ces méthodes diffèrent selon la représentation de la carte choisie (section \ref{sec:representation-de-la-carte}). On peut ainsi utiliser un scan-matching direct \cite{directScanMatch}, se baser sur les caractéristiques géométriques de l'environnement ou profiter de la grille probabiliste de la carte. L'une des techniques les plus utilisées dans le cadre du scan matching est l'ICP.\\
 
-La simplicité et la rapidité du SLAM par recherche du maximum de vraisemblance permet de construire des cartes de l'environnement en temps réel, mais cette approche ne peut pas garder une notion d'incertitude dans les estimations. En plus, la nature incrémentale de l'algorithme limite les traitements sur une seule étape de calcul et néglige l'ensemble des données capturées dans les autres étapes (contrairement au filtre de Kalman par exemple).
+La simplicité et la rapidité du SLAM par recherche du maximum de vraisemblance permet de construire des cartes de l'environnement en temps réel, mais cette approche ne peut pas garder une notion d'incertitude dans les estimations. En plus, la nature incrémentale de l'algorithme limite les traitements sur une seule étape de calcul et néglige l'ensemble des données capturées dans les autres étapes (contrairement au filtre de Kalman par exemple).\\
 
-Lorsqu'une position $ x_k $ du robot et une carte $ m_k $ ont été déterminées, elles sont fixées et ne peuvent plus être changées ou corrigées en utilisant les prochaines données (cas de fermeture de boucle par exemple). L'erreur d'estimation de la position $ x_k $ peut ainsi grandir sans limite. Afin de corriger de problème, des propositions comme celle de Hähnel [52] ont été émise, il propose d'utiliser un arbre d'associations pour suivre plusieurs hypothèses de la carte de l'environnement. Si cette idée peut améliorer la qualité des résultats de l'algorithme, elle risque tout comme les autres propositions de nécessiter plus de charges de calcul, ce qui peut freiner l'utilisation temps-réel de l'IML dans le SLAM\cite{reference2}.
+Lorsqu'une position $ x_k $ du robot et une carte $ m_k $ ont été déterminées, elles sont fixées et ne peuvent plus être changées ou corrigées en utilisant les prochaines données (cas de fermeture de boucle par exemple). L'erreur d'estimation de la position $ x_k $ peut ainsi grandir sans limite. Afin de corriger de problème, des propositions comme celle de Hähnel \cite{lazySlam} ont été émise, il propose d'utiliser un arbre d'associations pour suivre plusieurs hypothèses de la carte de l'environnement. Si cette idée peut améliorer la qualité des résultats de l'algorithme, elle risque tout comme les autres propositions de nécessiter plus de charges de calcul, ce qui peut freiner l'utilisation temps-réel de l'IML dans le SLAM\cite{reference2}.\\
 
 C'est justement ce qui fait de Pose Graph une approche de \textit{full SLAM} (ou \textit{off line SLAM}), or qu'on ne peut pas l'applique en temps réel.
 \subsubsection{Graph SLAM}
-Le GraphSLAM (pour \textit{graph based SLAM}), ou Pose Graph, a été introduit pour la première fois par Lu et Milios en 1997\cite{lu1997}, c'est un problème d'estimation de maximum de vraisemblance incrémentale, c'est sa variante la plus utilisée\cite{poseGraph}.
+Le GraphSLAM (pour \textit{graph based SLAM}), ou Pose Graph, a été introduit pour la première fois par Lu et Milios en 1997\cite{lu1997}, c'est un problème d'estimation de maximum de vraisemblance incrémentale, c'est sa variante la plus utilisée\cite{poseGraph}.\\
 
 Cette approche constitue depuis une dizaine d'années un axe de recherche très actif au sein de la communauté de robotique. L'estimation de l'état du système est formulée par un problème d'optimisation.
 
@@ -663,26 +664,26 @@ Cette approche constitue depuis une dizaine d'années un axe de recherche très ac
 	\caption[Exemple Graph SLAM]{\textit{Exemple illustratif de la méthode Graph SLAM}}
 	\label{fig:poseGraphPosesEtAmers}
 \end{figure}
-Ce dernier fait appel à plusieurs techniques issues essentiellement de l'algèbre linéaire et de la théorie des graphes. Le GraphSLAM est une technique de SLAM basé optimisation de graphe, il modélise le problème de SLAM à l'aide d'un graphe. Comme l'illustre la figure \ref{fig:poseGraphPosesEtAmers}, la trajectoire et la carte des amers sont représentées par des n\oe{}uds. Associées à un bruit Gaussien, les mesures des capteurs donnent des contraintes spatiales entre les n\oe{}uds. Ces contraintes spatiales sont modélisées par des arêtes. On distingue deux types d'arêtes : arêtes de mouvement et arêtes d'observation. Une arête de mouvement relie deux n\oe{}uds robot (pose) consécutifs. Une arête d'observation provient d'une observation d'un amer. Un amer est relié à une pose (n\oe{}ud robot) s'il a été observé depuis celle-ci.
+Ce dernier fait appel à plusieurs techniques issues essentiellement de l'algèbre linéaire et de la théorie des graphes. Le GraphSLAM est une technique de SLAM basé optimisation de graphe, il modélise le problème de SLAM à l'aide d'un graphe. Comme l'illustre la figure \ref{fig:poseGraphPosesEtAmers}, la trajectoire et la carte des amers sont représentées par des n\oe{}uds. Associées à un bruit Gaussien, les mesures des capteurs donnent des contraintes spatiales entre les n\oe{}uds. Ces contraintes spatiales sont modélisées par des arêtes. On distingue deux types d'arêtes : arêtes de mouvement et arêtes d'observation. Une arête de mouvement relie deux n\oe{}uds robot (pose) consécutifs. Une arête d'observation provient d'une observation d'un amer. Un amer est relié à une pose (n\oe{}ud robot) s'il a été observé depuis celle-ci.\\
 
-Tandis que la marginalisation consistait à éliminer des entrées de la matrice de variances-
-covariances (inverse de la matrice d?information) dans le but de diminuer la densité du système (le
-rendre plus épars).
+La figure \ref{fig:poseGraphPosesEtAmers} illustre également la procédure de marginalisation des amers que l'on peut appeler aussi réduction de graphe. Celle-ci est réalisée en utilisant le complément de Schur qui réduit la taille du système et ainsi son temps de résolution. Il transforme le système construit en un nouveau système plus petit, et ne contenant que les poses.\\
 
-Le complément de Schur dans le GraphSLAM consiste à réduire le graphe en marginalisant les amers. La marginalisation d?un amer implique la connexion deux à deux les poses depuis lesquelles cet amer a été observé. Le graphe réduit peut être également obtenu par une mise en correspondance directe des faisceaux Laser entre deux poses donnant, ainsi, la distance relative entre ces poses.
+La marginalisation consiste à éliminer des entrées de la matrice de variances-covariances (inverse de la matrice d'information) dans le but de diminuer la densité du système (le rendre plus épars).
 
-Pour efficacement résoudre de larges systèmes, leur technique consiste à utiliser un squelette du graphe (skeleton graph). Celui-ci est composé d?un sous-ensemble
-de frames suite à la marginalisation des amers.
+C'est le complément de Schur dans le GraphSLAM qui réduit le graphe en marginalisant les amers. La marginalisation d'un amer implique la connexion deux à deux les poses depuis lesquelles cet amer a été observé. Le graphe réduit peut être également obtenu par une mise en correspondance directe des faisceaux Laser entre deux poses donnant, ainsi, la distance relative entre ces poses.\\
 
-La figure \ref{fig:poseGraphPosesEtAmers} illustre également la procédure de marginalisation des amers que l?on peut appeler aussi réduction de graphe. Celle-ci est réalisée en utilisant le complément de Schur qui réduit la taille du système et ainsi son temps de résolution. Il transforme le système construit en un nouveau système plus petit, et ne contenant que les poses. 
+Pour efficacement résoudre de larges systèmes, cette technique consiste à utiliser un squelette du graphe (skeleton graph). Celui-ci est composé d?un sous-ensemble de frames suite à la marginalisation des amers.\\
 
-Néanmoins, la marginalisation des amers génère de nouvelles contraintes entre les poses. Le nouveau système peut, donc, être moins épars, voire très dense par rapport au système initial. Le temps de résolution peut alors augmenter et devient très important. D?autre part, ce phénomène de remplissage peut être masqué par la forte réduction de la taille du système si le nombre d?amers est très grand par rapport au nombre de poses
+Néanmoins, la marginalisation des amers génère de nouvelles contraintes entre les poses. Le nouveau système peut, donc, être moins épars, voire très dense par rapport au système initial. Le temps de résolution peut alors augmenter et devient très important. D'autre part, ce phénomène de remplissage peut être masqué par la forte réduction de la taille du système si le nombre d'amers est très grand par rapport au nombre de poses\cite{reference2}.
 \subsection{Comparaison}
 
 L'intérêt majeur des approches basées sur le filtrage de Kalman est la possibilité d'estimer l'état du système a posteriori en se basant sur les amers de l'environnement et les positions du robot. Leur grande faiblesse vient des contraintes et des hypothèses fortes qu'on doit appliquer aux différents modèles utilisés. En plus, il n'est pas toujours facile d'extraire des amers corrects et intéressants dans un environnement non-structuré ou externe.
 
 L'utilisation d'un filtre particulaire Rao-Blackwellisé permet de maintenir une estimation a posteriori de l'état du système d'une manière plus rapide que le KF. Le filtrage particulaire peut également être utilisé avec des cartes grid-based ou feature-based. Cette méthode souffre néanmoins de plusieurs problèmes à cause de sa complexité grandissantes et ses difficultés de paramétrage.
-% Reste à developper la comparaison
+
+La MLE reste une solution intéressante grâce à sa simplicité et son efficacité en temps de calcul. En plus, il peut être appliqué à tous les types de cartes. Malheureusement, on ne peut estimer que les meilleures hypothèses en position à chaque étape de calcul, ce qui freine les possibilités de l'IML lors de la fermeture d'une boucle dans un environnement cyclique.
+.
+% Reste à developper la comparaison monte catle gmapping ekf ukf kf posegraph 
 \section{Défis courants avec SLAM} 
 
 Bien que SLAM soit utilisé pour certaines applications pratiques, plusieurs défis techniques empêchent une adoption plus générale. Chacun a une contre-mesure qui peut aider à surmonter l'obstacle.
@@ -713,7 +714,7 @@ Le coût de calcul est un problème lors de la mise en \oe{}uvre de SLAM sur le ma
 
 Une \textbf{contre - mesure} consiste à exécuter différents processus en parallèle. Des processus tels que l'extraction de caractéristiques, qui est le prétraitement du processus de correspondance, sont relativement adaptés à la parallélisation. L'utilisation de processeurs multic\oe{}urs pour le traitement, le calcul de données multiples à instruction unique (SIMD) et de GPU intégrés peut encore améliorer les vitesses dans certains cas. De plus, étant donné que l'optimisation du graphe de pose peut être effectuée sur un cycle relativement long, abaisser sa priorité et effectuer ce processus à intervalles réguliers peut également améliorer les performances.
 \section{Conclusion}
-Depuis l'identification de la problématique du SLAM de nombreuses approches pour y répondre ont apparues. Historiquement, les approches filtrées, de Kalman puis particulaire, sont apparues les premières dans un contexte de SLAM général puis ont été adaptées au cas du SLAM visuel et monoculaire. Dans ce contexte sont ensuite apparues les approches \textit{Structure From Motion}, issues de la communauté de vision.
+Depuis l'identification de la problématique du SLAM de nombreuses approches pour y répondre ont apparues. Historiquement, les approches filtrées, de Kalman puis particulaire, sont apparues les premières dans un contexte de SLAM général puis ont été adaptées au cas du SLAM visuel et monoculaire. Dans ce contexte sont ensuite apparues les approches \textit{Structure From Motion}, issues de la communauté de vision; ces SfM permettent de reconstruire une scène ou un objet en 3D à partir d'images en 2D. Ce domaine reste en permanente évolution. Et pour
 \part{Scan Matching}
 \chapter{Généralités sur le Scan Matching}
 \section{Point Cloud}
@@ -722,7 +723,7 @@ https://youtu.be/ktRqKxddjJk?t=1363
 Densité, selection/segmentation, frequence
 https://youtu.be/ktRqKxddjJk?t=1009
 \section{Scan Matching}
-Le scan matching est un processus important dans plusieurs domaines. Il est utilisé pour la construction de modèles à partir d?analyses partielles dans des disciplines aussi diverses que L'imagerie médicale, L'archéologie, la robotique, etc. Il est également utile pour permettre la localisation du robot mobile. Il existe plusieurs algorithmes avec qui divergent dans leurs approches, qui ont pour but de faire du scan matching dont les plus connus : L'algorithme itératif du point le plus proche (ICP), la double correspondance itérative (IDC), la transformation de distribution normale (Normal Distribution Transform, NDT) et la méthode de champs de vraisemblance (LF)\cite{ref7}.
+Le scan matching est un processus important dans plusieurs domaines. Il est utilisé pour la construction de modèles à partir d'analyses partielles dans des disciplines aussi diverses que L'imagerie médicale, L'archéologie, la robotique, etc. Il est également utile pour permettre la localisation du robot mobile. Il existe plusieurs algorithmes avec qui divergent dans leurs approches, qui ont pour but de faire du scan matching dont les plus connus : L'algorithme itératif du point le plus proche (ICP), la double correspondance itérative (IDC), la transformation de distribution normale (Normal Distribution Transform, NDT) et la méthode de champs de vraisemblance (LF)\cite{ref7}.
 
 Afin de déterminer la localisation, on pourrait croire que l'odométrie suffirait à acquérir assez d'information sur le déplacement de notre robot, pour dessiner son itinéraire. Cependant, on pourra constater dans le chapitre suivant, que l'odométrie brute à elle seule est bien trop pauvre pour créer un environnement que le robot pourra exploiter pour naviguer dans un milieu cartographié via des données issues exclusivement de l'odométrie. 
 
@@ -808,7 +809,7 @@ Généralement la sélection de points se fait aléatoirement et pour l'association 
 
 Puis vient l'étape de la pondération où chaque paire de points est attachée à un poids qui permet de déterminer si l'association est juste, la valeur 1 correspond donc à une association correcte et 0 à une fausse association. Ces points seront rejetés pour éviter une fausse estimation, L'organigramme de la figure \ref{fig:algoICP} représente les grandes étapes de L'ICP.\\
 
-Pour pouvoir faire L'association de points, on doit disposer initialement de deux scans consécutifs et chaque scan sera projeté sur le précédent pour pouvoir les comparer, une matrice de transformation homogène est nécessaire pour cela, et pour finir le seuil de sortie de la boucle est un seuil de nombre d?itérations permettant de déduire une position correcte, On peut aussi voir l'approche détaillée de l'algorithme adapté en fonction matlab et qui est disponible dans la toolbox "...."\ cite : [1] Chen, Y. and G. Medioni. ?Object Modelling by Registration of Multiple Range Images.? Image Vision Computing. Butterworth-Heinemann . Vol. 10, Issue 3, April 1992, pp. 145-155.
+Pour pouvoir faire L'association de points, on doit disposer initialement de deux scans consécutifs et chaque scan sera projeté sur le précédent pour pouvoir les comparer, une matrice de transformation homogène est nécessaire pour cela, et pour finir le seuil de sortie de la boucle est un seuil de nombre d'itérations permettant de déduire une position correcte, On peut aussi voir l'approche détaillée de l'algorithme adapté en fonction matlab et qui est disponible dans la toolbox "...."\ cite : [1] Chen, Y. and G. Medioni. ?Object Modelling by Registration of Multiple Range Images.? Image Vision Computing. Butterworth-Heinemann . Vol. 10, Issue 3, April 1992, pp. 145-155.
 
 [2] Besl, Paul J., N. D. McKay. ?A Method for Registration of 3-D Shapes.? IEEE Transactions on Pattern Analysis and Machine Intelligence. Los Alamitos, CA: IEEE Computer Society. Vol. 14, Issue 2, 1992, pp. 239-256.
 
@@ -826,7 +827,7 @@ Pour pouvoir faire L'association de points, on doit disposer initialement de deu
 
 \url{https://www.youtube.com/c/CyrillStachniss/search?query=ICP}
 \subsection{Vanilla ICP}
-Vanilla ICP ou ICP originale est 
+Vanilla ICP ou ICP originale est l'algorithme de base qu'on va appliquer dans 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{icp1}
@@ -868,7 +869,7 @@ Vanilla ICP ou ICP originale est
 	\caption[bla]{blablabla}
 	\label{fig:icp6}
 \end{figure}
-
+\
 \subsection{ICP Point à Plan}
 
 \begin{figure}[h]
@@ -881,40 +882,261 @@ Vanilla ICP ou ICP originale est
 \subsection{GICP}
 
 \subsection{Comparaison}
-L'ICP point à plan de même que le GICP estiment que les objets scannés sont des surfaces et non pas des points distincts.
-Selon ces deux variantes de l'ICP, lorsqu'on dispose d'un télémètre laser qui fait la "computation" des points sur les surfaces des objets scannés, ça n'implique pas pour autant qu'on scanne toujours les mêmes points.
-C'est pourtant bel et bien ce que l'ICP point à point fait, il essaie de minimiser la distance entre deux scans. Alors que les objets que nous balayons sont des surfaces, et donc que les les points qui sont généés et traités résident quelquepart sur cette surface, et c'est exactement ce que Le GICP et l'ICP point à plan prennent en considération.
+L'ICP point à plan de même que le GICP estiment que les objets scannés sont des surfaces et non pas des points distincts.\\
+
+Selon ces deux variantes de l'ICP, lorsqu'on dispose d'un télémètre laser qui fait la "computation" des points sur les surfaces des objets scannés, ça n'implique pas pour autant qu'on scanne toujours les mêmes points.\\
+C'est pourtant bel et bien ce que l'ICP point à point fait, il essaie de minimiser la distance entre deux scans. Alors que les objets que nous balayons sont des surfaces, et donc que les les points qui sont gênées et traités résident quelque part sur cette surface, et c'est exactement ce que Le GICP et l'ICP point à plan prennent en considération.\\
 
 Point à Plan :
-Cette variante de l'ICP est très proche de l'ICP point à point, cependant les différences qui les séparent mènent à des changements considérables dans la fonction de coût qu'on cherche à minimiser. 
+Le concept de la variante Poit à Plan de l'ICP est très proche de l'ICP point à point, cependant les différences qui les séparent mènent à des changements considérables dans la fonction de coût qu'on cherche à minimiser.\\
 
-Dans l'ICP point à point nous prenons des nuages de points et recherchons dans l'autre nuage de points une correspondance pour tous chacun points. Par la suite, nous allons essayer de minimiser les distances carrées entre ces deux nuages de points.
-Tandis que dans l'ICP point à plan, on prend additionnellement en compte les normales des surfaces des scans qu'on souhaite superposer ou aligner, puis on projette le vecteur d'erreur point à point (e.i. l'écart entre chacun des deux points les plus proches des deux nuages de points) sur la normale de la surface qui contient le vecteur d'erreur. Ce n'est fondamentalement rien de plus que de calculer le produit scalaire 
+Dans l'ICP point à point nous prenons des nuages de points et recherchons dans l'autre nuage de points une correspondance pour tous chacun points. Par la suite, nous allons essayer de minimiser les distances carrées entre ces deux nuages de points.\\
 
-Et comme on pourra le constater dans le chapitre suivant, on a 
+Tandis que dans l'ICP point à plan, on prend additionnellement en compte les normales des surfaces des scans qu'on souhaite superposer ou aligner, puis on projette le vecteur d'erreur point à point (e.i. l'écart entre chacun des deux points les plus proches des deux nuages de points) sur la normale de la surface qui contient le vecteur d'erreur. Ce n'est fondamentalement rien de plus que de calculer le produit scalaire de deux vecteurs.\\
+
+L'approche point à plan peut adopter la même solution de Vanilla ICP, la SVD qui permettrait de calculer la matrice de rotation et le vecteur de translation, ou on pourrait également l'exploiter avec d'autres méthodes tel que celle des quaternions afin de parvenir à exploiter la méthode des moindres carrés.
 \chapter{NDT}
-La transformation de distribution normale (NDT) peut être décrite comme une méthode pour représenter de façon compacte une surface. Cette méthode à été proposé par Biber et Straßer en 2003 \cite{ndt_1} comme une méthode pour l'alignement des scans 2D. Biber et Straßer ont ensuite développé la méthode dans un document commun avec Sven Fleck \cite{ndt_2}, également dans le contexte de l'alignement et de la cartographie. Dans leurs travail, le nuage de points est transformé en une représentation de surface lisse, décrite comme un ensemble de fonctions locales de densité de probabilité (PDF), chacune décrivant la forme d?une section de surface\cite{ndt_3}.
+La transformation de distribution normale (NDT) peut être décrite comme une méthode pour représenter de façon compacte une surface. Cette méthode à été proposé par Biber et Straßer en 2003 \cite{ndt_1} comme une méthode pour l'alignement des scans 2D. Biber et Straßer ont ensuite développé la méthode dans un document commun avec Sven Fleck \cite{ndt_2}, également dans le contexte de l'alignement et de la cartographie. Dans leurs travail, le nuage de points est transformé en une représentation de surface lisse, décrite comme un ensemble de fonctions locales de densité de probabilité (PDF), chacune décrivant la forme d'une section de surface\cite{ndt_3}.\\
 
-La NDT est une méthode qui consiste à associer deux scan laser 2D l?un par rapport à l?autre. Il s?agit également de faire correspondre plusieurs scans lasers l?un par rapport à l?autre, en utilisant uniquement les résultats de la correspondance par paire dans une étape d?optimisation globale. Nous pouvons appliquer cet algorithme au suivi de position (Position Tracking) (\textit{i.e.} estimer le mouvement d?un objet mobile) et au problème de localisation et de cartographie simultanée (SLAM)\cite{ndt_2}. Semblable à une grille d?occupation, la NDT établit une subdivision régulière de plan. Mais là où la grille d?occupation représente la probabilité d?une cellule sont occupés, la NDT représente la probabilité de mesure d?un échantillon pour chaque position dans la cellule\cite{ref7}.
+La NDT est une méthode qui consiste à associer deux scan laser 2D l'un par rapport à l'autre. Il s'agit également de faire correspondre plusieurs scans lasers l'un par rapport à l'autre, en utilisant uniquement les résultats de la correspondance par paire dans une étape d'optimisation globale. Nous pouvons appliquer cet algorithme au suivi de position (Position Tracking) (\textit{i.e.} estimer le mouvement d'un objet mobile) et au problème de localisation et de cartographie simultanée (SLAM)\cite{ndt_2}. Semblable à une grille d'occupation, la NDT établit une subdivision régulière de plan. Mais là où la grille d'occupation représente la probabilité d'une cellule sont occupés, la NDT représente la probabilité de mesure d'un échantillon pour chaque position dans la cellule\cite{ref7}.
 
 \section{Représentation par des densités de probabilités}
+Cette section décrit la transformation de distribution normale (NDT) d?un seul scan laser. Ce même principe peut être utilisé lors du suivi de position (Position Tracking) et du SLAM.\\
+
+La NDT modélise la distribution de tous les points 2D reconstruits à partir d?un scan laser par une collection des distributions normales locales. Tout d?abord, l?espace 2D autour du robot est subdivisé régulièrement en cellules avec une taille constante (carte locale). Ensuite, pour chaque cellule, qui contient au moins trois points, Nous effectuons les opérations suivantes :
+
 \subsection{Collecte des points 2D}
+Cette phase consiste à collecter tous les points 2D $ X_{i=1...n} $ contenus dans cette cellule ($ n $ points).\\
+Chaque point $ X $ est représenté par ses coordonnées cartésienne, soit :
+\begin{equation}\label{eqNDT_1}
+X_i= {\begin{pmatrix}
+		x_i \\ y_i
+	 \end{pmatrix}}_{i=1...n}
+\end{equation}
 \subsection{Calcul de la moyenne}
+La moyenne des points présents à l?intérieur de la cellule est exprimée par :
+\begin{equation}\label{eqNDT_2}
+Q= {\begin{pmatrix}
+q_x \\ q_y
+\end{pmatrix}}=\frac{1}{n}\overset{n}{\underset{i=1}{\sum}}X_i
+\end{equation}
 \subsection{Calcul de la covariance}
-\section{Limitations numériques}
+Calculer la matrice de covariance
+\begin{equation}\label{eqNDT_3}
+\Omega=\frac{1}{n}\overset{n}{\underset{i=1}{\sum}}(X_i-Q)(X_i-Q)^t
+\end{equation}
+Dans le cas 2D, la covariance est une matrice $ 2\times2 $ :
+\begin{equation}\label{eqNDT_4}
+\begin{split*}
+\begin{align}
+\Omega&=\frac{1}{n}\overset{n}{\underset{i=1}{\sum}}(X_i-Q)(X_i-Q)^t\\
+&=\frac{1}{n}\overset{n}{\underset{i=1}{\sum}}\begin{pmatrix}
+x_i-q_x \\ y_i-q_y
+\end{pmatrix}\begin{pmatrix}
+x_i-q_x & y_i-q_y
+\end{pmatrix}\\
+&=\frac{1}{n}\overset{n}{\underset{i=1}{\sum}}\begin{pmatrix}
+{x_i-q_x}^2 & (x_i-q_x)(y_i-q_y) \\ (x_i-q_x)(y_i-q_y) & {x_i-q_x}^2
+\end{pmatrix}
+\end{align}
+\end{split*}
+\end{equation}
+Après avoir calculé les moyennes et les covariances des cellules, la probabilité
+de mesurer un échantillon $ X $ (un point 2D) contenu dans cette cellule est modélisée
+par la distribution normale $ \Pi $ :
+\begin{equation}\label{eqNDT_5}
+\Pi(X)= exp(-\frac{(X-Q)^t\Omega^{-1}(X-Q)}{2})
+\end{equation}
+Semblable à une grille d?occupation, la NDT établit une subdivision régulière du plan de l?espace de travail. Cependant là où la grille d?occupation représente la probabilité d?occupation d?une cellule, la NDT représente la probabilité de mesure pour chaque position d?échantillon dans la cellule.\\
+
+A ce niveau la question qui se pose est : \textit{Quel est l?utilité de cette représentation ?} Nous disposons désormais d?une description continue et différentielle du plan 2D par morceaux !
 \section{L'alignement avec NDT}
+La transformation géométrique $ T $ entre deux repères du robot est une rotation et translation, sa formule est donnée par :
+\begin{equation}\label{eqNDT_6}
+T: {\begin{pmatrix}
+	x' \\ y'
+	\end{pmatrix}} \longmapsto \begin{pmatrix}
+	cos\phi & sin\phi \\ sin\phi & cos\phi
+	\end{pmatrix}\begin{pmatrix}
+	x \\ y
+	\end{pmatrix} + \begin{pmatrix}
+	t_x \\ t_y
+	\end{pmatrix}
+\end{equation}
+Où $ (t_x t_y)^t $ décrit la translation et ? la rotation entre les deux scans correspond à chaque repère. L?objectif de l?alignement d?un scan (Scan alignment/Registration) est de récupérer ces paramètres ($ t_x $ , $ t_y $ et $ \phi $) à l?aide des scans laser effectués à deux positions différente (deux scans successives). Le processus de l?approche proposée dans la NDT (compte tenu de deux scans ; le premier considéré comme scan de référence et le deuxième) est le suivant :
+\begin{enumerate}
+	\item Construire la transformation de distribution normale du première scan.
+	\item Initialiser l?estimation des paramètres ($ t_x $ , $ t_y $ et $ \phi $) (par zéro ou en utilisant les données de l?odométrie).
+	\item Pour chaque point du deuxième scan :
+	
+	\quad \textendash \quad Transformer le point 2D au repère de scan de référence en fonction des paramètres ($ t_x $ , $ t_y $ et $ \phi $) en utilisant l?équation \ref{eqNDT_6}.
+	
+	\quad \textendash \quad Déterminer les distributions normales correspondantes pour chaque point transformé en utilisant l?équation \ref{eqNDT_5}.
+	
+	\item Le \textit{score} pour les paramètres $ t_x $ , $ t_y $ et $ \phi $) est déterminé en évaluant la distribution pour chaque point transformé et en additionnant le résultat.
+	\item Calculez une nouvelle estimation des paramètres en essayant d?optimiser le
+	score. Cela se fait en effectuant une étape de l?algorithme de Newton.
+	\item Revenir à l'étape 3 jusqu'à ce qu'un critère de convergence soit satisfait.
+\end{enumerate}
+
+Les trois premières étapes sont simples : la construction du NDT a été décrite dans les équations \ref{eqNDT_2} et \ref{eqNDT_3}. Les données d?odométrie pourraient être utilisées pour initialiser l?estimation. La transformation du deuxième scan est effectuée en utilisant $ T $ (équation \ref{eqNDT_5}) et la distribution normale correspondante est une recherche en utilisant l'équation \ref{eqNDT_4} dans la grille NDT construite.\\
+
+Le reste est maintenant décrit en détail en utilisant la notation suivante :\\
+
+\textendash \quad $ p = {(p_k)^t}_{k=1...3} = (t_x t_y \phi)^t $ : Le vecteur des paramètres à estimer.
+
+\textendash \quad $ X_i $ : Le point 2D de l?échantillon $ i $ du nouveau scan laser (correspondant à l?instant actuel).
+
+\textendash \quad $ X'_i $ : Le point $ X_i $ transformé selon le vecteur de paramètre $ p $ au repère de scan précédent (scan de référence), \textit{i.e.} $ X'_i = T(X_i, p) $.
+
+\textendash \quad On fait correspondre chaque point du nouveau scan $ X'_i $ à sa cellule dans le scan de référence.
+
+\textendash \quad $ \Omega_i $ et $ Q_i $ : La matrice de covariance et la moyenne de la cellule dans la quelle se trouve le point $ X_i $ dans le scan de référence.
+
+La transformation selon le vecteur p pourrait être considérée comme optimale,
+si la somme évaluant les distributions normales de tous les point $ X'_i $ avec les paramètres $ \Omega_i $ et $ Q_i $ est un maximum. Nous appelons cette somme le "\textit{score}" de \textit{p}. Il est défini comme suit :
+\begin{equation}\label{eqNDT_7}
+score(p)=\overset{n}{\underset{i=1}{\sum}}\Pi(X'_i)=\overset{n}{\underset{i=1}{\sum}} exp(-\frac{(X'_i-Q_i)^t\Omega_i^{-1}(X'_i-Q_i)}{2})
+\end{equation}
+
+Ce "\textit{score} sera optimisé dans la section suivante.
 \section{Le processus d'optimisation avec la méthode de Newton}
-\subsection*{Problèmes de méthode de Newton}
+Le fonctionnement de la NDT dépend de la maximisation du "score" (fonction \ref{eqNDT_7}). La méthode d?optimisation utilisée dans la NDT d?origine proposée dans \cite{ndt_1}.\\
+
+Étant donné que les problèmes d'optimisation sont généralement décrits comme des problèmes de minimisation, nous adopterons notre notation à cette convention. Ainsi, la fonction à minimiser dans cette section est la fonction "score". 
+
+L'algorithme de Newton cherche itérativement les paramètres $ p = (p_k)^t_k\in[1,3] $ qui minimisent une fonction $ f $. Chaque itération résout l'équation suivante :
+\begin{equation}\label{eqNDT_8}
+H\Delta p =-g
+\end{equation}
+Où $ g $ est le gradient transposé de $ f $ avec les entrées :
+\begin{equation}\label{eqNDT_9}
+g_k=\frac{\partial f}{\partial p_k} avec k\in[1,3]
+\end{equation} 
+Et $ H $ est la matrice Hessienne de $ f $ avec des entrées
+\begin{equation}\label{eqNDT_10}
+H_kJ=\frac{\partial f}{\partial p_k \partial p_j} avec (k,j)\in[1,3]\times [1,3]
+\end{equation} 
+La solution de ce système linéaire est une différence $ \Delta p $, ajoutée à l?estimation
+actuelle :
+\begin{equation}\label{eqNDT_11}
+p\longleftarrow p + \Delta p
+\end{equation}
+Cette étape est une étape dans une direction de descente, à condition que la matrice Hessienne $ H $ soit définit positive. Si ce n?est pas le cas, l?approche du modèle de région de confiance propose de remplacer $ H $ par $ H' = H + \lambda I $, avec $ \lambda $ choisi de sorte que $ H' $ soit définit positive.
+
+Cet algorithme est maintenant appliqué à la fonction "score" (équation \ref{eqNDT_7}). Le gradient et la matrice Hessienne sont construits en collectant les dérivées partielles de tous les sommets de l?équation.
+
+Pour une notation plus courte, l?indice de l?échantillon du scan laser $ i $ est supprimé, nous écrivons alors :
+\begin{equation}\label{eqNDT_12}
+Q=X'_i-Q_i
+\end{equation}
+
+Nous pouvons vérifier facilement que les dérivées partielles de $ Q $ par rapport à
+$ p $ sont égales aux dérivées partielles de $ X'_i $ par rapport à $ p $.
+\begin{equation}\label{eqNDT_13}
+\begin{split*}
+\begin{align}
+\frac{\partial Q}{\partial p_k} &=\frac{\partial X'_i-Q_i}{\partial p_k}\\
+&=\frac{\partial X'}{\partial p_k}-\frac{\partial Q_i}{\partial p_k}
+\end{align}
+\end{split*}
+\end{equation}
+
+Et comme la moyenne est constante pour la cellule pendant toutes les itérations, sa dérivée est donc nulle :
+\begin{equation}\label{eqNDT_14}
+\frac{\partial Q_i}{\partial p_k}=\begin{pmatrix}
+0 \\ 0 \\ 0
+\end{pmatrix}
+\end{equation}
+Et alors l?équation \ref{eqNDT_13} donne
+\begin{equation}\label{eqNDT_15}
+\frac{\partial Q_i}{\partial p_k}=\frac{\partial X'_i}{\partial p_k}
+\end{equation}
+
+Un élément de la somme de la fonction "score" \ref{eqNDT_7} est alors donné par :
+
+\begin{equation}\label{eqNDT_16}
+\begin{split*}
+\begin{align}
+s &=-exp\frac{(X'-Q)^t\Omega^{-1}(X'-Q)}{2}\\
+&=-exp\frac{-Q^t\Omega^{-1}}{2}
+\end{align}
+\end{split*}
+\end{equation}
+Les composants du gradient g sont alors :
+
+\begin{equation}\label{eqNDT_17}
+\begin{split*}
+\begin{align}
+g_k &=\frac{\partial s}{\partial p_k}  \text{\quad avec k} \in[1,3]\\
+&=\frac{\partial s}{\partial Q}\frac{\partial Q}{\partial p_k}\\
+&=Q^t\Omega^{-1}\frac{\partial Q}{\partial p_k} exp\frac{-Q^t\Omega^{-1}Q}{2}
+\end{align}
+\end{split*}
+\end{equation}
+
+Les dérivées partielles de $ Q $ par rapport à $ p $ sont données par la matrice Jacobienne J de $ T $ (voir équation \ref{eqNDT_6}) :
+\begin{equation}\label{eqNDT_18}
+J=\begin{pmatrix}
+1 & 0 & -x\sin \phi-y\cos \phi \\ 0 & 1 & x\cos \phi-y\sin \phi
+\end{pmatrix}
+\end{equation}
+
+Les entrées de la matrice Hessienne $ H $ sont données par :
+\begin{equation*}\label{eqNDT_19}
+\begin{split*}
+\begin{align}
+g_k &=\frac{\partial f}{\partial p_k \partial p_k}\\
+&=-\exp \frac{-Q^t\Omega^{-1}Q}{2}
+(
+(Q^t\Omega^{-1}\frac{\partial Q}{\partial p_k})
+(-Q^t\Omega^{1}\frac{\partial Q}{\partial p_j})
++Q^t\Omega^{-1}\frac{\partial^2 Q}{\partial p_k \partial p_j}
++ (\frac{\partial Q}{\partial p_j})^t\Omega^{-1}\frac{\partial Q}{\partial p_k}
+)
+\end{align}
+\end{split*}
+\end{equation*}
+
+Les deuxièmes dérivées partielles de $ Q $ sont (voir l?équation \ref{eqNDT_18}) :
+
+\textendash \quad si $ k=j=3 $ :
+
+\begin{equation}\label{eqNDT_20}
+\frac{\partial^2 Q}{\partial p_k \partial p_j}=\begin{pmatrix}
+1 & 0 & -x\sin \phi-y\cos \phi \\ 0 & 1 & x\cos \phi-y\sin \phi
+\end{pmatrix}
+\end{equation}
+
+\textendash \quad sinon :
+
+\begin{equation}\label{eqNDT_21}
+\frac{\partial^2 Q}{\partial p_k \partial p_j}=\begin{pmatrix}
+0 \\ 0
+\end{pmatrix}
+\end{equation}
+
+L'intégralité des étapes citées sont résumées dans l'organigramme de la méthode de la NDT (voir figure \ref{fig:algoNDT})
+
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{algoNdt}
-	\caption[L'organigramme général d'NDT]{L'organigramme général d'NDT}
+	\caption[L'organigramme général de la NDT]{L'organigramme général de la NDT}
 	\label{fig:algoNDT}
 \end{figure}
+\subsection*{Problèmes de méthode de Newton}
+L?inconvénient majeur de la méthode est sa sensibilité au choix de point de départ. Si ce point est mal choisi ("loin" de la solution) la méthode peut soit diverger, soit converger vers une autre solution (minima local).\\
+
+Pour éviter ce problème, les ouvrage \cite{ref7}\cite{ndt-optimisation}\cite{ndt_optimisat} propose de remplacer la méthode de Newton par l?optimisation par essaim particulaire, qui est une méthode évolutionnaire méta-heuristique très efficace[27, 19].
 \part{Simulations}
 Dans ce chapitre nous allons tester les algorithmes ICP et NDT dans l'optique de comparer leurs performances en 2D et en 3D. Afin de choisir le 
 \chapter{Scan Matching en 2D}
-
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{scanMatchingEx}
+	\caption[scanMatchingExample]{scanMatchingExample}
+	\label{fig:scanMatchingEx}
+\end{figure}
 \section{ICP Vs. NDT}
 
 \begin{figure}[h]
