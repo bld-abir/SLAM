@@ -813,20 +813,51 @@ Pour pouvoir faire L'association de points, on doit disposer initialement de deu
 
 [2] Besl, Paul J., N. D. McKay. ?A Method for Registration of 3-D Shapes.? IEEE Transactions on Pattern Analysis and Machine Intelligence. Los Alamitos, CA: IEEE Computer Society. Vol. 14, Issue 2, 1992, pp. 239-256.
 
+
+Plusieurs chercheurs ont proposé des solutions pour adresser les problèmes générés par l'algorithme de l'ICP original (Vanilla ICP), ce qui a mené à différentes variantes de cet algorithme. Une taxonomie a des variantes de l'ICP a été suggérée par """"file:///home/blad/Documents/Études/M2/Mémoire/ICP/bscthesis.pdf""" eeet """12_fasticp_paper""" eeeeet le japonais Vixin. Elles décrivent cinq (05) étapes :
+
+\begin{enumerate}
+	\item Sélection des points
+	\item Matching des nuages de points
+	\item Pondération des paires
+	\item Rejection des paires
+	\item Optimisation des erreurs
+\end{enumerate}
+
+Cette brève vue d'ensemble permettra d'esquisser une meilleure image de ce en quoi consiste l'ICP en général, d'autant plus que les variantes peuvent être tellement différentes qu'il devient difficile de déterminer que ce sont des dérivées de l'ICP. Nous allons exploiter l'algorithme originale dans le chapitre dédié aux simulation pour comprendre les imperfections de l'algorithme Vanilla ICP qu'on va définir théoriquement dans la section \ref{sec:vanilla-icp}. Puis nous verrons deux autres variantes qui sont toutes deux très utilisées, et qui donnent d'excellents résultats. 
+\section{Taxonomie de l'ICP}
+\subsection{Initialisation des points}
+\subsection{Matching des nuages de points}
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=\linewidth]{point_cloud_registration_icp}
-	\caption[L'organigramme général d'ICP]{L'organigramme général d'ICP}
-	\label{fig:point_cloud_registration_icp}
+	\includegraphics[width=\linewidth]{icp_matching}
+	\caption[Méthodes de Matching]{ICP matching strategies in two dimensions. Blue points represent the model point clouds to which red data points are matched. In the reverse calibration case, the points are projected onto the discretized, lower dimensional camera view space.}
+	\label{fig:icp_matching}
 \end{figure}
+\subsection{Pondération des paires}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{tableau}
+	\caption[tableau]{provisoire : Descriptive table of robust cost functions used in this analysis expressed with respect of their tuning parameter k and the scaled error e.file: ///home/blad/Documents/Études/M2/Mémoire/SLAM/notYet/ComparaisonCauchyWelshHuberTukey.pdf}
+	\label{fig:tableau}
+\end{figure}
+\subsection{Rejection des paires}
+cahier+3_LV_JIXIN
 
-
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{icp_rejection}
+	\caption[icp_rejection]{icp_rejection}
+	\label{fig:icp_rejection}
+\end{figure}
+\subsection{Optimisation des erreurs}
+file:///home/blad/Documents/Études/M2/Mémoire/SLAM/12_fasticp_paper.pdf
 \section{Variantes}
 
 \url{https://youtu.be/ktRqKxddjJk?t=887}
 
 \url{https://www.youtube.com/c/CyrillStachniss/search?query=ICP}
-\subsection{Vanilla ICP}
+\subsection{Vanilla ICP}\label{sec:vanilla-icp}
 Vanilla ICP ou ICP originale est l'algorithme de base qu'on va appliquer dans 
 \begin{figure}[h]
 	\centering
@@ -880,6 +911,8 @@ Vanilla ICP ou ICP originale est l'algorithme de base qu'on va appliquer dans
 \end{figure}
 
 \subsection{GICP}
+L'ICP Généralisé ou Global ICP est un algorithme particulièrement résilient. 
+\url{https://www.geo.tuwien.ac.at/downloads/pg/pctools/publish/globalICPHelp/globalICP.html}
 
 \subsection{Comparaison}
 L'ICP point à plan de même que le GICP estiment que les objets scannés sont des surfaces et non pas des points distincts.\\
@@ -947,9 +980,9 @@ par la distribution normale $ \Pi $ :
 \begin{equation}\label{eqNDT_5}
 \Pi(X)= exp(-\frac{(X-Q)^t\Omega^{-1}(X-Q)}{2})
 \end{equation}
-Semblable à une grille d?occupation, la NDT établit une subdivision régulière du plan de l?espace de travail. Cependant là où la grille d?occupation représente la probabilité d?occupation d?une cellule, la NDT représente la probabilité de mesure pour chaque position d?échantillon dans la cellule.\\
+Semblable à une grille d'occupation, la NDT établit une subdivision régulière du plan de l'espace de travail. Cependant là où la grille d'occupation représente la probabilité d'occupation d'une cellule, la NDT représente la probabilité de mesure pour chaque position d'échantillon dans la cellule.\\
 
-A ce niveau la question qui se pose est : \textit{Quel est l?utilité de cette représentation ?} Nous disposons désormais d?une description continue et différentielle du plan 2D par morceaux !
+A ce niveau la question qui se pose est : \textit{Quel est l'utilité de cette représentation ?} Nous disposons désormais d'une description continue et différentielle du plan 2D par morceaux !
 \section{L'alignement avec NDT}
 La transformation géométrique $ T $ entre deux repères du robot est une rotation et translation, sa formule est donnée par :
 \begin{equation}\label{eqNDT_6}
@@ -963,29 +996,29 @@ T: {\begin{pmatrix}
 	t_x \\ t_y
 	\end{pmatrix}
 \end{equation}
-Où $ (t_x t_y)^t $ décrit la translation et ? la rotation entre les deux scans correspond à chaque repère. L?objectif de l?alignement d?un scan (Scan alignment/Registration) est de récupérer ces paramètres ($ t_x $ , $ t_y $ et $ \phi $) à l?aide des scans laser effectués à deux positions différente (deux scans successives). Le processus de l?approche proposée dans la NDT (compte tenu de deux scans ; le premier considéré comme scan de référence et le deuxième) est le suivant :
+Où $ (t_x t_y)^t $ décrit la translation et la rotation entre les deux scans correspond à chaque repère. L'objectif de l'alignement d'un scan (Scan alignment/Registration) est de récupérer ces paramètres ($ t_x $ , $ t_y $ et $ \phi $) à l'aide des scans laser effectués à deux positions différente (deux scans successives). Le processus de l'approche proposée dans la NDT (compte tenu de deux scans ; le premier considéré comme scan de référence et le deuxième) est le suivant :
 \begin{enumerate}
 	\item Construire la transformation de distribution normale du première scan.
-	\item Initialiser l?estimation des paramètres ($ t_x $ , $ t_y $ et $ \phi $) (par zéro ou en utilisant les données de l?odométrie).
+	\item Initialiser l?estimation des paramètres ($ t_x $ , $ t_y $ et $ \phi $) (par zéro ou en utilisant les données de l'odométrie).
 	\item Pour chaque point du deuxième scan :
 	
-	\quad \textendash \quad Transformer le point 2D au repère de scan de référence en fonction des paramètres ($ t_x $ , $ t_y $ et $ \phi $) en utilisant l?équation \ref{eqNDT_6}.
+	\quad \textendash \quad Transformer le point 2D au repère de scan de référence en fonction des paramètres ($ t_x $ , $ t_y $ et $ \phi $) en utilisant l'équation \ref{eqNDT_6}.
 	
-	\quad \textendash \quad Déterminer les distributions normales correspondantes pour chaque point transformé en utilisant l?équation \ref{eqNDT_5}.
+	\quad \textendash \quad Déterminer les distributions normales correspondantes pour chaque point transformé en utilisant l'équation \ref{eqNDT_5}.
 	
 	\item Le \textit{score} pour les paramètres $ t_x $ , $ t_y $ et $ \phi $) est déterminé en évaluant la distribution pour chaque point transformé et en additionnant le résultat.
-	\item Calculez une nouvelle estimation des paramètres en essayant d?optimiser le
-	score. Cela se fait en effectuant une étape de l?algorithme de Newton.
+	\item Calculez une nouvelle estimation des paramètres en essayant d'optimiser le
+	score. Cela se fait en effectuant une étape de l'algorithme de Newton.
 	\item Revenir à l'étape 3 jusqu'à ce qu'un critère de convergence soit satisfait.
 \end{enumerate}
 
-Les trois premières étapes sont simples : la construction du NDT a été décrite dans les équations \ref{eqNDT_2} et \ref{eqNDT_3}. Les données d?odométrie pourraient être utilisées pour initialiser l?estimation. La transformation du deuxième scan est effectuée en utilisant $ T $ (équation \ref{eqNDT_5}) et la distribution normale correspondante est une recherche en utilisant l'équation \ref{eqNDT_4} dans la grille NDT construite.\\
+Les trois premières étapes sont simples : la construction du NDT a été décrite dans les équations \ref{eqNDT_2} et \ref{eqNDT_3}. Les données d'odométrie pourraient être utilisées pour initialiser l'estimation. La transformation du deuxième scan est effectuée en utilisant $ T $ (équation \ref{eqNDT_5}) et la distribution normale correspondante est une recherche en utilisant l'équation \ref{eqNDT_4} dans la grille NDT construite.\\
 
 Le reste est maintenant décrit en détail en utilisant la notation suivante :\\
 
 \textendash \quad $ p = {(p_k)^t}_{k=1...3} = (t_x t_y \phi)^t $ : Le vecteur des paramètres à estimer.
 
-\textendash \quad $ X_i $ : Le point 2D de l?échantillon $ i $ du nouveau scan laser (correspondant à l?instant actuel).
+\textendash \quad $ X_i $ : Le point 2D de l?échantillon $ i $ du nouveau scan laser (correspondant à l'instant actuel).
 
 \textendash \quad $ X'_i $ : Le point $ X_i $ transformé selon le vecteur de paramètre $ p $ au repère de scan précédent (scan de référence), \textit{i.e.} $ X'_i = T(X_i, p) $.
 
@@ -1001,7 +1034,7 @@ score(p)=\overset{n}{\underset{i=1}{\sum}}\Pi(X'_i)=\overset{n}{\underset{i=1}{\
 
 Ce "\textit{score} sera optimisé dans la section suivante.
 \section{Le processus d'optimisation avec la méthode de Newton}
-Le fonctionnement de la NDT dépend de la maximisation du "score" (fonction \ref{eqNDT_7}). La méthode d?optimisation utilisée dans la NDT d?origine proposée dans \cite{ndt_1}.\\
+Le fonctionnement de la NDT dépend de la maximisation du "score" (fonction \ref{eqNDT_7}). La méthode d'optimisation utilisée dans la NDT d'origine proposée dans \cite{ndt_1}.\\
 
 Étant donné que les problèmes d'optimisation sont généralement décrits comme des problèmes de minimisation, nous adopterons notre notation à cette convention. Ainsi, la fonction à minimiser dans cette section est la fonction "score". 
 
@@ -1017,16 +1050,15 @@ Et $ H $ est la matrice Hessienne de $ f $ avec des entrées
 \begin{equation}\label{eqNDT_10}
 H_kJ=\frac{\partial f}{\partial p_k \partial p_j} avec (k,j)\in[1,3]\times [1,3]
 \end{equation} 
-La solution de ce système linéaire est une différence $ \Delta p $, ajoutée à l?estimation
-actuelle :
+La solution de ce système linéaire est une différence $ \Delta p $, ajoutée à l'estimation actuelle :
 \begin{equation}\label{eqNDT_11}
 p\longleftarrow p + \Delta p
 \end{equation}
-Cette étape est une étape dans une direction de descente, à condition que la matrice Hessienne $ H $ soit définit positive. Si ce n?est pas le cas, l?approche du modèle de région de confiance propose de remplacer $ H $ par $ H' = H + \lambda I $, avec $ \lambda $ choisi de sorte que $ H' $ soit définit positive.
+Cette étape est une étape dans une direction de descente, à condition que la matrice Hessienne $ H $ soit définit positive. Si ce n'est pas le cas, l'approche du modèle de région de confiance propose de remplacer $ H $ par $ H' = H + \lambda I $, avec $ \lambda $ choisi de sorte que $ H' $ soit définit positive.
 
-Cet algorithme est maintenant appliqué à la fonction "score" (équation \ref{eqNDT_7}). Le gradient et la matrice Hessienne sont construits en collectant les dérivées partielles de tous les sommets de l?équation.
+Cet algorithme est maintenant appliqué à la fonction "score" (équation \ref{eqNDT_7}). Le gradient et la matrice Hessienne sont construits en collectant les dérivées partielles de tous les sommets de l'équation.
 
-Pour une notation plus courte, l?indice de l?échantillon du scan laser $ i $ est supprimé, nous écrivons alors :
+Pour une notation plus courte, l'indice de l'échantillon du scan laser $ i $ est supprimé, nous écrivons alors :
 \begin{equation}\label{eqNDT_12}
 Q=X'_i-Q_i
 \end{equation}
@@ -1048,7 +1080,7 @@ Et comme la moyenne est constante pour la cellule pendant toutes les itérations,
 0 \\ 0 \\ 0
 \end{pmatrix}
 \end{equation}
-Et alors l?équation \ref{eqNDT_13} donne
+Et alors l'équation \ref{eqNDT_13} donne
 \begin{equation}\label{eqNDT_15}
 \frac{\partial Q_i}{\partial p_k}=\frac{\partial X'_i}{\partial p_k}
 \end{equation}
@@ -1075,7 +1107,7 @@ g_k &=\frac{\partial s}{\partial p_k}  \text{\quad avec k} \in[1,3]\\
 \end{split*}
 \end{equation}
 
-Les dérivées partielles de $ Q $ par rapport à $ p $ sont données par la matrice Jacobienne J de $ T $ (voir équation \ref{eqNDT_6}) :
+Les dérivées partielles de $ Q $ par rapport à $ p $ sont données par la matrice Jacobienne $ J $ de $ T $ (voir équation \ref{eqNDT_6}) :
 \begin{equation}\label{eqNDT_18}
 J=\begin{pmatrix}
 1 & 0 & -x\sin \phi-y\cos \phi \\ 0 & 1 & x\cos \phi-y\sin \phi
@@ -1098,7 +1130,7 @@ g_k &=\frac{\partial f}{\partial p_k \partial p_k}\\
 \end{split*}
 \end{equation*}
 
-Les deuxièmes dérivées partielles de $ Q $ sont (voir l?équation \ref{eqNDT_18}) :
+Les deuxièmes dérivées partielles de $ Q $ sont (voir l'équation \ref{eqNDT_18}) :
 
 \textendash \quad si $ k=j=3 $ :
 
@@ -1125,9 +1157,9 @@ L'intégralité des étapes citées sont résumées dans l'organigramme de la méthode 
 	\label{fig:algoNDT}
 \end{figure}
 \subsection*{Problèmes de méthode de Newton}
-L?inconvénient majeur de la méthode est sa sensibilité au choix de point de départ. Si ce point est mal choisi ("loin" de la solution) la méthode peut soit diverger, soit converger vers une autre solution (minima local).\\
+L'inconvénient majeur de la méthode est sa sensibilité au choix de point de départ. Si ce point est mal choisi ("loin" de la solution) la méthode peut soit diverger, soit converger vers une autre solution (minima local).\\
 
-Pour éviter ce problème, les ouvrage \cite{ref7}\cite{ndt-optimisation}\cite{ndt_optimisat} propose de remplacer la méthode de Newton par l?optimisation par essaim particulaire, qui est une méthode évolutionnaire méta-heuristique très efficace[27, 19].
+Pour éviter ce problème, les ouvrage \cite{ref7}\cite{ndt-optimisation}\cite{ndt_optimisat} propose de remplacer la méthode de Newton par l'optimisation par essaim particulaire, qui est une méthode évolutionnaire méta-heuristique très efficace[27, 19].
 \part{Simulations}
 Dans ce chapitre nous allons tester les algorithmes ICP et NDT dans l'optique de comparer leurs performances en 2D et en 3D. Afin de choisir le 
 \chapter{Scan Matching en 2D}
@@ -1207,6 +1239,12 @@ https://youtu.be/saVZtgPyyJQ
 Ils sembles tous identiques. 
 \chapter{Scan Matching en 3D}
 \section{ICP en 3D}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{point_cloud_registration_icp}
+	\caption[L'organigramme général d'ICP]{L'organigramme général d'ICP}
+	\label{fig:point_cloud_registration_icp}
+\end{figure}
 Point to Point Vs. Point to Line
 Le temps de réponse est quasiment identique, et on ne remarque pas de différence entre le scan matching de deux nuages points, bessa7 quand on prend une "frame" de nuages de points alors, on constate la différence :
 \begin{figure}[h]
