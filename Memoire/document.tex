@@ -155,6 +155,7 @@ Ce sera là qu'on va parler des étapes d'évolution avec les parties prenantes dan
 		\textbf{SLAM}	& Simultanious Localization and Mapping \\ 
 		\textbf{SNSS}	& Global Navigation Satelite System\\ 
 		\textbf{SVO}	& Semi-direct Visual Odometry \\ 
+		\textbf{SVD}	& Singular Value Decomposition \\ 
 		\textbf{ToF}	& Time of Flight \\ 
 		\textbf{UAV}	& Unmanned Aerial Vehicle \\ 
 		\textbf{vSLAM}	& Visual SLAM  \\ 
@@ -682,7 +683,7 @@ L'intérêt majeur des approches basées sur le filtrage de Kalman est la possibili
 L'utilisation d'un filtre particulaire Rao-Blackwellisé permet de maintenir une estimation a posteriori de l'état du système d'une manière plus rapide que le KF. Le filtrage particulaire peut également être utilisé avec des cartes grid-based ou feature-based. Cette méthode souffre néanmoins de plusieurs problèmes à cause de sa complexité grandissantes et ses difficultés de paramétrage.
 
 La MLE reste une solution intéressante grâce à sa simplicité et son efficacité en temps de calcul. En plus, il peut être appliqué à tous les types de cartes. Malheureusement, on ne peut estimer que les meilleures hypothèses en position à chaque étape de calcul, ce qui freine les possibilités de l'IML lors de la fermeture d'une boucle dans un environnement cyclique.
-.
+
 % Reste à developper la comparaison monte catle gmapping ekf ukf kf posegraph 
 \section{Défis courants avec SLAM} 
 
@@ -782,7 +783,6 @@ L'algorithme de cartographie et de localisation basé sur le scan matching adopté
 
 \chapter{ICP}
 \url{https://www.youtube.com/watch?v=QWDM4cFdKrE&t=125s}
-https://nbviewer.jupyter.org/github/niosus/notebooks/blob/master/icp.ipynb\\
 
 L'ICP est largement utilisé pour L'alignement des nuages de points. Il a été introduit en 1992 par Besl et McKay\cite{icp_bib_1}.\\
 
@@ -798,23 +798,23 @@ de repère ;
 \quad - Le rejet des mauvaises associations (points aberrants).
 \bigskip
 
-Généralement la sélection de points se fait aléatoirement et pour l'association la distance euclidienne entre chaque point est calculée et la plus petite distance permet de les associer\cite{icp_bib_1}.\\
-
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=\linewidth]{algoICP}
+	\includegraphics[width=10cm]{algoICP}
 	\caption[L'organigramme général d'ICP]{L'organigramme général d'ICP}
 	\label{fig:algoICP}
 \end{figure}
 
+Pour simplifier le concept on va commencer par un algorithme de simplification \ref{fig:algoICP} sachant que l'initialisation ne se fait pas forcément en utilisant les données odométriques, bien que ce soit une option, on peut toujours initialiser la transformation à l'unité.\\
+
+La sélection de points se fait aléatoirement et pour l'association la distance euclidienne entre chaque point est calculée et la plus petite distance permet de les associer\cite{icp_bib_1}.\\
+
 Puis vient l'étape de la pondération où chaque paire de points est attachée à un poids qui permet de déterminer si l'association est juste, la valeur 1 correspond donc à une association correcte et 0 à une fausse association. Ces points seront rejetés pour éviter une fausse estimation, L'organigramme de la figure \ref{fig:algoICP} représente les grandes étapes de L'ICP.\\
 
-Pour pouvoir faire L'association de points, on doit disposer initialement de deux scans consécutifs et chaque scan sera projeté sur le précédent pour pouvoir les comparer, une matrice de transformation homogène est nécessaire pour cela, et pour finir le seuil de sortie de la boucle est un seuil de nombre d'itérations permettant de déduire une position correcte, On peut aussi voir l'approche détaillée de l'algorithme adapté en fonction matlab et qui est disponible dans la toolbox "...."\ cite : [1] Chen, Y. and G. Medioni. ?Object Modelling by Registration of Multiple Range Images.? Image Vision Computing. Butterworth-Heinemann . Vol. 10, Issue 3, April 1992, pp. 145-155.
-
-[2] Besl, Paul J., N. D. McKay. ?A Method for Registration of 3-D Shapes.? IEEE Transactions on Pattern Analysis and Machine Intelligence. Los Alamitos, CA: IEEE Computer Society. Vol. 14, Issue 2, 1992, pp. 239-256.
+Pour pouvoir faire L'association de points, on doit disposer initialement de deux scans consécutifs et chaque scan sera projeté sur le précédent pour pouvoir les comparer, une matrice de transformation homogène est nécessaire pour cela (on a impérativement besoin du vecteur de translation et la matrice de rotation qui décrit le déplacement qui a eu lieu pour passer d'une vue décrite par le premier nuage de point (premier scan) à la position ou le rebot perçoit un second nuage de point qui décrit une perspective légèrement différente comparée à la première.), et pour finir le seuil de sortie (on parle de seuil dans le but de simplifier le concept, voir la section \ref{sec:optimisation-des-erreurs}) de la boucle est un seuil de nombre d'itérations permettant de déduire une position correcte, On peut aussi voir l'approche détaillée de l'algorithme adapté en fonction matlab\cite{matlab_icp1}\cite{matlab_icp2}.
 
 
-Plusieurs chercheurs ont proposé des solutions pour adresser les problèmes générés par l'algorithme de l'ICP original (Vanilla ICP), ce qui a mené à différentes variantes de cet algorithme. Une taxonomie a des variantes de l'ICP a été suggérée par """"file:///home/blad/Documents/Études/M2/Mémoire/ICP/bscthesis.pdf""" eeet """12_fasticp_paper""" eeeeet le japonais Vixin. Elles décrivent cinq (05) étapes :
+Plusieurs chercheurs ont proposé des solutions pour adresser les problèmes générés par l'algorithme de l'ICP original (Vanilla ICP), ce qui a mené à différentes variantes de cet algorithme. Une taxonomie a des variantes de l'ICP a été suggérée par \cite{bscthesis}\cite{fasticp} et \cite{reference1}. Elles décrivent cinq (05) étapes :
 
 \begin{enumerate}
 	\item Sélection des points
@@ -827,6 +827,17 @@ Plusieurs chercheurs ont proposé des solutions pour adresser les problèmes génér
 Cette brève vue d'ensemble permettra d'esquisser une meilleure image de ce en quoi consiste l'ICP en général, d'autant plus que les variantes peuvent être tellement différentes qu'il devient difficile de déterminer que ce sont des dérivées de l'ICP. Nous allons exploiter l'algorithme originale dans le chapitre dédié aux simulation pour comprendre les imperfections de l'algorithme Vanilla ICP qu'on va définir théoriquement dans la section \ref{sec:vanilla-icp}. Puis nous verrons deux autres variantes qui sont toutes deux très utilisées, et qui donnent d'excellents résultats. 
 \section{Taxonomie de l'ICP}
 \subsection{Initialisation des points}
+La façon dont sont sélectionnés les points en entrée de ICP peut avoir un impact sur la convergence de celui ci. \textit{Est il préférable de traiter toutes les données disponibles ou faut il les échantillonner ?} Il existe plusieurs approches pour sélectionner ces points.\\
+\begin{itemize}
+	\item 
+\end{itemize}
+KLD Sampling : Kullback-Leibler divergence
+
+Selon \cite{icp_melyoun} il est plus intéressant
+d'échantillonner ces points selon l'orientation de leurs normales, au lieu d'effectuer un tirage aléatoire sur l'ensemble des données. Il est préférable de trier, d'abord, et regrouper dans des ensembles différents ces points en fonction de l'orientation de leurs normales. Ensuite, un échantillonnage uniforme est effectué sur chaque ensemble. On a ci dessous des approches qui se basent sur la normale pour échantillonner les points :
+\begin{itemize}
+	\item 
+\end{itemize}
 \subsection{Matching des nuages de points}
 \begin{figure}[h]
 	\centering
@@ -835,6 +846,11 @@ Cette brève vue d'ensemble permettra d'esquisser une meilleure image de ce en qu
 	\label{fig:icp_matching}
 \end{figure}
 \subsection{Pondération des paires}
+La pondération des couples de points appariés a pour objectif de renforcer l'apport des appariements supposés être corrects et atténuer l'effet des faux appariements.\\
+
+La convergence de ICP dépend beaucoup de la qualité des appariements utilisés. En effet, La présence de faux appariements, dans le meilleur des cas, ralentit la convergence de l'algorithme et peut, au pire des cas, causer sa divergence.\\
+
+Une méthode de mise en correspondance robuste est, donc, indispensable. La distance géométrique euclidienne "classique" n'est, peut être, alors, plus suffisante pour établir des appariements relativement corrects et nécessaires à la convergence de ICP. Ainsi, d'autres critères qu'une simple distance euclidienne (ou en plus de celle ci) peuvent être utilisés.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{tableau}
@@ -842,16 +858,65 @@ Cette brève vue d'ensemble permettra d'esquisser une meilleure image de ce en qu
 	\label{fig:tableau}
 \end{figure}
 \subsection{Rejection des paires}
+Il est très important de rejeter les appariements
+supposés faux. Ceux ci induisent en erreur les estimateurs par
+moindres carrés. La difficulté réside dans la définition même
+d'un "mauvais appariement". Sur quel critère se baser pour
+décider qu'un appariement est faux ?. La façon la plus basique d'éliminer ces points, est d'utiliser un seuil de distance géométrique ou mixte (comportant un terme photométrique)
+fixe. Ce seuil serait difficile à fixer dans le cas de ICP, étant donnée que d'une itération à l'autre la distance moyenne entre les points appariés est sensée décroître. Il est possible d'utiliser
+
 cahier+3_LV_JIXIN
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{icp_rejection}
-	\caption[icp_rejection]{icp_rejection}
+	\caption[icp rejection]{icp rejection}
 	\label{fig:icp_rejection}
 \end{figure}
-\subsection{Optimisation des erreurs}
+\subsection{Optimisation des erreurs}\label{sec:optimisation-des-erreurs}
 file:///home/blad/Documents/Études/M2/Mémoire/SLAM/12_fasticp_paper.pdf
+
+\subsubsection{La minimisation des critères de distance}
+Le calcul de la meilleure transformation revient à minimiser un critère de distance. L'erreur du critère de distance (que ce soit la distance entre deux point, ou deux normales du vecteur de distance, ou autre) est minimisée via l'une de ces 3 approches phares  :\\
+
+\textit{Minimisation Point à Point} qui fait la somme des distances carrés de nuages de points d'un modèle, qu'on peut exprimer via : 
+\begin{equation}\label{eqICP_01}
+E=\overset{N}{\underset{i=1}{\sum}}{\lVert Rp_i+\overset{\rightarrow}{T}-q_i\rVert}^2
+\end{equation}
+Ce critère est revient à minimiser une fonction de coût qui représente physiquement les distances entre la paire de points correspondants appartenant à deux nuages de points distincts.\\ 
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{icp_min_pt}
+	\caption[Minimisation point à point]{Minimisation point à point}
+	\label{fig:icp_min_pt}
+\end{figure}
+
+\textit{Minimisation Point à Plan} optimise la somme des distances des normales tangentes aux plans auxquels appartiennent les paires de points correspondants, mathématiquement formulé, cette fonction de coût correspond à :
+
+\begin{equation}\label{eqICP_02}
+E=\overset{N}{\underset{i=1}{\sum}}{[(Rp_i+\overset{\rightarrow}{T}-q_i)\cdotp\overset{\rightarrow}{n_i}]}^2
+\end{equation}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{icp_min_pl}
+	\caption[Minimisation point à plan]{Minimisation point à plan}
+	\label{fig:icp_min_pl}
+\end{figure}
+
+Où $ \overset{\rightarrow}{n_i} $ représente l'estimation de la normale tangente au $ i^{ème} $ modèle de points. L'interprétation physique de cette fonction de coût est que les arrêtes entre les points de la même paire sont libre de se déplacer et de changer dans le modèle de point tangent aux plans, et fixes par rapport au nuage de point, c'est une caractéristique très avantageuse qui fait la force de l'algorithme de de l'ICP point à plan.\\
+
+Il existe d'autres fonctions de coût comme la norme $ L_1 $ qui peut être utilisée à la place de la norme euclidienne de l'équation \ref{eqICP_01}.
+
+\subsubsection{Localisation}
+Une fois les points créés on a besoin d'identifier la pose (position et orientation) du robot, et pour ce divers Algorithmes existent qui vont calculer une solution à chaque itération :\\
+
+Pour l'ICP point à point, il est très courant d'utiliser la SVD (Décomposition en valeur singulière) décrite dans l'annexe \ref{sec:annexe-b---la-decomposition-svd} et qu'on va appliquer pour simuler l'algorithme de l'ICP original (voir la théorie dans la section  \ref{sec:vanilla-icp} et la simulation dans \ref{sec:scan-matching-en-2d}). Cependant il existe d'autres méthodes pour obtenir le vecteur de translation $ \overset{\rightarrow}{T} $ et la matrice de rotation $ R $ dont une formulation en \textit{quaternions} équivalente à la SVD\cite{quaternions}, (quaternions unitaires \cite{quaternions_unit}, ou des quaternions duaux\cite{quaternions_duo})\cite{icp_melyoun}.
+
+La minimisation point à plan trouve une expression explicite de la solution (\textit{closed form solution}) après linéarisation de la matrice de rotation $ R $, ce qui est détaillé dans l'annexe \ref{sec:annexe-c--minimisation-point-a-plan}. La linéarisation introduit un erreur, mais à force de réitérer l'algorithme, l'erreur est minimisée et la matrice de rotation linéarisée se rapproche fortement de la réalité. Cette solution a été proposé par \cite{icp_min_pt_to_pl}.\\
+
+Pour d'autres critères d'optimisation, l'existence d'une solution explicite devient invraisemblable. Celà dit on pu toujours utiliser des méthodes non linéaires, bien que ce soit des approches délicates où l'équilibre entre forte précision et moindre coût de calcul, celà dit ça nous offre la liberté de modéliser la fonction convoité à notre bon vouloir.
 \section{Variantes}
 
 \url{https://youtu.be/ktRqKxddjJk?t=887}
@@ -934,9 +999,9 @@ La transformation de distribution normale (NDT) peut être décrite comme une méth
 La NDT est une méthode qui consiste à associer deux scan laser 2D l'un par rapport à l'autre. Il s'agit également de faire correspondre plusieurs scans lasers l'un par rapport à l'autre, en utilisant uniquement les résultats de la correspondance par paire dans une étape d'optimisation globale. Nous pouvons appliquer cet algorithme au suivi de position (Position Tracking) (\textit{i.e.} estimer le mouvement d'un objet mobile) et au problème de localisation et de cartographie simultanée (SLAM)\cite{ndt_2}. Semblable à une grille d'occupation, la NDT établit une subdivision régulière de plan. Mais là où la grille d'occupation représente la probabilité d'une cellule sont occupés, la NDT représente la probabilité de mesure d'un échantillon pour chaque position dans la cellule\cite{ref7}.
 
 \section{Représentation par des densités de probabilités}
-Cette section décrit la transformation de distribution normale (NDT) d?un seul scan laser. Ce même principe peut être utilisé lors du suivi de position (Position Tracking) et du SLAM.\\
+Cette section décrit la transformation de distribution normale (NDT) d'un seul scan laser. Ce même principe peut être utilisé lors du suivi de position (Position Tracking) et du SLAM.\\
 
-La NDT modélise la distribution de tous les points 2D reconstruits à partir d?un scan laser par une collection des distributions normales locales. Tout d?abord, l?espace 2D autour du robot est subdivisé régulièrement en cellules avec une taille constante (carte locale). Ensuite, pour chaque cellule, qui contient au moins trois points, Nous effectuons les opérations suivantes :
+La NDT modélise la distribution de tous les points 2D reconstruits à partir d'un scan laser par une collection des distributions normales locales. Tout d'abord, l'espace 2D autour du robot est subdivisé régulièrement en cellules avec une taille constante (carte locale). Ensuite, pour chaque cellule, qui contient au moins trois points, Nous effectuons les opérations suivantes :
 
 \subsection{Collecte des points 2D}
 Cette phase consiste à collecter tous les points 2D $ X_{i=1...n} $ contenus dans cette cellule ($ n $ points).\\
@@ -947,7 +1012,7 @@ X_i= {\begin{pmatrix}
 	 \end{pmatrix}}_{i=1...n}
 \end{equation}
 \subsection{Calcul de la moyenne}
-La moyenne des points présents à l?intérieur de la cellule est exprimée par :
+La moyenne des points présents à l'intérieur de la cellule est exprimée par :
 \begin{equation}\label{eqNDT_2}
 Q= {\begin{pmatrix}
 q_x \\ q_y
@@ -1018,7 +1083,7 @@ Le reste est maintenant décrit en détail en utilisant la notation suivante :\\
 
 \textendash \quad $ p = {(p_k)^t}_{k=1...3} = (t_x t_y \phi)^t $ : Le vecteur des paramètres à estimer.
 
-\textendash \quad $ X_i $ : Le point 2D de l?échantillon $ i $ du nouveau scan laser (correspondant à l'instant actuel).
+\textendash \quad $ X_i $ : Le point 2D de l'échantillon $ i $ du nouveau scan laser (correspondant à l'instant actuel).
 
 \textendash \quad $ X'_i $ : Le point $ X_i $ transformé selon le vecteur de paramètre $ p $ au repère de scan précédent (scan de référence), \textit{i.e.} $ X'_i = T(X_i, p) $.
 
@@ -1159,10 +1224,10 @@ L'intégralité des étapes citées sont résumées dans l'organigramme de la méthode 
 \subsection*{Problèmes de méthode de Newton}
 L'inconvénient majeur de la méthode est sa sensibilité au choix de point de départ. Si ce point est mal choisi ("loin" de la solution) la méthode peut soit diverger, soit converger vers une autre solution (minima local).\\
 
-Pour éviter ce problème, les ouvrage \cite{ref7}\cite{ndt-optimisation}\cite{ndt_optimisat} propose de remplacer la méthode de Newton par l'optimisation par essaim particulaire, qui est une méthode évolutionnaire méta-heuristique très efficace[27, 19].
+Pour éviter ce problème, les ouvrage \cite{ref7}\cite{ndt-optimisation}\cite{ndt_optimisat} propose de remplacer la méthode de Newton par l'optimisation par essaim particulaire, qui est une méthode évolutionnaire méta-heuristique très efficace[27, 19].\\
 \part{Simulations}
 Dans ce chapitre nous allons tester les algorithmes ICP et NDT dans l'optique de comparer leurs performances en 2D et en 3D. Afin de choisir le 
-\chapter{Scan Matching en 2D}
+\chapter{Scan Matching en 2D}\label{sec:scan-matching-en-2d}
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{scanMatchingEx}
@@ -1317,7 +1382,7 @@ NDT 60 sec min jusqu'à 90
 \end{figure}
 \part{Annexes}
 \appendix
-\chapter{Annexe 1  : Le filtre de Kalman}
+\chapter{Annexe A  : Le filtre de Kalman}
 \section{Le filtre de Kalman-Shcmidt}
 Le filtre de Kalman traite le problème d'estimation de l'état $ x $ d'un processus discret déterminé par l'équation suivante :
 \begin{equation}\label{A.1}
@@ -1408,7 +1473,10 @@ Remarque le filtre d'information traite les systèmes qui acquièrent des données 
 
 \subsubsection{Approche FastSlam}
 \subsubsection{Approche Amers}
-
+\chapter{Annexe B  : La Décomposition SVD}\label{sec:annexe-b---la-decomposition-svd}
+Annexe A file:///home/blad/Documents/Études/M2/Mémoire/ICP/bscthesis.pdf
+\chapter{Annexe C : Minimisation Point à Plan}\label{sec:annexe-c--minimisation-point-a-plan}
+Annexe D file:///home/blad/Documents/Études/M2/Mémoire/ICP/bscthesis.pdf
 \part{Partie}
 %\backmatter
 \chapter{Index/Bibliographie}
