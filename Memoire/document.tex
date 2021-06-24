@@ -8,6 +8,9 @@
 \usepackage{lmodern} % Pour changer le pack de police.
 \usepackage{fancyhdr} % Pr les entetes & pieds de pages
 
+%\usepackage{colorbl} % Pr colorer les cases, lignes et colonnes d'un tableau
+\usepackage[table]{xcolor}
+
 \usepackage{amsthm}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -140,6 +143,7 @@ Ce sera là qu'on va parler des étapes d'évolution avec les parties prenantes dan
 		\textbf{INS}	& Information Network System  \\ 	
 		\textbf{IR}	& Infra-Rouge \\ 
 		\textbf{IROS}	& International Conference on Intelligent Robots and Systems \\ 
+		\textbf{Kd tree}	& k-dimensional tree \\
 		\textbf{KF}	& Kalman Filter \\
 		\textbf{KLD}	& KullBack-Leibler Divergence  \\ 
 		\textbf{ML-AMCL}	& MultiLayer Adaptative Monte Carlo Localisation  \\ 	
@@ -701,6 +705,39 @@ L'utilisation d'un filtre particulaire Rao-Blackwellisé permet de maintenir une 
 
 La MLE reste une solution intéressante grâce à sa simplicité et son efficacité en temps de calcul. En plus, il peut être appliqué à tous les types de cartes. Malheureusement, on ne peut estimer que les meilleures hypothèses en position à chaque étape de calcul, ce qui freine les possibilités de l'IML lors de la fermeture d'une boucle dans un environnement cyclique.
 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{conclusion_chap11}
+	\caption[Minimisation de l'erreur de mesure]{\textit{Exemple de construction d'un graphe de pose et de minimisation des erreurs}}
+	\label{fig:tab1}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{conclusion_chap12}
+	\caption[Minimisation de l'erreur de mesure]{\textit{Exemple de construction d'un graphe de pose et de minimisation des erreurs}}
+	\label{fig:tab2}
+\end{figure}
+
+\definecolor{Gray}{gray}{0.85}
+\begin{tabular}{|c|c|c|}
+	\hline 
+	\rowcolor{Gray}
+	\cellcolor{Gray} & Avantages & Inconvénients \\ 
+	\hline 
+	\cellcolor{Gray} Filtre de Kalman &  &  \\ 
+	\hline 
+	\cellcolor{Gray} Filtre Particulaire &  &  \\ 
+	\hline 
+	\cellcolor{Gray} IML &  &  \\ 
+	\hline 
+	\cellcolor{Gray} Scan Matching &  &  \\ 
+	\hline 
+	\cellcolor{Gray} Scan Matching + Pose Graph &  &  \\ 
+	\hline 
+	\cellcolor{Gray} &  &  \\ 
+	\hline 
+\end{tabular} 
 % Reste à developper la comparaison monte catle gmapping ekf ukf kf posegraph 
 \section{Défis courants avec SLAM} 
 
@@ -804,9 +841,9 @@ Il faut noter qu'il existe plus d'une méthode, et plus d'un outil pour faire du 
   \chapter{ICP}
 \url{https://www.youtube.com/watch?v=QWDM4cFdKrE&t=125s}
 
-L'ICP est largement utilisé pour L'alignement des nuages de points. Il a été introduit en 1992 par Besl et McKay\cite{icp_bib_1}.\\
+L'ICP ou \textit{Iterative Closest Point} est une technique pour aligner deux nuages de points en cherchant de manière itérative les points les plus proches pour les faire correspondre et superposer des nuages de points. Elle a été introduit en 1992 par Besl et McKay\cite{icp_bib_1}.\\
 
-Cette technique de SLAM est basée sur le scan matching, cet algorithme permet le recalage entre deux données géométriques (dans ce cas des nuages points), les étapes de L'algorithme sont :
+Cette technique de SLAM est basée sur le scan matching est très utilisée, son algorithme permet le recalage entre deux données géométriques (dans ce cas des nuages points), les étapes de L'algorithme sont :
 
 \quad - La sélection des points à aligner ;
 
@@ -865,6 +902,7 @@ d'échantillonner ces points selon l'orientation de leurs normales, au lieu d'eff
 	\caption[Méthodes de Matching]{ICP matching strategies in two dimensions. Blue points represent the model point clouds to which red data points are matched. In the reverse calibration case, the points are projected onto the discretized, lower dimensional camera view space.}
 	\label{fig:icp_matching}
 \end{figure}
+Des méthodes d'accélération de mise en correspondance existent tel que KD tree, cependant ça ne garantie pas de donner les mêmes résultats à chaque fois. 
 \subsection{Pondération des paires}
 La pondération des couples de points appariés a pour objectif de renforcer l'apport des appariements supposés être corrects et atténuer l'effet des faux appariements.\\
 
@@ -983,8 +1021,10 @@ Vanilla ICP ou ICP originale est l'algorithme de base qu'on va appliquer dans
 	\caption[bla]{blablabla}
 	\label{fig:icp6}
 \end{figure}
-\subsection{IRLS-ICP}
+\subsection{IRLS-ICP}\label{sec:irls-icp}
+Iterative Registered Least Sqaure
 
+L'ICP classqiue mesure l'erreur d'alignement en utilisant la distance $ l_2 $, qui pénalise les larges déviations de n'importe quel point du nuage de point source $ P $ au nuage de point $ Q $. Cette méthode permet effectivement de parvenir à des résultats explicites (dits aussi en forme fermée) dans l'étape de l'alignement, mais peut tout de même amener à des appareillments erronés en cas de 
 \subsection{ICP Point à Plan}
 
 \begin{figure}[h]
@@ -1259,9 +1299,20 @@ En principe les données du télémètre laser devraient suffire pour cartographier 
 
 Dans notre simulation nous allons commencer par faire un Scan Matching via l'ICP Vanilla, qui sera optimisé par la suite, et via la NDT, afin de comparer ces deux algorithmes.\\
 \section{ICP Vanilla}
-\section{IRLS-ICP}\label{sec:irls-icp}
+\section{IRLS-ICP}\label{sec:sim-irls-icp}
+L'algorithme a tendance à planter si on ne rend pas l'algorithme plus robuste, et pour ce on dispose de diverses méthodes de M-Estimateurs :\\
+
+Figure ScanMatching-IRLS-ICP 2x2 avec les quatre méthodes pour des itérations proches de la phase de virage.\\
+
+On constate que Welsch donne les meilleurs résultats, avec Cauchy qui côtoie de près son degré de précision, Tukey et Huber démontrent de moins bons résultats, qui restent tout de même bien meilleurs que la méthode $ l_2 $.\\
+
+Figure SLAM-IRLS-ICP-Welsch\\
+
+Les résultats sont excellents tant que la rotation est minime, mais dès qu'elle devient importante, l'IRLS-ICP est très peu résilient dans les virages, et on peut voir de la figure ref{SLAM-IRLS-ICP-Welsch} qui exprime la trajectoire et la carte résultant d'un SLAM via le M-estimateur de Welsh pour l'IRLS ICP.\\
+
+Les résultats ne sont donc pas satisfaisants dans le cas de cette application de l'algorithme de l'ICP bien que ce soit une méthode robuste de  la variante point à point, elle distingue mal les contours réels des limites duc champs d'atteinte du télémètre laser. La robustesse de cet algorithmes réside dans l'exploitation d'une méthode de MLE qui est les M-Estimateurs, dont ici on a pu voir une comparaison entre l'estimateur d'Huber, de Welsch, de Cauchy, et un estimateur bi-weighted de Tukey(voir section \ref{sec:irls-icp}).\\
 \section{IRLS-ICP et Odométrie}\label{sec:irls-icp-et-odometrie}
-Étant donné que la dérive de la localisation accentue la dérive de la cartographie, on va calculer les poses à partir des données odométrique, et dessiner la carte de l'environnement à partir des des données du télémètre laser et des poses déterminées via l'odométrie. 
+Étant donné que la dérive de la localisation accentue la dérive de la cartographie, on va calculer les poses à partir des données odométriques, et dessiner la carte de l'environnement à partir des des données du télémètre laser et des poses déterminées via l'odométrie. 
 
 
 \section{IRLS-ICP et Pose Graph}
@@ -1427,11 +1478,14 @@ Une séquence de ... de scans qui ont été superposés l'un après l'autre pour reco
 	\includegraphics[width=\linewidth]{3D_icp_fig_5}
 	\caption[Scan Matching à base de l'ICP]{Scan Matching pour cartographier un environnement via l'algorithme de l'ICP}
 	\label{fig:3D_ndt_fig_2}
-	
+\end{figure}	
 \subsection{Comparaison}
-ICP 16 secondes 
-NDT 60 sec min jusqu'à 90
-\end{figure}
+ICP 16 secondes \\
+NDT 60 sec min jusqu'à 90\\
+Pour le filtrage, les fonctions \texttt{pcregistericp} et \texttt{pcregisterndt} sont des fonctions matlab qu'on utilise avec \texttt{pcdownsample} qui fait l'échantillonage, et qu'on retrouve dans la toolbox Vision de Matlab R2018a\footnote{Attention à utiliser une version qui inclut les ressources nécessaires pour lancer les fonctions \texttt{pcdownsample} et \texttt{pcmerge}, ce qui n'est pas le cas de la version 1 de Matlab R2021a} et qui ont pour options de faire un échantillonnage \texttt{random} (aléatoire) ou \texttt{gridAverage} (qui calcul la moyenne des points faisant partie d'une même unité d'espace dans le cas où une unité d'espace contiendrait plus d'un point) cette seconde méthode devrait théoriquement préserver la forme du nuage de point mieux que l'échantillonnage aléatoire\cite{pcdownsample}.\\
+
+En pratique en remarque que la sélection de points \texttt{random} prend bien moins de points que la sélection \texttt{gridAverage} et est légèrement plus lente en plus de renvoyer des résultats lestement plus flous en plus de ne pas aligner les scans aussi bien que \texttt{gridAverage}.
+
 \part{Annexes}
 \appendix
 \chapter{Annexe A  : Le filtre de Kalman}
