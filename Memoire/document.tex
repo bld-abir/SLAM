@@ -2,7 +2,7 @@
 \usepackage[latin1]{inputenc}
 \usepackage[T1]{fontenc}
 %\usepackage[cyr]{aeguill}
-\usepackage[french]{babel}
+\usepackage[german]{babel}
 \usepackage{graphicx} % Pour manipuler des images
 \usepackage{subfig} % Pour faire des images dans ne même figure
 \usepackage{lmodern} % Pour changer le pack de police.
@@ -17,6 +17,7 @@
 \usepackage{amssymb}
 \usepackage{mathrsfs}
 
+%\usepackage{array,multirow,makecell}% Pour défiir la taille des cellules des tableaux
 \usepackage{indentfirst}
 \usepackage{verbatim}  % Afin d'incerer du code via la cmd 
 %\begin{verbatimtab}[10]
@@ -133,6 +134,7 @@ Ce sera là qu'on va parler des étapes d'évolution avec les parties prenantes dan
 		\textbf{DSO}	& Direct Sparse Odometry \\ 
 		\textbf{DTAM}	&  Dense Tracking and Mapping \\ 
 		\textbf{EKF}	& Extended Kalman Filter \\
+		\textbf{GM}	& Generalised Median \\
 		\textbf{GPS}	& Global Positioning System \\ 	
 		\textbf{ICP}	& Iterative Closest Point \\ 
 		\textbf{IDC}	& Iterative Dual Correspondences \\ 
@@ -483,28 +485,40 @@ Cette structure du SLAM est représentée sur le schéma de la figure suivante. Sur
 \end{figure}
 
 \chapter{Le SLAM}
-SLAM (localisation et cartographie simultanées) est une méthode utilisée pour les véhicules autonomes qui vous permet de créer une carte et de localiser votre véhicule sur cette carte en même temps. Les algorithmes SLAM permettent au véhicule de cartographier des environnements inconnus. Les ingénieurs utilisent les informations de la carte pour effectuer des tâches telles que la planification de trajectoire et l'évitement d'obstacles.
+SLAM (localisation et cartographie simultanées) est une méthode utilisée pour les véhicules autonomes qui vous permet de créer une carte et de localiser votre véhicule sur cette carte en même temps. Les algorithmes SLAM permettent au véhicule de cartographier des environnements inconnus. Les ingénieurs utilisent les informations de la carte pour effectuer des tâches telles que la planification de trajectoire et l'évitement d'obstacles.\\
 
-SLAM fait l'objet de recherches techniques depuis de nombreuses années. Mais avec de vastes améliorations de la vitesse de traitement informatique et la disponibilité de capteurs à faible coût tels que des caméras et des télémètres laser, SLAM est maintenant utilisé pour des applications pratiques dans un nombre croissant de domaines.
+SLAM fait l'objet de recherches techniques depuis de nombreuses années. Mais avec de vastes améliorations de la vitesse de traitement informatique et la disponibilité de capteurs à faible coût tels que des caméras et des télémètres laser, SLAM est maintenant utilisé pour des applications pratiques dans un nombre croissant de domaines.\\
 
 Pour comprendre pourquoi SLAM est important, examinons certains de ses avantages et des exemples d'application.
 
 \section{Exemples de SLAM}
-Considérons un aspirateur robot domestique. Sans SLAM, il se déplacerait aléatoirement dans une pièce et ne pourra peut-être pas nettoyer toute la surface du sol, d'autant plus que cette approche consomme une énergie excessive, de sorte que la batterie s'épuise plus rapidement. D'autre part, les robots avec SLAM peuvent utiliser des informations telles que le nombre de tours de roue et des données provenant de caméras et d'autres capteurs d'imagerie pour déterminer la quantité de mouvement nécessaire. C'est ce qu'on appelle la localisation. Le robot peut également utiliser simultanément la caméra et d'autres capteurs pour créer une carte des obstacles dans son environnement et éviter de nettoyer deux fois la même zone. C'est ce qu'on appelle la cartographie.
+Considérons un aspirateur robot domestique. Sans SLAM, il se déplacerait aléatoirement dans une pièce et ne pourra peut-être pas nettoyer toute la surface du sol, d'autant plus que cette approche consomme une énergie excessive, de sorte que la batterie s'épuise plus rapidement. D'autre part, les robots avec SLAM peuvent utiliser des informations telles que le nombre de tours de roue et des données provenant de caméras et d'autres capteurs d'imagerie pour déterminer la quantité de mouvement nécessaire. C'est ce qu'on appelle la localisation. Le robot peut également utiliser simultanément la caméra et d'autres capteurs pour créer une carte des obstacles dans son environnement et éviter de nettoyer deux fois la même zone. C'est ce qu'on appelle la cartographie.\\
 
 SLAM est utile dans de nombreuses autres applications telles que la navigation dans une flotte de robots mobiles pour organiser des étagères dans un entrepôt, le stationnement d'une voiture autonome dans un endroit vide ou la livraison d'un colis en naviguant sur un drone dans un environnement inconnu. Permettant la localisation et le mappage simultanés avec d'autres tâches telles que la fusion de capteurs, le suivi d'objet, la planification de chemin et le suivi de chemin.
 
-\section{Les Méthodes de SLAM}
-D'une manière générale, il existe deux types de composants technologiques utilisés pour réaliser le SLAM. Le premier type est le traitement du signal des capteurs, y compris le traitement frontal, qui dépend largement des capteurs utilisés. Le deuxième type est l'optimisation du graphe de pose, y compris le traitement back-end, qui est indépendant du capteur. Dans ce mémoire on va se focaliser plutôt sur le traitement de signal des capteurs.
+\section{Workflow du SLAM}
+La solution SLAM est divisée en un \textit{front end} et un \textit{back end}. La partie frontale est chargée de la lecture des données de mesure acquise par les différents capteurs, et de les faire coïncider pour en construire la carte de l'environnement. La partie \textit{back end} est responsable de la mise à jour de la carte à chaque nouvelle acquisition de données, et ce via la détection de fermetures de boucles et leur optimisation, le plus souvent, cette aspect du SLAM est fait via Pose Graph\cite{fullStack}.
 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{overallSlam}
+	\caption[Exemple de Slam Overall]{Exemple de Slam Overall}
+	\label{fig:overallSlam}
+\end{figure}
+
+La figure \ref{fig:overallSlam} décrit un exemple de SLAM Overall ou complet qui utilise l'algorithme de l'ICP pour faire le scan matching dans le \textit{front end}, le résultat est assigné à une carte où les poses sont des n\oe{}uds de Pose Graph. Dans la partie \textit{back end} un algorithme VBRL pour la détection d boucles de fermetures, dès que la validité de la boucle est vérifiée une fonction d'optimisation du Pose Graph est lancée.\\
+
+D'une manière générale, il existe deux types de composants technologiques utilisés pour réaliser le SLAM. Le premier type est le traitement du signal des capteurs, y compris le traitement frontal, qui dépend largement des capteurs utilisés. Le deuxième type est l'optimisation du graphe de pose, y compris le traitement \textit{back end}, qui est indépendant du capteur. Dans ce mémoire on va se focaliser dans un premier temps sur la partie \textit{front end}, sur le traitement de signal des capteurs et en considérant la méthode de Pose Graph comme un moyen d'optimisation.
+
+\subsection{Font End}
 Afin de comprendre ce type de technologie appelée traitement frontal, nous prendrons l'exemple du Visual SLAM et Lidar SLAM, deux différentes méthodes d'aborder le SLAM.
 
-\subsection{SLAM visuel}
-Comme son nom l'indique, le SLAM visuel (ou vSLAM) utilise des images acquises à partir d'appareils photo et d'autres capteurs d'image. Visual SLAM peut utiliser des caméras simples (caméras grand angle, fish-eye et sphériques), des caméras à \oe{}il composé (caméras stéréo et multi-caméras) et des caméras RVB-D (caméras de profondeur et ToF).
+\subsubsection{SLAM visuel}
+Comme son nom l'indique, le SLAM visuel (ou vSLAM) utilise des images acquises à partir d'appareils photo et d'autres capteurs d'image. Visual SLAM peut utiliser des caméras simples (caméras grand angle, fish-eye et sphériques), des caméras à \oe{}il composé (caméras stéréo et multi-caméras) et des caméras RVB-D (caméras de profondeur et ToF).\\
 
-Visual SLAM peut être mis en \oe{}uvre à faible coût avec des caméras relativement bon marché. De plus, comme les caméras fournissent un grand volume d'informations, elles peuvent être utilisées pour détecter un point de repère (positions précédemment mesurées). La détection de points de repère peut également être combinée avec une optimisation basée sur des graphiques, ce qui permet une flexibilité dans la mise en \oe{}uvre SLAM.
+Visual SLAM peut être mis en \oe{}uvre à faible coût avec des caméras relativement bon marché. De plus, comme les caméras fournissent un grand volume d'informations, elles peuvent être utilisées pour détecter un point de repère (positions précédemment mesurées). La détection de points de repère peut également être combinée avec une optimisation basée sur des graphiques, ce qui permet une flexibilité dans la mise en \oe{}uvre SLAM.\\
 
-Le SLAM monoculaire est lorsque vSLAM utilise une seule caméra comme seul capteur, ce qui rend difficile la définition de la profondeur. Cela peut être résolu en détectant des marqueurs AR, des damiers ou d'autres objets connus dans l'image pour la localisation ou en fusionnant les informations de la caméra avec un autre capteur tel que des unités de mesure inertielle (IMU), qui peuvent mesurer des quantités physiques telles que la vitesse et l'orientation. La technologie liée au vSLAM comprend la structure à partir du mouvement (SfM), l'odométrie visuelle et l'ajustement des faisceaux.
+Le SLAM monoculaire est lorsque vSLAM utilise une seule caméra comme seul capteur, ce qui rend difficile la définition de la profondeur. Cela peut être résolu en détectant des marqueurs AR, des damiers ou d'autres objets connus dans l'image pour la localisation ou en fusionnant les informations de la caméra avec un autre capteur tel que des unités de mesure inertielle (IMU), qui peuvent mesurer des quantités physiques telles que la vitesse et l'orientation. La technologie liée au vSLAM comprend la structure à partir du mouvement (SfM), l'odométrie visuelle et l'ajustement des faisceaux.\\
 
 Les algorithmes Visual SLAM peuvent être globalement classés en deux catégories. Les méthodes creuses correspondent aux points caractéristiques des images et utilisent des algorithmes tels que PTAM et ORB-SLAM. Les méthodes denses utilisent la luminosité globale des images et utilisent des algorithmes tels que DTAM, LSD-SLAM, DSO et SVO.
 
@@ -522,10 +536,10 @@ Les algorithmes Visual SLAM peuvent être globalement classés en deux catégories.
 	\label{fig:12}
 \end{figure}
 
-\subsection{LiDAR SLAM}
-La détection et la télémétrie de la lumière (lidar) est une méthode qui utilise principalement un capteur laser (ou capteur de distance).
+\subsubsection{LiDAR SLAM}
+La détection et la télémétrie de la lumière (lidar) est une méthode qui utilise principalement un capteur laser (ou capteur de distance).\\
 
-Par rapport aux caméras, ToF et autres capteurs, les lasers sont nettement plus précis et sont utilisés pour les applications avec des véhicules en mouvement à grande vitesse tels que les voitures autonomes et les drones. Les valeurs de sortie des capteurs laser sont généralement des données de nuages de points 2D (x, y) ou 3D (x, y, z). Le nuage de points du capteur laser fournit des mesures de distance de haute précision et fonctionne très efficacement pour la construction de cartes avec SLAM. Généralement, le mouvement est estimé séquentiellement en faisant correspondre les nuages de points. Le mouvement calculé (distance parcourue) est utilisé pour localiser le véhicule. Pour l'appariement de nuages de points lidar, des algorithmes de transformation itérative de point le plus proche (ICP) et de distribution normale (NDT) sont utilisés. Les cartes de nuages de points 2D ou 3D peuvent être représentées sous forme de carte quadrillée ou de carte voxel.
+Par rapport aux caméras, ToF et autres capteurs, les lasers sont nettement plus précis et sont utilisés pour les applications avec des véhicules en mouvement à grande vitesse tels que les voitures autonomes et les drones. Les valeurs de sortie des capteurs laser sont généralement des données de nuages de points 2D (x, y) ou 3D (x, y, z). Le nuage de points du capteur laser fournit des mesures de distance de haute précision et fonctionne très efficacement pour la construction de cartes avec SLAM. Généralement, le mouvement est estimé séquentiellement en faisant correspondre les nuages de points. Le mouvement calculé (distance parcourue) est utilisé pour localiser le véhicule. Pour l'appariement de nuages de points lidar, des algorithmes de transformation itérative de point le plus proche (ICP) et de distribution normale (NDT) sont utilisés. Les cartes de nuages de points 2D ou 3D peuvent être représentées sous forme de carte quadrillée ou de carte voxel.\\
 
 En revanche, les nuages de points ne sont pas aussi finement détaillés que les images en termes de densité et ne fournissent pas toujours des fonctionnalités suffisantes pour l'appariement. Par exemple, dans les endroits où il y a peu d'obstacles, il est difficile d'aligner les nuages de points et cela peut entraîner une perte de trace de l'emplacement du véhicule. De plus, la correspondance de nuages de points nécessite généralement une puissance de traitement élevée, il est donc nécessaire d'optimiser les processus pour améliorer la vitesse. En raison de ces défis, la localisation des véhicules autonomes peut impliquer la fusion d'autres résultats de mesure tels que l'odométrie des roues, le système mondial de navigation par satellite (GNSS) et les données IMU. Pour des applications telles que les robots d'entrepôt, le SLAM lidar 2D est couramment utilisé, tandis que le SLAM utilisant des nuages de points lidar 3D peut être utilisé pour les drones et le stationnement automatisé.
 
@@ -542,6 +556,8 @@ En revanche, les nuages de points ne sont pas aussi finement détaillés que les i
 	\caption{SLAM avec 3D LiDAR}
 	\label{fig:18}
 \end{figure}
+\newpage
+~
 
 \section{Algorithmes}
 Nous allons présenter dans cette partie trois méthodes largement utilisées pour la résolution du problème de SLAM. La majorité des autres méthodes et algorithmes en dérivent. Le premier exemple est le SLAM par Filtre de Kalman Etendu (EKF). C'est la plus ancienne méthode, encore largement utilisée. Le deuxième exemple utilise des techniques de filtrage statistique qu'on nomme généralement des filtres particulaires, ces deux premiers filtres sont très semblables étant donné leur structure commune qui découle du Filtre de Bayes.\\ 
@@ -690,7 +706,7 @@ Ce dernier fait appel à plusieurs techniques issues essentiellement de l'algèbre
 
 La figure \ref{fig:poseGraphPosesEtAmers} illustre également la procédure de marginalisation des amers que l'on peut appeler aussi réduction de graphe. Celle-ci est réalisée en utilisant le complément de Schur qui réduit la taille du système et ainsi son temps de résolution. Il transforme le système construit en un nouveau système plus petit, et ne contenant que les poses.\\
 
-La marginalisation consiste à éliminer des entrées de la matrice de variances-covariances (inverse de la matrice d'information) dans le but de diminuer la densité du système (le rendre plus épars).
+La marginalisation consiste à éliminer des entrées de la matrice de variances-covariances (inverse de la matrice d'information) dans le but de diminuer la densité du système (le rendre plus épars).\\
 
 C'est le complément de Schur dans le GraphSLAM qui réduit le graphe en marginalisant les amers. La marginalisation d'un amer implique la connexion deux à deux les poses depuis lesquelles cet amer a été observé. Le graphe réduit peut être également obtenu par une mise en correspondance directe des faisceaux Laser entre deux poses donnant, ainsi, la distance relative entre ces poses.\\
 
@@ -720,7 +736,11 @@ La MLE reste une solution intéressante grâce à sa simplicité et son efficacité e
 \end{figure}
 
 \definecolor{Gray}{gray}{0.85}
-\begin{tabular}{|c|c|c|}
+\definecolor{GrayDark}{gray}{0.5}
+\arrayrulecolor{GrayDark}
+	
+\begin{tabular}{|l|l|l|}
+	%\caption{Comparaison entres les méthodes de SLAM}
 	\hline 
 	\rowcolor{Gray}
 	\cellcolor{Gray} & Avantages & Inconvénients \\ 
@@ -739,6 +759,8 @@ La MLE reste une solution intéressante grâce à sa simplicité et son efficacité e
 	\hline 
 \end{tabular} 
 % Reste à developper la comparaison monte catle gmapping ekf ukf kf posegraph 
+\newpage
+~
 \section{Défis courants avec SLAM} 
 
 Bien que SLAM soit utilisé pour certaines applications pratiques, plusieurs défis techniques empêchent une adoption plus générale. Chacun a une contre-mesure qui peut aider à surmonter l'obstacle.
@@ -884,17 +906,21 @@ Plusieurs chercheurs ont proposé des solutions pour adresser les problèmes génér
 Cette brève vue d'ensemble permettra d'esquisser une meilleure image de ce en quoi consiste l'ICP en général, d'autant plus que les variantes peuvent être tellement différentes qu'il devient difficile de déterminer que ce sont des dérivées de l'ICP. Nous allons exploiter l'algorithme originale dans le chapitre dédié aux simulation pour comprendre les imperfections de l'algorithme Vanilla ICP qu'on va définir théoriquement dans la section \ref{sec:vanilla-icp}. Puis nous verrons deux autres variantes qui sont toutes deux très utilisées, et qui donnent d'excellents résultats. 
 \section{Taxonomie de l'ICP}
 \subsection{Initialisation des points}
-La façon dont sont sélectionnés les points en entrée de ICP peut avoir un impact sur la convergence de celui ci. \textit{Est il préférable de traiter toutes les données disponibles ou faut il les échantillonner ?} Il existe plusieurs approches pour sélectionner ces points.\\
+La façon dont sont sélectionnés les points en entrée de ICP peut avoir un impact sur la convergence de celui ci. \textit{Est il préférable de traiter toutes les données disponibles ou faut il les échantillonner ?} Il existe plusieurs approches pour sélectionner ces points. La documentation \cite{lion} utilise les méthodes suivantes d'échantillonnage, bien qu'il y en est plusieurs autres, celles ci donnent une idée sur ce qui existe :\\
 \begin{itemize}
-	\item 
+	\item Sélection aléatoire d'un certain pourcentage de points (on le trouve dans \cite{lion} sous \texttt{ RandomSampling} et on l'utilisera dans la partie \ref{sec:scan-matching-en-3d} sous la dénomination \texttt{random}) ;
+	\item Sélection du $ n^{ème} $ élément de chaque échantillon de point, l'échantillon étant définit selon l'ordre des points du nuage de points de l'objet à échantillonner (\texttt{IntervalSampling}) ; 
+	\item Échantillonnage uniforme de points dans l'espace (\texttt{UniformSampling}) ;
+	\item Sélection de points selon le poids de la normale (\texttt{MaxLeverageSampling}) ;
+	\item Sélection de tous les points appartenant à un champs déterminé de forme quadrilatère ou polygonale (\texttt{Limits} ou \texttt{InPolygon}) ;
+	\item Sélection de points apparteants à un VoxelHull specifique, or des points appartnant à des parties communes à deux nuages de points, là où se produit un chevauchement (\texttt{InVoxelHull}) ;
+	\item Sélection des $ k $ plus proches points voisins de chaqe point dans un autre nuage de points (\texttt{KnnSearch}) ;
+	\item Sélection des points constituant un contour vertical (\texttt{Profile}) ;
+	\item Sélection de points selon un coefficient de robustesse pour la distance entre les points appareillés ou les ou pour l'angle entre la normale des points appareillés (\texttt{Attribute}). Selon \cite{icp_melyoun} il est plus intéressant d'échantillonner ces points selon l'orientation de leurs normales, au lieu d'effectuer un tirage aléatoire sur l'ensemble des données. 
 \end{itemize}
-KLD Sampling : Kullback-Leibler divergence
 
-Selon \cite{icp_melyoun} il est plus intéressant
-d'échantillonner ces points selon l'orientation de leurs normales, au lieu d'effectuer un tirage aléatoire sur l'ensemble des données. Il est préférable de trier, d'abord, et regrouper dans des ensembles différents ces points en fonction de l'orientation de leurs normales. Ensuite, un échantillonnage uniforme est effectué sur chaque ensemble. On a ci dessous des approches qui se basent sur la normale pour échantillonner les points :
-\begin{itemize}
-	\item 
-\end{itemize}
+Il est préférable de trier, d'abord, et regrouper dans des ensembles différents ces points en fonction de l'orientation de leurs normales. Ensuite, un échantillonnage uniforme est effectué sur chaque ensemble. Mais il arrive d'avoir besoin d'échantillonnage léger. Pour l'initialisation, on utilise des méthode de filtrages et de dé-bruitage pour lisser l'image et/ou la suppression des points aberrants.\\
+	
 \subsection{Matching des nuages de points}
 \begin{figure}[h]
 	\centering
@@ -915,7 +941,29 @@ Une méthode de mise en correspondance robuste est, donc, indispensable. La dista
 	\caption[tableau]{provisoire : Descriptive table of robust cost functions used in this analysis expressed with respect of their tuning parameter k and the scaled error e.file: ///home/blad/Documents/Études/M2/Mémoire/SLAM/notYet/ComparaisonCauchyWelshHuberTukey.pdf}
 	\label{fig:tableau}
 \end{figure}
-\subsection{Rejection des paires}
+
+\begin{tabular}{l l l l l}
+	%\caption{Comparaison entres les méthodes de SLAM}
+	\hline
+	Fonctions & Condition & Coût $ \rho(e) $ & Poids $ w(e) $ & M \\ 
+	\hline\hline
+	\rowcolor{Gray}
+	$L_2$ &  &  & & \\  
+	$L_1$ &  &  & & \\  
+	\rowcolor{Gray}
+	Huber &  &  & &  \\  
+	Cauchy &  &  & &  \\ 
+	\rowcolor{Gray}
+	GM &  &  & & \\ 
+	Welsch &  &  & & \\  
+	\rowcolor{Gray}
+	Tukey &  &  & &  \\  
+	Max. Dist &  &  & &  \\
+	\rowcolor{Gray}
+	Trimmed &  &  & &  \\ 
+	\hline
+\end{tabular}
+\subsection{Réjection des paires}
 Il est très important de rejeter les appariements supposés faux. Ceux ci induisent en erreur les estimateurs par  moindres carrés. La difficulté réside dans la définition même d'un "mauvais appariement". \textit{Sur quel critère se baser pour décider qu'un appariement est faux ?}. La façon la plus basique d'éliminer ces points, est d'utiliser un seuil de distance géométrique ou mixte (comportant un terme photométrique) fixe. Ce seuil serait difficile à fixer dans le cas de ICP, étant donnée que d'une itération à l'autre la distance moyenne entre les points appariés est sensée décroître. Il est possible d'utiliser
 
 %cahier+3_LV_JIXIN
@@ -927,9 +975,16 @@ Il est très important de rejeter les appariements supposés faux. Ceux ci induise
 	\label{fig:icp_rejection}
 \end{figure}
 
+\quad \textendash \quad L'angle entre les normales des points appareillés ne doit pas dépasser un certain seuil.
+
+\quad \textendash \quad La distance point à point entre les points correspondants ne doit pas dépasser un certain seuil.
+
+\quad \textendash \quad Une limite de distance pour les correspondances point à plan afin de filtrer les points aberrants (cette méthode est un estimateur médian (M-estimateur) robuste connu sous \textit{Generalised Median} (GM) pour une base de donnée supposée être conforme àun distribution gaussienne).
+
+\quad \textendash \quad Maximum acceptable de la robustesse des plans extraits, et pour ce foire c'est la dérivée du plan qui est utilisée.
 \subsection{Optimisation des erreurs}\label{sec:optimisation-des-erreurs}
 %file:///home/blad/Documents/Études/M2/Mémoire/SLAM/12_fasticp_paper.pdf
-
+On parle de minimisation d'Indice Clé de Performance aussi appel ICP, à ne pas confondre avec l'ICP(\textit{Iterative Closest Point}). Il existe divers indicateurs d'erreur de performance tel que MSE (\textit{Mean Squared Error}) ou l'erreur quadratique moyenne, RMSE (Root Mean Square Error) ou Racine de l'erreur quadratique moyenne, ou encore les MASE, MAPE, SMAPE, etc. Dans le cas de l'ICP, l'optimisation des erreurs peut être représentée en deux étapes :
 \subsubsection{La minimisation des critères de distance}
 Le calcul de la meilleure transformation revient à minimiser un critère de distance. L'erreur du critère de distance (que ce soit la distance entre deux point, ou deux normales du vecteur de distance, ou autre) est minimisée via l'une de ces 3 approches phares :\\
 
@@ -972,9 +1027,9 @@ La minimisation point à plan trouve une expression explicite de la solution (\te
 
 Pour d'autres critères d'optimisation, l'existence d'une solution explicite devient invraisemblable. Celà dit on peut toujours utiliser des méthodes non linéaires, bien que ce soit des approches délicates où l'équilibre entre forte précision et moindre coût de calcul devient le défit phare. Celà dit ça nous offre la liberté de modéliser la fonction convoitée à notre bon vouloir.
 
-Reste enfin les algorithmes dédiés, comme l'AMCL et la ML-AMCL qui sont utilisés dans le cas du filtre particulaire avec un filtrage KLD, c'est un système 2D de localisation probabiliste pour des robots mobiles. C'est ce que fait ce n\oe{}ud ROS\cite{amcl}, qui à base d'une carte, de scans, et de données de tlémètre laser, transforme les messages en des stiations de pose (position et orientation). C'est une approche dédié
+Reste enfin les algorithmes dédiés, comme l'AMCL et la ML-AMCL qui sont utilisés dans le cas du filtre particulaire avec un filtrage KLD, c'est un système 2D de localisation probabiliste pour des robots mobiles. C'est ce que fait ce n\oe{}ud ROS\cite{amcl}, qui à base d'une carte, de scans, et de données de télémètre laser, transforme les messages en des situations de pose (position et orientation). C'est une approche dédié
 \section{Variantes}
-
+On abordera la fonction originale de l'ICP, mais puisqu'elle n'est pas très utilisée, on va aborder d'autres variantes plus présentes dans la pratique.\\
 \url{https://youtu.be/ktRqKxddjJk?t=887}
 
 \url{https://www.youtube.com/c/CyrillStachniss/search?query=ICP}
@@ -1084,7 +1139,7 @@ Calculer la matrice de covariance
 \end{equation}
 Dans le cas 2D, la covariance est une matrice $ 2\times2 $ :
 \begin{equation}\label{eqNDT_4}
-\begin{split*}
+ \begin{split*}
 \begin{align}
 \Omega&=\frac{1}{n}\overset{n}{\underset{i=1}{\sum}}(X_i-Q)(X_i-Q)^t\\
 &=\frac{1}{n}\overset{n}{\underset{i=1}{\sum}}\begin{pmatrix}
@@ -1158,6 +1213,8 @@ score(p)=\overset{n}{\underset{i=1}{\sum}}\Pi(X'_i)=\overset{n}{\underset{i=1}{\
 
 Ce "\textit{score}" sera optimisé dans la section suivante.
 \section{Le processus d'optimisation avec la méthode de Newton}
+La NDT ne nécessite pa d'association point à point, et parvient à aligner les scans simplement en maximisant itérativement le "score" en utilisant l'algorithme de Newton\cite{reference1}.\\
+
 Le fonctionnement de la NDT dépend de la maximisation du "score" (fonction \ref{eqNDT_7}). La méthode d'optimisation utilisée dans la NDT d'origine proposée dans \cite{ndt_1}.\\
 
 Étant donné que les problèmes d'optimisation sont généralement décrits comme des problèmes de minimisation, nous adopterons notre notation à cette convention. Ainsi, la fonction à minimiser dans cette section est la fonction "score". 
@@ -1405,7 +1462,7 @@ Comprendre bien l'algo du full slam. On sait qu'il a générer les positions à par
 
 \subsection{Comparaison}
 Ils sembles tous identiques. 
-\chapter{Scan Matching en 3D}
+\chapter{Scan Matching en 3D}\label{sec:scan-matching-en-3d}
 \section{ICP en 3D}
 \begin{figure}[h]
 	\centering
