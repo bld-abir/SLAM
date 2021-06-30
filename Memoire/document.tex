@@ -145,7 +145,7 @@ Ce sera là qu'on va parler des étapes d'évolution avec les parties prenantes dan
 		\textbf{INS}	& Information Network System  \\ 	
 		\textbf{IR}	& Infra-Rouge \\ 
 		\textbf{IROS}	& International Conference on Intelligent Robots and Systems \\ 
-		\textbf{Kd tree}	& k-dimensional tree \\
+		\textbf{Kd tree}	& $k$-dimensional tree \\
 		\textbf{KF}	& Kalman Filter \\
 		\textbf{KLD}	& KullBack-Leibler Divergence  \\ 
 		\textbf{ML-AMCL}	& MultiLayer Adaptative Monte Carlo Localisation  \\ 	
@@ -246,7 +246,7 @@ Considérons un robot se déplaçant dans un environnement inconnu, en observant un
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=9cm]{3}
-	\caption[L'idée de base du SLAM]{L'idée de base du SLAM}
+	\caption[L'idée de base du SLAM]{L'idée de base du SLAMmm}
 	\label{fig:2.2.3.1}
 \end{figure}
 \medskip
@@ -273,7 +273,6 @@ On définit aussi les ensembles suivants :
 \quad - $ m=\{m_{1}, m_{2}, \ldots, m_{n}\} $ : la carte de l'environnement contenant une liste d'objets statiques
 \section{Localisation}
 Le problème de localisation du robot consiste à estimer sa position dans un environnement donné, en utilisant l'historique de ses observations, l'historique des commandes et la connaissance de l'environnement. La figure 2.2 schématise ce principe.
-
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{4}
@@ -798,8 +797,21 @@ Depuis l'identification de la problématique du SLAM de nombreuses approches pour
 \section{Point Cloud}
 Un point cloud, ou un nuage de point est un ensemble de points dans un espace 3D. Ces nuages de points sont obtenus notamment à partir de scanners 3D, tels que des scans de télémètres laser. On retrouve ce concept dans la navigation et la perception des robots, l'estimation de la profondeur, la vision stéréo, l'enregistrement visuel et les systèmes avancés d'aide à la conduite (ADAS)\cite{Matlab_cp}.
 https://youtu.be/ktRqKxddjJk?t=1363
-Densité, selection/segmentation, frequence
+Densité, selection/segmentation, fréquence
 https://youtu.be/ktRqKxddjJk?t=1009
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{matrix}
+	\caption[Description d'un Nuage de Point]{Description de la matrice représentative d'un Nuage de Point}
+	\label{fig:matrix}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{matrixDescript}
+	\caption[Description d'un Nuage de Point]{Description de la matrice représentative d'un Nuage de Point}
+	\label{fig:matrixDescript}
+\end{figure}
 \section{Scan Matching}
 Le scan matching est un processus important dans plusieurs domaines. Il est utilisé pour la construction de modèles à partir d'analyses partielles dans des disciplines aussi diverses que L'imagerie médicale, L'archéologie, la robotique, etc. Il est également utile pour permettre la localisation du robot mobile. Il existe plusieurs algorithmes avec qui divergent dans leurs approches, qui ont pour but de faire du scan matching dont les plus connus : L'algorithme itératif du point le plus proche (ICP), la double correspondance itérative (IDC), la transformation de distribution normale (Normal Distribution Transform, NDT) et la méthode de champs de vraisemblance (LF)\cite{ref7}.\\
 
@@ -907,14 +919,14 @@ Plusieurs chercheurs ont proposé des solutions pour adresser les problèmes génér
 Cette brève vue d'ensemble permettra d'esquisser une meilleure image de ce en quoi consiste l'ICP en général, d'autant plus que les variantes peuvent être tellement différentes qu'il devient difficile de déterminer que ce sont des dérivées de l'ICP. Nous allons exploiter l'algorithme originale dans le chapitre dédié aux simulation pour comprendre les imperfections de l'algorithme Vanilla ICP qu'on va définir théoriquement dans la section \ref{sec:vanilla-icp}. Puis nous verrons deux autres variantes qui sont toutes deux très utilisées, et qui donnent d'excellents résultats. 
 \section{Taxonomie de l'ICP}
 \subsection{Initialisation des points}
-La façon dont sont sélectionnés les points en entrée de ICP peut avoir un impact sur la convergence de celui ci. \textit{Est il préférable de traiter toutes les données disponibles ou faut il les échantillonner ?} Il existe plusieurs approches pour sélectionner ces points. La documentation \cite{lion} utilise les méthodes suivantes d'échantillonnage, bien qu'il y en est plusieurs autres, celles ci donnent une idée sur ce qui existe :\\
+La façon dont sont sélectionnés les points en entrée de ICP peut avoir un impact sur la convergence de celui ci. \textit{Est il préférable de traiter toutes les données disponibles ou faut il les échantillonner ?} Il existe plusieurs approches pour sélectionner ces points. La documentation \cite{lion} utilise les méthodes suivantes d'échantillonnage, bien qu'il y en est plusieurs autres, celles ci donnent une idée sur ce qui existe :
 \begin{itemize}
 	\item Sélection aléatoire d'un certain pourcentage de points (on le trouve dans \cite{lion} sous \texttt{ RandomSampling} et on l'utilisera dans la partie \ref{sec:scan-matching-en-3d} sous la dénomination \texttt{random}) ;
-	\item Sélection du $ n^{ème} $ élément de chaque échantillon de point, l'échantillon étant définit selon l'ordre des points du nuage de points de l'objet à échantillonner (\texttt{IntervalSampling}) ; 
+	\item Sélection du $ n^{ème} $ élément de chaque échantillon de point, l'échantillon étant définit selon l'ordre des points du nuage de points de l'objet à échantillonner ; (\texttt{IntervalSampling}) ; 
 	\item Échantillonnage uniforme de points dans l'espace (\texttt{UniformSampling}) ;
-	\item Sélection de points selon le poids de la normale (\texttt{MaxLeverageSampling}) ;
+	\item Sélection de points selon le poids de la normale de tangente des points appareillés (\texttt{MaxLeverageSampling}) ;
 	\item Sélection de tous les points appartenant à un champs déterminé de forme quadrilatère ou polygonale (\texttt{Limits} ou \texttt{InPolygon}) ;
-	\item Sélection de points apparteants à un VoxelHull specifique, or des points appartnant à des parties communes à deux nuages de points, là où se produit un chevauchement (\texttt{InVoxelHull}) ;
+	\item Sélection de points appartenant à un VoxelHull spécifique, or des points appartenant à des parties communes à deux nuages de points, là où se produit un chevauchement (\texttt{InVoxelHull}) ;
 	\item Sélection des $ k $ plus proches points voisins de chaqe point dans un autre nuage de points (\texttt{KnnSearch}) ;
 	\item Sélection des points constituant un contour vertical (\texttt{Profile}) ;
 	\item Sélection de points selon un coefficient de robustesse pour la distance entre les points appareillés ou les ou pour l'angle entre la normale des points appareillés (\texttt{Attribute}). Selon \cite{icp_melyoun} il est plus intéressant d'échantillonner ces points selon l'orientation de leurs normales, au lieu d'effectuer un tirage aléatoire sur l'ensemble des données. 
@@ -929,7 +941,23 @@ Il est préférable de trier, d'abord, et regrouper dans des ensembles différents 
 	\caption[Méthodes de Matching]{ICP matching strategies in two dimensions. Blue points represent the model point clouds to which red data points are matched. In the reverse calibration case, the points are projected onto the discretized, lower dimensional camera view space.}
 	\label{fig:icp_matching}
 \end{figure}
-Des méthodes d'accélération de mise en correspondance existent tel que KD tree, cependant ça ne garantie pas de donner les mêmes résultats à chaque fois. 
+Des méthodes d'accélération de mise en correspondance existent tel que KD tree, cependant ça ne garantie pas de donner les mêmes résultats à chaque fois.\\
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{kd_tree_expml}
+	\caption[Exemple de BSP Tree 2D]{Exemple de BSP Tree dans un espace 2D}
+	\label{fig:kd_tree_expml}
+\end{figure}
+
+Le kd-Tree est selon \cite{kd_cedric} une structure permettant d'organiser des données présentes dans un espace à $k$-dimensions selon leur répartition spatiale.  Cette structure est très utile pour de nombreuses applications, comme par exemple, pour accélérer la recherche de données dans un espace multi-dimensions, la recherche d'intervalles, ou encore la recherche de plus proches voisins.\\
+
+Le kd-Tree est un cas particulier des « \textit{Binary Space Partitionning} (BSP) \textit{trees} ». Les BSP trees subdivisent l'espace à $k$-dimensions en coupant chaque volume englobant en deux sous-volumes par un plan de l'espace, et en re-itérant récursivement sur ces deux nouveaux volumes ainsi obtenus. Les BSP trees peuvent donc être représentés par un arbre binaire où les deux sous-volumes sont les deux fils du n\oe{}ud correspondant au volume englobant de niveau supérieur (cf. figure n o 1). Les plans de coupe peuvent être choisis en fonction de la répartition des données, afin qu'il y ait des volumes englobants de grande taille, là où il n'y a pas une grande concentration de données et inversement.\\
+
+Dans le cas du kd-Tree, ces plans séparateurs sont
+toujours choisis de telle façon que leur normal soit un des axes du système de coordonnées de l'espace (plans toujours perpendiculaires aux axes comme dans la figure n o 1). Cela permet de simplifier la construction, mais aussi le parcours de l'arbre.\\
+
+Le rôle du kd-Tree est double : il permet, d'une part, d'avoir une subdivision spatiale optimisée de l'espace permettant d'accélérer le traitement des données et donc de d'accélérer la mise en correspondance des nuages de points, d'autre part, de stocker les données sous la forme d'un arbre binaire. 
 \subsection{Pondération des paires}
 La pondération des couples de points appariés a pour objectif de renforcer l'apport des appariements supposés être corrects et atténuer l'effet des faux appariements.\\
 
@@ -965,24 +993,60 @@ Une méthode de mise en correspondance robuste est, donc, indispensable. La dista
 	\hline
 \end{tabular}
 \subsection{Réjection des paires}
-Il est très important de rejeter les appariements supposés faux. Ceux ci induisent en erreur les estimateurs par  moindres carrés. La difficulté réside dans la définition même d'un "mauvais appariement". \textit{Sur quel critère se baser pour décider qu'un appariement est faux ?}. La façon la plus basique d'éliminer ces points, est d'utiliser un seuil de distance géométrique ou mixte (comportant un terme photométrique) fixe. Ce seuil serait difficile à fixer dans le cas de ICP, étant donnée que d'une itération à l'autre la distance moyenne entre les points appariés est sensée décroître. Il est possible d'utiliser
 
-%cahier+3_LV_JIXIN
+Tout comme l'étape précédente qui pondère les paires correspondantes, l'étape de rejection assigne un poids binaire, et rejette certaines paires jugées comme erronées, ou comme outliers, ce qui est très bénéfique lors de l'application des moindres carrés.\\
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\linewidth]{icp_rejection}
-	\caption[icp rejection]{icp rejection}
-	\label{fig:icp_rejection}
-\end{figure}
+Afin d'obtenir une estimation satisfaisante, la rejection à partir d'un seuil $ D_{icp} $ fait de ce paramètre l'un des plus important dans l'algorithme ICP, il permet en effet d'exclure les "outliers" des points candidats à l'appareillage. Si la valeur de ce seuil est minime alors ça pourrait amener à des correspondances inadéquates et alors l'estimation est condamnée à converger vers un optimum local. Dans le cas contraire, une valeur trop importante pourrait introduire des correspondances incorrectes qui vont détériorer la précision de l'estimation et la vitesse de convergence en prendra un coup.\\
 
-\quad \textendash \quad L'angle entre les normales des points appareillés ne doit pas dépasser un certain seuil.
+Il est très important de rejeter les appariements supposés faux. Ceux ci induisent en erreur les estimateurs par  moindres carrés. La difficulté réside dans la définition même d'un "mauvais appariement". \textit{Sur quel critère se baser pour décider qu'un appariement est faux ?}. La façon la plus basique d'éliminer ces points, est d'utiliser un seuil de distance géométrique ou mixte (comportant un terme photométrique) fixe. Ce seuil serait difficile à fixer dans le cas de ICP, étant donnée que d'une itération à l'autre la distance moyenne entre les points appariés est sensée décroître. Diverses méthodes déterminent et mettent à jour la rejection par seuillage\cite{reference1}\cite{fasticp}, dont :
 
-\quad \textendash \quad La distance point à point entre les points correspondants ne doit pas dépasser un certain seuil.
+\begin{itemize}
+	\item \begin{description}
+		\item[Constant (Distance) :] C'est la méthode la plus directe pour définir un seuil, on détermine manuellement une valeur fixe. Dans chaque itération, toutes les paires candidates dont la distance est plus importante que celle de la valeur du seuil sera rejetée, et considérée comme une correspondance invalide. Le concept est simple, mais la difficulté réside dans le fait de déterminer la valeur adéquate du seuil d'autant plus que l'erreur de transformation entre les deux scans décroît au cours des itérations.
 
-\quad \textendash \quad Une limite de distance pour les correspondances point à plan afin de filtrer les points aberrants (cette méthode est un estimateur médian (M-estimateur) robuste connu sous \textit{Generalised Median} (GM) pour une base de donnée supposée être conforme àun distribution gaussienne).
+		\item[Constant (Angle) :] De même que dans la méthode précédente un seuil est fixé, cela dit cette fois ce n'est pas une distance qui le caractérise mais plut un angle, ou plus précisément l'angle entre les normales des points appareillés ne doit pas dépasser un certain seuil.
+		
+		\item[Médian :] Dans cette méthode le seuil équivaut à la somme des moyennes et de la dérivation standard des distances entre les paires candidates, les paires rejetées sont celles dont la distance point à point est plus important que certains multiples de la dérivation standard des distances, Un exemple de cette méthode serait \cite{rejectionMedian} qui rejette les paires dont la distance euclidienne représente plus de $ 2.5 fois $ la dérivation standard. Cette méthode est elle aussi directe et ne requiert pas de configuration manuelle des paramètres, cependant elle suppose que la distribution des distances est gaussienne, ce qui est loin d'être vrai dans certains cas réels.
+				
+		\item[Median Plan :] Maximum acceptable de la robustesse des plans extraits, et pour cette fois c'est la dérivée du plan qui est utilisée.
+		
+		\item[Median Généralisé :] Une limite de distance pour les correspondances point à plan afin de filtrer les points aberrants (cette méthode est un estimateur médian (M-estimateur) robuste connu sous \textit{Generalised Median} (GM) pour une base de donnée supposée être conforme à une distribution gaussienne).
 
-\quad \textendash \quad Maximum acceptable de la robustesse des plans extraits, et pour ce foire c'est la dérivée du plan qui est utilisée.
+		\item[Trim :] Cette approche commence par en compte toutes les paires selon leurs distance, et ce n'est qu'après q'elle inclus les paires candidates dont la distance correspond à un certain pourcentage par rapport à toutes les distances de toutes les paires candidates. Cette méthode dépend moins de la forme de la distribution, cependant, elle a besoin de prendre en compte l'intégralité des paires dans chaque itération ce qui augmente le coût de calcul. Dont la méthode proposée par \cite{rejectionPourcent} qui rejette 10\% des paires.
+		
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=0.7\linewidth]{icp_rejection}
+			\caption[icp rejection]{Méthode Trim de Rejection}
+			\label{fig:icp_rejection}
+		\end{figure}
+		
+		\item[Max.Dist :] Ou la rejection des paires qui ne consistent pas de paires avoisinantes, en assumant que la surface est rigide lorsque qu'elle se mouvoit. Ce schéma classe les deux appareillements $ (p1, q1) $ et $ (p2, q2) $ comme invalides si :
+		\begin{equation}\label{eqReject001}
+		|Dist(p_1,p_2) - Dist(q_1,q_2)| > D_{icp}
+		\end{equation}
+		Alors selon \cite{rejectionMaxDist} on applique 
+		\begin{equation}\label{eqReject002}
+		0.1 \times \max{Dist(p_1,p_2), Dist(q_1,q_2)}
+		\end{equation}
+		en tant que seuil. 
+		
+		\item[Maillages de bordures :] Ou maillage aux limites, cette stratégie exclue les points se situant sur les bordures du maillage\cite{rejectMesh}, c'est spécialement utile pour éviter des appareillements erronés (causant ainsi une erreur systématique dans l'estimation de la transformée) dans le cas de superpositions de scans qui ne correspondent à deux perspectives légèrement décalées, comme c'est le cas dans la figure \ref{meshBoundri}. 
+		
+		\begin{figure*}[ht!]
+			\centering
+			\subfloat[\label{meshBoundria}]{%
+				\includegraphics[width=0.3\textwidth]{meshBoundria}}
+			\subfloat[\label{meshBoundrib} ]{%
+				\includegraphics[width=0.3\textwidth]{meshBoundrib}}\\
+			\caption{\label{meshBoundri}(a) When two meshes to be aligned do not overlap completely (as is the case for most real-world data), allowing correspondences involving points on mesh boundaries can introduce a systematic bias into the alignment. (b) Disallowing such pairs eliminates many of these incorrect correspondences.}
+		\end{figure*}
+		
+	\end{description}
+\end{itemize}
+
+Dans le document \cite{fasticp} la méthode par excellente serait celle du maillage de bordures, cela dit, dans nos simulations on a utilisé : 
+
 \subsection{Optimisation des erreurs}\label{sec:optimisation-des-erreurs}
 %file:///home/blad/Documents/Études/M2/Mémoire/SLAM/12_fasticp_paper.pdf
 On parle de minimisation d'Indice Clé de Performance aussi appel ICP, à ne pas confondre avec l'ICP(\textit{Iterative Closest Point}). Il existe divers indicateurs d'erreur de performance tel que MSE (\textit{Mean Squared Error}) ou l'erreur quadratique moyenne, RMSE (Root Mean Square Error) ou Racine de l'erreur quadratique moyenne, ou encore les MASE, MAPE, SMAPE, etc. Dans le cas de l'ICP, l'optimisation des erreurs peut être représentée en deux étapes :
@@ -1078,6 +1142,16 @@ Vanilla ICP ou ICP originale est l'algorithme de base qu'on va appliquer dans
 	\label{fig:icp6}
 \end{figure}
 \subsection{IRLS-ICP}\label{sec:irls-icp}
+13 FastAndRobust
+@article{zhang2021fast,
+	author={Juyong Zhang and Yuxin Yao and Bailin Deng},
+	title={Fast and Robust Iterative Closest Point}, 
+	journal={IEEE Transactions on Pattern Analysis and Machine Intelligence}, 
+	year={2021},
+	volume={},
+	number={},
+	pages={1-1}}
+\url{https://github.com/yaoyx689/Fast-Robust-ICP}
 Iterative Registered Least Sqaure
 
 L'ICP classqiue mesure l'erreur d'alignement en utilisant la distance $ l_2 $, qui pénalise les larges déviations de n'importe quel point du nuage de point source $ P $ au nuage de point $ Q $. Cette méthode permet effectivement de parvenir à des résultats explicites (dits aussi en forme fermée) dans l'étape de l'alignement, mais peut tout de même amener à des appareillments erronés en cas de 
@@ -1353,7 +1427,7 @@ On va réaliser un SLAM sur un environnement de simulation Matlab, en commençant 
 	\label{fig:scanMatchingEx}
 \end{figure}
 
-En principe les données du télémètre laser devraient suffire pour cartographier et pour localiser le robot en calculant les poses relatives et tracer sa trajectoire. Mais on dispose également de données odométriques qui sont absolues et qui sont particulièrement précises dans ce cas, alors qu'en temps normal, les données acquises par l'odométrie ont tendance à manquer d'exactitude à force d'accumuler des erreurs au fil des mesures jusqu'à devenir inutilisable dans certains cas\cite{odom}, d'où des approches de fusion données odométrique et d'autres approches, dont le meilleur exemple serait la VO.\\
+En principe les données du télémètre laser devraient suffire pour cartographier et pour localiser le robot en calculant les poses relatives et tracer sa trajectoire. Mais on dispose également de données odométriques qui sont absolues et qui sont particulièrement précises dans ce cas, alors qu'en temps normal, les données acquises par l'odomètrie ont tendance à manquer d'exactitude à force d'accumuler des erreurs au fil des mesures jusqu'à devenir inutilisable dans certains cas\cite{odom}, d'où des approches de fusion données odométrique et d'autres approches, dont le meilleur exemple serait la VO.\\
 
 Dans notre simulation nous allons commencer par faire un Scan Matching via l'ICP Vanilla, qui sera optimisé par la suite, et via la NDT, afin de comparer ces deux algorithmes.\\
 \section{ICP Vanilla}
