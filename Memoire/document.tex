@@ -246,7 +246,7 @@ Considérons un robot se déplaçant dans un environnement inconnu, en observant un
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=9cm]{3}
-	\caption[L'idée de base du SLAM]{L'idée de base du SLAMmm}
+	\caption[L'idée de base du SLAM]{L'idée de base du SLAM}
 	\label{fig:2.2.3.1}
 \end{figure}
 \medskip
@@ -273,6 +273,7 @@ On définit aussi les ensembles suivants :
 \quad - $ m=\{m_{1}, m_{2}, \ldots, m_{n}\} $ : la carte de l'environnement contenant une liste d'objets statiques
 \section{Localisation}
 Le problème de localisation du robot consiste à estimer sa position dans un environnement donné, en utilisant l'historique de ses observations, l'historique des commandes et la connaissance de l'environnement. La figure 2.2 schématise ce principe.
+
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{4}
@@ -1352,7 +1353,7 @@ On va réaliser un SLAM sur un environnement de simulation Matlab, en commençant 
 	\label{fig:scanMatchingEx}
 \end{figure}
 
-En principe les données du télémètre laser devraient suffire pour cartographier et pour localiser le robot en calculant les poses relatives et tracer sa trajectoire. Mais on dispose également de données odométriques qui sont absolues et qui sont particulièrement précises dans ce cas, alors qu'en temps normal, les données acquises par l'odomètrie ont tendance à manquer d'exactitude à force d'accumuler des erreurs au fil des mesures jusqu'à devenir inutilisable dans certains cas\cite{odom}, d'où des approches de fusion données odométrique et d'autres approches, dont le meilleur exemple serait la VO.\\
+En principe les données du télémètre laser devraient suffire pour cartographier et pour localiser le robot en calculant les poses relatives et tracer sa trajectoire. Mais on dispose également de données odométriques qui sont absolues et qui sont particulièrement précises dans ce cas, alors qu'en temps normal, les données acquises par l'odométrie ont tendance à manquer d'exactitude à force d'accumuler des erreurs au fil des mesures jusqu'à devenir inutilisable dans certains cas\cite{odom}, d'où des approches de fusion données odométrique et d'autres approches, dont le meilleur exemple serait la VO.\\
 
 Dans notre simulation nous allons commencer par faire un Scan Matching via l'ICP Vanilla, qui sera optimisé par la suite, et via la NDT, afin de comparer ces deux algorithmes.\\
 \section{ICP Vanilla}
