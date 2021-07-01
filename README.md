@@ -61,12 +61,6 @@ ___________
   * [ ] PyCharm ; 
   * [ ] Ros (je me suis mise à l'aise mɛa la version Melodic, voir si Bionic temchi mɛa Matlab 2018) ; </Br>
 2. [ ] Toutes les fonctions fi la toolbox ~~ *Robotics/.../examplalgs* ~~ mchawli même ceux du FP w le FK, ça serait bien d'essayer de les appliquer ɛla la bdd exploitee dacs le cas 2D wella 3D</Br>
-
-___________
-
-## In an other life...
-1. [ ] Chercher iḍa **Pioneer** existe fi **Gazebo**, même s'il n'est que très peu probable qu'on en vienne à exploiter un modèle qu'on générerait ḥna via ROS.
-
 ___________
 
 ## À rediscuter :
@@ -103,3 +97,7 @@ tel que resid est soit la norme euclidiéne de la distance entre les deux nuages
 3. les deux variantes ICP2 (de  Bergström)</Br>
 => C'est IRLS-ICP, dans ce papier, il parle de 3 variantes, Tukey bi-weighted, Cauchy et Huber. Il en existe bien d'autres, et justement dans l'icp2, on utilise l'algorithme L2, Tukey bi-weighted, Cauchy, Huber et Welsh. </Br>
 
+___________
+
+## In an other life...
+1. [ ] Chercher iḍa **Pioneer** existe fi **Gazebo**, même s'il n'est que très peu probable qu'on en vienne à exploiter un modèle qu'on générerait ḥna via ROS.
