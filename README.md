@@ -43,12 +43,14 @@ ___________
 5. [x] Overall Slam : 11_Nahman
 6. [ ] IRLS :
     1. 13_FastAndRobust / p.5 Robust Icp
-    2. 14_Robust / Intro & M-Estimation (je ne l'ai jamais retrouvé)
+    2. X 14_Robust / Intro & M-Estimation (je ne l'ai jamais retrouvé)
     3. 15_Comparaison_Cauchy_Welsch_Huber / p.1 FigI ; p.2 III Theory ; p5 Comparaison with l2
-    4. 
+    4. 21_irls_icp_Bergstrom
+    5. M-Estimator
+    6. Le git ly jebet mennou point cloud 
 7. [ ] Format: revoir la mise en page (les marges): Chercher ce qu'est le format exigé par le département, c bon pour la taille (12) et la police (Times New Roman), reste les interlignes (1.5), les marges et autres ?</Br>
 8. [ ] Justifier les détails sur EKF et filtre Particulaire, sinon supprimer ;</Br>
-9. [ ] Mettre des leins de renvoi partout où il y a label : figure, tableaux, références bibliographiques ;</Br>
+9. [ ] Mettre des liens de renvoi partout où il y a label : figure, tableaux, références bibliographiques ;</Br>
 10. [ ] Réécrire la section 3.4 Défits courants, ou la supprimer ;</Br>
 11. [ ] Mettre en avant l'introduction du chapitre 1 avec un titre dédié ;</Br>
 12. [ ] Mettre en avant le fait qu'on a fait du visual slam et du lidar slam. Mettre des liens entre Workflow Slam et le chapitre 3. Le format point cloud est utilisé par default pour le visual slam, tandis que le format lidar scan a tenrance a être utilisé powr le lidar Slam. Cela dit, il est tres possible de convertir un format lidar scan en point cloud etant donne que ce dernier format trouve beaucoup d'etreinte ? auprès des utilisateurs(vérifier ça dans 18_ProbasVsIcp).
