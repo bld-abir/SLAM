@@ -1,14 +1,8 @@
-clc
-clear all
-
-% The tic function records the current time, 
-% and the toc function uses the recorded value to calculate the elapsed time.
-tic
+% clear everything
+clc; clear; close all; 
 
 % Importation du fichier .mat
 ld = load('livingRoom.mat');
-
-
 
 
 % Extraire deux nuages de points
@@ -43,7 +37,7 @@ pcshowpair(movingReg,ptCloudRef,'VerticalAxis','Y','VerticalAxisDir','Down')
 title('Alignment of the 2 point clouds')
 drawnow
 hold off
-toc
+
 mergeSize = 0.015;
 ptCloudScene = pcmerge(ptCloudRef, movingReg, mergeSize);
 
@@ -51,12 +45,12 @@ ptCloudScene = pcmerge(ptCloudRef, movingReg, mergeSize);
 figure(3)
 subplot(2,1,1)
 imshow(ptCloudCurrent.Color)
-title('First input image','Color','w')
-drawnow
+title('First input image','Color','k')
 hold on
 subplot(2,1,2)
 imshow(ptCloudRef.Color)
-title('Second input image','Color','w')
+title('Second input image','Color','k')
+hold off
 drawnow
 
 figure(4)
@@ -78,6 +72,17 @@ title('Updated world scene')
 hAxes.CameraViewAngleMode = 'auto';
 hScatter = hAxes.Children;
 
+% The tic function records the current time, 
+% and the toc function uses the recorded value to calculate the elapsed time.
+tic
+
+initialPose = [0 0 0];
+poseList = zeros(length(ld.livingRoomData),3);
+poseList(1,:) = initialPose;
+%     ua=0;
+%     va=0;
+    thet=0;
+    
 for i = 3:length(ld.livingRoomData)%%%%
     ptCloudCurrent = ld.livingRoomData{i};%%
        
@@ -88,24 +93,43 @@ for i = 3:length(ld.livingRoomData)%%%%
     
     % Apply NDT registration.
     gridStep = 0.5;
-    tform = pcregisterndt(moving, fixed, gridStep);%%%%
-    
+    [tform, ~, ~, th, r] = pcregisterndt(moving, fixed, gridStep);%%%%
+        
     % Transform the current point cloud to the reference coordinate system
     % defined by the first point cloud.
     accumTform = affine3d(tform.T * accumTform.T);
     %ptCloudAligned = pctransform(ptCloudRef, accumTform);
     
+    % Maintain Poses
+    [absolutePose] = exampleHelperComposeTransform(poseList(i-1,:), tform.T(1:3,4));
+    poseList(i,:) = absolutePose;
+    %eul = tform2eul(tform.T);
+    %[th r] = aeuler
+    
     % Update the world scene.
     mergeSize = 0.015;%%%%
     movingReg = pctransform(ptCloudCurrent,accumTform);%%%%
     ptCloudScene = pcmerge(ptCloudScene, movingReg, mergeSize);%%%%
-    
 
     % Visualize the world scene.
     hScatter.XData = ptCloudScene.Location(:,1);
     hScatter.YData = ptCloudScene.Location(:,2);
     hScatter.ZData = ptCloudScene.Location(:,3);
     hScatter.CData = ptCloudScene.Color;
+    hold on
+    plot3(poseList(:,1), poseList(:,2), poseList(:,3), 'bo', 'DisplayName', 'Estimated robot position');
+    hold on
+%     theta
+%     tet=deg2rad(theta)
+    thet=th+thet;
+    %thet=rad2deg(thet)
+    [u,v] = pol2cart(-thet*2*pi^2-90,r*10);
+%     ua=u+ua
+%     va=v+va
+
+%     [u, v, w] = sph2cart (roll, pitch, yaw)
+    compass(u,v)
+    hold off
     drawnow('limitrate')
 end
 
@@ -126,3 +150,4 @@ ylabel('Y (m)')
 zlabel('Z (m)')
 
 % toc works with the tic function to measure elapsed time.
+toc

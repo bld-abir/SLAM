@@ -1,15 +1,13 @@
-clc
-clear all
+% clear everything
+clc; clear; close all; 
 
-% The tic function records the current time, 
-% and the toc function uses the recorded value to calculate the elapsed time.
-tic
 
 % Importation du fichier .mat
-addpath /home/blad/Bureau/MATLAB/R2018a/toolbox/vision/vision
+% addpath /home/blad/Bureau/MATLAB/R2018a/toolbox/vision/vision
 
 dataFile = fullfile(toolboxdir('vision'), 'visiondata', 'livingRoom.mat');
 load(dataFile);
+
 
 % Extract two consecutive point clouds and use the first point cloud as
 % reference.
@@ -27,7 +25,7 @@ hold off
 gridSize = 0.1;
 % fixed = pcdownsample(ptCloudRef, 'gridAverage', gridSize);
 % moving = pcdownsample(ptCloudCurrent, 'gridAverage', gridSize);
-fixed =ptCloudRef;
+fixed = ptCloudRef;
 moving = ptCloudCurrent;
 
 % Note that the downsampling step does not only speed up the registration,
@@ -45,20 +43,20 @@ pcshowpair(ptCloudAligned,ptCloudRef,'VerticalAxis','Y','VerticalAxisDir','Down'
 title('Alignment of the 2 point clouds')
 drawnow
 hold off
-toc
+
 mergeSize = 0.015;
 ptCloudScene = pcmerge(ptCloudRef, ptCloudAligned, mergeSize);
 
 % Visualize the input images.
 figure(8)
-subplot(2,1,1)
+subplot(1,2,1)
 imshow(ptCloudRef.Color)
-title('First input image','Color','w')
-drawnow
+title('First input image','Color','k')
 hold on
-subplot(2,1,2)
+subplot(1,2,2)
 imshow(ptCloudCurrent.Color)
-title('Second input image','Color','w')
+title('Second input image','Color','k')
+hold off
 drawnow
 
 figure(9)
@@ -76,23 +74,36 @@ drawnow
 % Store the transformation object that accumulates the transformation.
 accumTform = tform; 
 
-figure(11)
+figure(10)
 hAxes = pcshow(ptCloudScene, 'VerticalAxis','Y', 'VerticalAxisDir', 'Down');
 title('Updated world scene')
 % Set the axes property for faster rendering
 hAxes.CameraViewAngleMode = 'auto';
 hScatter = hAxes.Children;
 
-for i = 5:length(livingRoomData)
+% The tic function records the current time, 
+% and the toc function uses the recorded value to calculate the elapsed time.
+tic
+
+initialPose = [0 0 0];
+poseList = zeros(length(livingRoomData),3);
+poseList(1,:) = initialPose;
+
+for i = 2:length(livingRoomData)
     ptCloudCurrent = livingRoomData{i};
        
     % Use previous moving point cloud as reference.
     fixed = moving;
-    moving = ptCloudCurrent;
+    %moving = ptCloudCurrent;
+    moving = pcdownsample(ptCloudCurrent, 'gridAverage', gridSize);%%
     
     % Apply ICP registration.
     tform = pcregistericp(moving, fixed, 'Metric','pointToPlane','Extrapolate', true);
-
+    
+    % Maintain Poses
+    absolutePose = exampleHelperComposeTransform(poseList(i-1,:), tform.T(1:3,4));
+    poseList(i,:) = absolutePose;
+    
     % Transform the current point cloud to the reference coordinate system
     % defined by the first point cloud.
     accumTform = affine3d(tform.T * accumTform.T);
@@ -106,9 +117,10 @@ for i = 5:length(livingRoomData)
     hScatter.YData = ptCloudScene.Location(:,2);
     hScatter.ZData = ptCloudScene.Location(:,3);
     hScatter.CData = ptCloudScene.Color;
+    hold on
+    plot3(poseList(:,1), poseList(:,2), poseList(:,3), 'b', 'DisplayName', 'Estimated robot position');
     drawnow('limitrate')
 end
-
 
 % During the recording, the Kinect was pointing downward. To visualize the
 % result more easily, let's transform the data so that the ground plane is
@@ -127,4 +139,4 @@ ylabel('Y (m)')
 zlabel('Z (m)')
 
 % toc works with the tic function to measure elapsed time.
-
+toc
