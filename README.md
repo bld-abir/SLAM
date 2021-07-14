@@ -3,84 +3,109 @@
 
 ## 3D Scan Matching 
 On a les fichiers *pointCloudIcp.m* et *pointCloudNdt.m* qui font du **scan matching** à base de ICP et de NDT réspéctivement dans le but de recréer l'environnement de '*leavingRoom*'. On peut comparer le rendu des algo **ICP (point to point & point to plan)** et **NDT** à parir de ces deux là. 
-On s'est basé sur : [Matlab 3-D Point Cloud Registration and Stitching](https://fr.mathworks.com/help/vision/ug/3-d-point-cloud-registration-and-stitching.html) et de [Matlab Example pcregisterndt](https://fr.mathworks.com/help/vision/ref/pcregisterndt.html)
+On s'est basé sur : [Matlab 3-D Point Cloud Registration and Stitching](https://fr.mathworks.com/help/vision/ug/3-d-point-cloud-registration-and-stitching.html) et de [Matlab Example pcregisterndt](https://fr.mathworks.com/help/vision/ref/pcregisterndt.html)</Br>
 Les fonctions *pcregistericp* et *pcregisterndt* suivent le modèle SLAM Overall (décrit fi le chapitre 1er fi la section nsit) le scan matching qui représente la première étape de ce SLAM (front end) puis l'étape de back end est assurée par la méthode d'optimisation Pose Graph.
 
 ### À faire 
 1. [ ] Retélécharger kitti, cette fois ça prendra le temps que ça prendra...
-2. [ ] Appliquer sur le dataset Kitti l'ICP et la NDT. Normalement ça sera facile de lire les donnés si je m'en souviens encore. 
-3. [ ] Dessiner la trajectoire du robot
+2. [ ] Appliquer le code l'une des séquences (03 ?) sur le dataset Kitti l'ICP et la NDT. Normalement ça sera facile de lire les donnés si je m'en souviens encore. Et comparer avec groundtruth.
+3. [ ] Dessiner la trajectoire du robot pour que ce ne soit pas de la construction 3D, mais du SLAM.
 
 ___________
 
 ## 2D Scan Matching
-On a les fichiers *ScanMatchingExample_ICP.m* et *ScanMatchingExample_NDT.m* qui font idem que f le cas en 3D en 2D sur des données différentes, celles de '*scanMatchingData*'. Ce qui est cool c qu'on peut utilser le même programme pour exploiter des données issues de simulations men **ROS**. 
-L'ICP-IRLS se base sur l'ICP Vanilla mais en rajoutant un processus d'optimisation dans la (2ème wella 3ème étape), un proscess qui assure la **roblustesse** de l'algorithme, des méthodes de **M-estimation**.
+On a les fichiers *ScanMatchingExample_ICP.m* et *ScanMatchingExample_NDT.m* qui font idem que f le cas en 3D en 2D sur des données différentes, celles de '*scanMatchingData*'. Ce qui est cool c qu'on peut utilser le même programme pour exploiter des données issues de simulations men **ROS**. </Br>
+L'ICP-IRLS se base sur l'ICP Vanilla mais en rajoutant un processus d'optimisation dans la (2ème wella 3ème étape), un proscess qui assure la **roblustesse** de l'algorithme, des méthodes de **M-estimation**.</Br>
 On n'a rien à tirer de *matchscans*. J'y ai deja passé assez de temps. Balak je revérifie iḍa ils usilisent PoseGraph.
 
 ### À faire 
-[X] La **rotation** des données odométrique autour de 'Z' bi un angle 'alphao(6)' pour qu'elles correspondent l'la tranformation appliquée à la carte issue des scans.
-[ ] Génére deux programmes pour l'icp :
+1. [x] La **rotation** des données odométrique autour de 'Z' bi un angle 'alphao(6)' pour qu'elles correspondent l'la tranformation appliquée à la carte issue des scans.
+2. [ ] Génére deux programmes pour l'icp :
    * [x] l'un qui se contente de cartographier à partir de données odométriques, et de donées du télémetre laser, on pourra lui rajouter une optimistion grâce à l'échantionnge bi downsample. 
    * [ ] L'autre, fait l'optimisation avec PoseGraph, et on concerve les données du télémètre laser même pour les poses. 
-
+3. [ ] Essayer d'autres ICP en ajoutant à nos scans 2D une colonne Z de zéros comme 1ère solution (pour avoir des scans 3D) et voir est-ce que ça marche.
+   * [ ] la 2ème fonction icp 3D 
+   * [x] et celle de Matlab
 ___________
 
 ## Mémoire 
 
 ### À faire 
-[ ] Mettre en commentaire kamel les chemins en local, pour ne pas me perdre. 
-[ ] Récuperer les images men un ancien document pdf ;
-[ ] Trouver une solution pour récuperer le maximum de references possibles. Kayen deja :
-    1. Ceux dont j'ai concervé les liens ;
-    2. Ceux que j'ai mis bekri sur Drive ;
-    3. Ceux que j'ai utilisé fel memoire et qui sont referencés f'la bibliothèque
+1. [ ] Mettre en commentaire kamel les chemins en local, pour ne pas me perdre. </Br>
+2. [x] Récuperer les images men un ancien document pdf ;</Br>
+3. [x] Trouver une solution pour récuperer le maximum de references possibles. Kayen deja :</Br>
+    1. Ceux dont j'ai concervé les liens ;</Br>
+    2. Ceux que j'ai mis bekri sur Drive ;</Br>
+    3. Ceux que j'ai utilisé fel memoire et qui sont referencés f'la bibliothèque</Br>
+4. [x] Rejection des points :
+    1. 3_LV_Jixin / p.22 Rejection (ma fhamtch wesh ktebt) ~~ Distance~~ Des traces~~
+    2. 12_FastIcp / p.5 Refection Pairs
+5. [x] Overall Slam : 11_Nahman
+6. [ ] IRLS :
+    1. 13_FastAndRobust / p.5 Robust Icp
+    2. X 14_Robust / Intro & M-Estimation (je ne l'ai jamais retrouvé)
+    3. 15_Comparaison_Cauchy_Welsch_Huber / p.1 FigI ; p.2 III Theory ; p5 Comparaison with l2
+    4. 21_irls_icp_Bergstrom
+    5. M-Estimator
+    6. Le git ly jebet mennou point cloud 
+7. [ ] Format: revoir la mise en page (les marges): Chercher ce qu'est le format exigé par le département, c bon pour la taille (12) et la police (Times New Roman), reste les interlignes (1.5), les marges et autres ?</Br>
+8. [ ] Justifier les détails sur EKF et filtre Particulaire, sinon supprimer ;</Br>
+9. [ ] Mettre des liens de renvoi partout où il y a label : figure, tableaux, références bibliographiques ;</Br>
+10. [ ] Réécrire la section 3.4 Défits courants, ou la supprimer ;</Br>
+11. [ ] Mettre en avant l'introduction du chapitre 1 avec un titre dédié ;</Br>
+12. [ ] Mettre en avant le fait qu'on a fait du visual slam et du lidar slam. Mettre des liens entre Workflow Slam et le chapitre 3. Le format point cloud est utilisé par default pour le visual slam, tandis que le format lidar scan a tenrance a être utilisé powr le lidar Slam. Cela dit, il est tres possible de convertir un format lidar scan en point cloud etant donne que ce dernier format trouve beaucoup d'etreinte ? auprès des utilisateurs(vérifier ça dans 18_ProbasVsIcp).
+13. [ ] Corriger toutes les figures 
+  * Dimensions ;
+  * Legende (la courte et la lougue) ;
 
 ___________
 
 ## Simulations 
 
 ### À faire 
-[ ] Retélécharger : [] Matlab R2018 Ver.Linux ; PyCharm ; Ros (je me suis mise à l'aise mɛa la version Melodic, voir si Bionic temchi mɛa Matlab 2018) ; 
-[ ] Toutes les fonctions fi la toolbox ~~ *Robotics/.../examplalgs* ~~ mchawli même ceux du filtre particulaire w le FK, ça serait bien d'essayer de les appliquer ɛla la bdd exploitee dacs le cas 2D wella 3D
+1. [ ] Retélécharger : 
+  * [x] Matlab R2018 Ver.Linux ; 
+  * [x] PyCharm ; 
+  * [ ] Ros (je me suis mise à l'aise mɛa la version Melodic, voir si Bionic temchi mɛa Matlab 2018) ; </Br>
+2. [ ] Toutes les fonctions fi la toolbox ~~ *Robotics/.../examplalgs* ~~ mchawli même ceux du FP w le FK, ça serait bien d'essayer de les appliquer ɛla la bdd exploitee dacs le cas 2D wella 3D</Br>
+3. [ ] Demander après les exemples de la versoin a de matlab
+___________
+
+## À rediscuter :
+1. Pour chaque paire de scan, faire un calcul d'erreur (res de icp2 par exemple) si res<seuil on prend en considération la pose relative obtenue Transform, sinon on ne considère pas la Transform obtenue et on passe au scan suivant. </Br>
+=> C déja le cas, l'IRLS utilise des méthodes de rejection des points concidrés comme étant invalides... Le seuillage se fait via 
+~~~
+345 |   if abs(oldres-res) < thres
+346 |         break
+~~~
+tel que *thres* c le seuil de rejection, et *res* et *oldres* sont les la contrainte calculée dans le cas du critère 0 ainsi
+~~~
+229 | res=mean(resid.^2);
+~~~
+ou dans le cas des critères 1, 2, 3 ou 4 (M-Estimateurs)
+~~~
+257 |  kRob = 1.9*median(resid);
+258 |          
+258 |            maxResid=max(resid);
+260 |            if kRob<1e-6*maxResid
+261 |                kRob=0.3*maxResid;
+262 |            elseif maxResid==0
+263 |                kRob=1;
+264 |            end
+265 |            
+266 |            res=mean(resid(resid<1.5*kRob).^2);
+~~~
+tel que resid est soit la norme euclidiéne de la distance entre les deux nuages de points, calculée soit via *norm* directement ou via *nearestNeighbor* (qui a besoin d'une représenation trigulaire, ici on utilise [*delaunayTriangulation* du nuage de point "modèle"] avec [le nuage de point "data"])
+![norleEuclid](https://user-images.githubusercontent.com/53100788/124046218-56c14680-da09-11eb-836f-580696a78550.png)
+![nearestNeighbor](https://user-images.githubusercontent.com/53100788/124046944-03e88e80-da0b-11eb-8995-ba7ab54dc585.png)
+
+2. Chercher après ICP (Martin Kjer & Jakob Wilm) et rédiger dessus une secion dans variantes, il est détaillée dans la thèse bscthesis.pdf</Br>
+=> Ce n'est pas un algorithme, il parle en général des divrses possibilités pour chacune des étapes de l'ICP et il les compare.</Br>
+
+3. les deux variantes ICP2 (de  Bergström)</Br>
+=> C'est IRLS-ICP, dans ce papier, il parle de 3 variantes, Tukey bi-weighted, Cauchy et Huber. Il en existe bien d'autres, et justement dans l'icp2, on utilise l'algorithme L2, Tukey bi-weighted, Cauchy, Huber et Welsh. </Br>
 
 ___________
+
 ## In an other life...
 1. [ ] Chercher iḍa **Pioneer** existe fi **Gazebo**, même s'il n'est que très peu probable qu'on en vienne à exploiter un modèle qu'on générerait ḥna via ROS.
-
-- Format: revoir la mise en page (les marges): respecter le format exigé par le département, interligne:1.5, la taille: 12,  Times New Romain, ...
-
-- Trop de détails qui  ne sont pas nécessaires pour ton travail (par exemple EKF, Particle SLAM, Posegraph, ... et d'autres sections); je vous ai demandé de parler brièvement de ces algorithmes. 
-
-- Alors que ce qu'il fallait détailler c'est les méthodes de scan matching: ICP, variantes ICP, et NDT (dans le chapitre 2 bien sûr). Tu dois comprendre ces méthodes et les décrire en détail  de sorte qu'on puisse les programmer nous même. Quand tu les comprend très bien, tu les rédiges selon ce que tu as compris.
-
-- Des sections et paragraphes pris intégralement d'autres thèses et mémoires. Des fois plusieurs sections prises de la même thèse.
-  
-- Il n' y a pas de renvois aux références  bibliographiques dans le texte sauf un peu dans la section Définitions et origines.
-
-- des sections inutiles telles que: Défis courants des SLAM, 3.4.2. Localisation échoue..... etc. 
-
--  il manque l'introduction du chapitre.
-
-- Remarque:  On n'écrit que ce qu'on comprend et dont on a besoin dans notre travail.
-  - Les chapitres et les objectifs doivent être clairs et nets.
-- toutes ces remarques sont valables pour les autres chapitres.
-  
-Alors je vous demande de faire les corrections et de me renvoyer les chapitres.   
-
-Pour le chapitre 3, on ne peut pas le rédiger avant que les codes ne soient fonctionnels et sans avoir des résultats.
-
-Pour cela, je vous demande de:
--  pour chaque paire de scan, faire un calcul d'erreur (res de icp2 par exemple) si res<seuil on prend en considération la pose relative obtenue Transform, sinon on ne considère pas la Transform obtenue et on passe au scan suivant.
-
-- Tu peux aussi essayer la 2ème fonction icp 3D (en P.J) et celle de Matlab en ajoutant à nos scans 2D une colonne Z de zéros comme 1ère solution (pour avoir des scans 3D) et voir est-ce que ça marche.
-
-- Tu essayes le code sur une séquence du dataset Kitti et comparer avec groundtruth.
-
-- Je tiens à te rappeler que notre objectif est la scanmatching dans les systèmes SLAM et non pas la construction 3D.
-
-- Je tiens à t'informer aussi que j'ai essayé le posegraph à la place de la fonction exampleHelperComposeTransform   mais ça n'a pas amélioré les résultats.
-
-Tu fais ce travail et tu m'envoies les résultats pour chaque cas dans un fichier word par email.
-
-Dans le chapitre 2, tu ajoutes des sections où tu décris les deux variantes ICP2 (de  Bergström) et  ICP (de  Martin Kjer and Jakob Wilm) et  une variante de ICP (point -to-plane) car c'est les variantes qu'on va comparer entre elles et avec NDT dans le troisième chapitre. Je t'envoie en P.J l'article de Bergström pour ICP2. Concernant l'algorithme ICP de   Martin Kjer and Jakob Wilm, il est détaillée dans la thèse bscthesis.pdf que je t'ai donné auparavant.
