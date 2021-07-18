@@ -73,7 +73,7 @@
 \rhead{ }
 \lfoot{Section \thesection}
 \cfoot{\thepage}
-\rfoot{Chapitre \thechapter}	
+\rfoot{Chapitre \thepart}	
 	
 \maketitle % Page de garde.
 %\frontmatter
@@ -82,6 +82,8 @@
 \renewcommand{\listtablename}{Liste de Tableaux}
 \renewcommand{\chaptername}{Chapitre}
 \renewcommand{\figurename}{Figure}
+\renewcommand{\tablename}{Tableau}
+\renewcommand{\partname}{Chapitre}
 % Les 2 prochaines ligens de code pour que le compteur des chapitre se remette à 0 por chaque nouvelle partie
 \makeatletter \@addtoreset{chapter}{part}\makeatother
 
@@ -128,18 +130,20 @@ Ce sera là qu'on va parler des étapes d'évolution avec les parties prenantes dan
 \chapter*{Liste des Acronymes}
 \begin{figure}[h]
 	\begin{tabular}{l l}
-		\textbf{2D}	& Deux Dimensions \\
-		\textbf{3D}	& Trois Dimensions \\ 
+		\textbf{2D}	    & Deux Dimensions \\
+		\textbf{3D}	    & Trois Dimensions \\ 
 		\textbf{ADAS}	& Advanced Driver Assistance Systems \\ 
+		\textbf{AIVI}	& Artificial Intelligence and Visual Interpretation \\ 
 		\textbf{AMCL}	& Adaptative Monte Carlo Localisation \\ 
 		\textbf{AHRS}	& Attitude \& Heading Reference System\\ 
 		\textbf{BoF}	& Bag of Features\\ 
 		\textbf{BoVW}	& Bag of Visual Words\\ 
 		\textbf{CPU}	& Central Processing Unit \\ 
 		\textbf{DSO}	& Direct Sparse Odometry \\ 
-		\textbf{DTAM}	&  Dense Tracking and Mapping \\ 
+		\textbf{DTAM}	& Dense Tracking and Mapping \\ 
 		\textbf{EKF}	& Extended Kalman Filter \\
-		\textbf{GM}	& Generalised Median \\
+		\textbf{GM} 	& Generalised Median \\
+		\textbf{GNSS}   & Géolocalisation et Navigation par un Système de Satellites \\
 		\textbf{GPS}	& Global Positioning System \\ 	
 		\textbf{ICP}	& Iterative Closest Point \\ 
 		\textbf{IDC}	& Iterative Dual Correspondences \\ 
@@ -148,17 +152,19 @@ Ce sera là qu'on va parler des étapes d'évolution avec les parties prenantes dan
 		\textbf{IML}	& Incremental Maximum Likelihood \\
 		\textbf{IMU}	& Inertial measurement unit \\ 	
 		\textbf{INS}	& Information Network System  \\ 	
-		\textbf{IR}	& Infra-Rouge \\ 
+		\textbf{IR}	    & Infra-Rouge \\ 
 		\textbf{IROS}	& International Conference on Intelligent Robots and Systems \\ 
 		\textbf{Kd tree}	& $k$-dimensional tree \\
-		\textbf{KF}	& Kalman Filter \\
+		\textbf{KF}	    & Kalman Filter \\
 		\textbf{KLD}	& KullBack-Leibler Divergence  \\ 
-		\textbf{ML-AMCL}	& MultiLayer Adaptative Monte Carlo Localisation  \\ 	
+		\textbf{ML-AMCL}	& MultiLayer Adaptative Monte Carlo Localisation  \\ 
+		
+		\textbf{LiDAR}	& Light Detection And Ranging \\ 
 		\textbf{LRF}	& Laser Range Finder \\ 
 		\textbf{LSD-SLAM}	& Large-Scale Direct Monocular SLAM \\ 	
 		\textbf{MATLAB}	& MATrix LABoratory  \\ 
 		\textbf{NDT}	& Normal Distributions Transform \\ 
-		\textbf{ORB-SLAM}	& Oriented FAST and Rotated BRIEF SLAM \\ 
+		\textbf{ORB-SLAM}	& Oriented fast and Rotated Brief SLAM \\ 
 		
 		
 	\end{tabular} 
@@ -231,7 +237,7 @@ La robotique de service désigne les robots qui rendent service à l'humain en se 
 %	\caption[VSLAM]{legende 6wila}
 %	\label{fig:2}
 %\end{figure}
-
+\renewcommand{\partname}{Chapitre}
 \part{Généralités sur les systèmes SLAM}
 \chapter{Inroduction}
 Ce premier chapitre sera une introduction au SLAM, et ses principaux algorithmes(f)
@@ -249,11 +255,11 @@ On a besoin d'une carte fiable pour se localiser, tandis qu'on a besoin de donné
 \chapter{Formulation}\label{sec:formulation}
 Le SLAM est composé d'un ensemble de méthodes permettant à un robot de construire une carte d'un environnement et en même temps de se localiser en utilisant cette carte. La trajectoire du véhicule et la position des amers dans la carte sont estimées au fur et à mesure, sans avoir besoin de connaissances a priori .
 
-Considérons un robot se déplaçant dans un environnement inconnu, en observant un certain nombre d'amers grâce à un capteur embarqué sur le robot. La figure 2.2.1 montre une illustration du problème.
+Considérons un robot se déplaçant dans un environnement inconnu, en observant un certain nombre d'amers grâce à un capteur embarqué sur le robot. La figure \ref{fig:2.2.3.1} montre une illustration du problème.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=9cm]{3}
-	\caption[L'idée de base du SLAM]{L'idée de base du SLAMmm}
+	\caption[L'idée de base du SLAM]{L'idée de base du SLAM}
 	\label{fig:2.2.3.1}
 \end{figure}
 \medskip
@@ -330,10 +336,7 @@ La carte de l'environnement peut aussi être représentée par une approche topolog
 La méthode de représentation directe de la carte de l'environnement est généralement adaptée à l'utilisation des capteurs Laser . Cette méthode utilise les données brutes des mesures du capteur pour représenter l'environnement sans aucune extraction d'amers ou de caractéristiques prédéfinies (lignes, coins, etc).
 
 Dans le cas d'un capteur laser, chaque mesure est constituée d'un ensemble de points d'impact du faisceau laser sur les objets de l'environnement. On peut ainsi construire une carte simplement en superposant les différents points de mesure. On obtient ainsi une représentation en nuage de points. La figure \ref{fig:} montre un exemple d'une carte en nuage
-de points.\begin{table}
-	
-	\caption{}
-\end{table}
+de points.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{9}
@@ -518,7 +521,7 @@ La figure \ref{fig:overallSlam} décrit un exemple de SLAM Overall ou complet qui
 D'une manière générale, il existe deux types de composants technologiques utilisés pour réaliser le SLAM. Le premier type est le traitement du signal des capteurs, y compris le traitement frontal, qui dépend largement des capteurs utilisés. Le deuxième type est l'optimisation du graphe de pose, y compris le traitement \textit{back end}, qui est indépendant du capteur. Dans ce mémoire on va se focaliser dans un premier temps sur la partie \textit{front end}, sur le traitement de signal des capteurs et en considérant la méthode de Pose Graph comme un moyen d'optimisation.
 
 \subsection{Font End}
-Afin de comprendre ce type de technologie appelée traitement frontal, nous prendrons l'exemple du Visual SLAM et Lidar SLAM, deux différentes méthodes d'aborder le SLAM.
+Afin de comprendre ce type de technologie appelée traitement frontal, nous prendrons l'exemple du Visual SLAM et LiDAR SLAM, deux différentes méthodes d'aborder le SLAM.
 
 \subsubsection{SLAM visuel}
 Comme son nom l'indique, le SLAM visuel (ou vSLAM) utilise des images acquises à partir d'appareils photo et d'autres capteurs d'image. Visual SLAM peut utiliser des caméras simples (caméras grand angle, fish-eye et sphériques), des caméras à \oe{}il composé (caméras stéréo et multi-caméras) et des caméras RVB-D (caméras de profondeur et ToF).\\
@@ -527,53 +530,66 @@ Visual SLAM peut être mis en \oe{}uvre à faible coût avec des caméras relativeme
 
 Le SLAM monoculaire est lorsque vSLAM utilise une seule caméra comme seul capteur, ce qui rend difficile la définition de la profondeur. Cela peut être résolu en détectant des marqueurs AR, des damiers ou d'autres objets connus dans l'image pour la localisation ou en fusionnant les informations de la caméra avec un autre capteur tel que des unités de mesure inertielle (IMU), qui peuvent mesurer des quantités physiques telles que la vitesse et l'orientation. La technologie liée au vSLAM comprend la structure à partir du mouvement (SfM), l'odométrie visuelle et l'ajustement des faisceaux.\\
 
-Les algorithmes Visual SLAM peuvent être globalement classés en deux catégories. Les méthodes creuses correspondent aux points caractéristiques des images et utilisent des algorithmes tels que PTAM et ORB-SLAM. Les méthodes denses utilisent la luminosité globale des images et utilisent des algorithmes tels que DTAM, LSD-SLAM, DSO et SVO.
+Les algorithmes Visual SLAM peuvent être globalement classés en deux catégories. Les méthodes creuses correspondent aux points caractéristiques des images et utilisent des algorithmes tels que PTAM et ORB-SLAM. Les méthodes denses utilisent la luminosité globale des images et utilisent des algorithmes tels que DTAM, LSD-SLAM, DSO et SVO.\\
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\linewidth]{13}
-	\caption{Structure du mouvement}
-	\label{fig:13}
-\end{figure}
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\linewidth]{12}
-	\caption[RGB-D SLAM]{Enregistrement de nuages de points pour RGB-D SLAM}
-	\label{fig:12}
+\begin{figure}[ht!]
+	\subfloat[\label{13}]{
+		\includegraphics[clip, width=0.48\textwidth]{13}}
+	\hspace{\fill}
+	\subfloat[\label{12}]{
+		\includegraphics[clip, width=0.48\textwidth]{12}}\\
+	\caption{\label{Vision}Vision SLAM : (a) Structure du mouvement; (b) Enregistrement de nuages de points pour RGB-D SLAM}
 \end{figure}
 
 \subsubsection{LiDAR SLAM}
-La détection et la télémétrie de la lumière (lidar) est une méthode qui utilise principalement un capteur laser (ou capteur de distance).\\
+La détection et la télémétrie de la lumière (LiDAR) est une méthode qui utilise principalement un capteur laser (ou capteur de distance).\\
 
-Par rapport aux caméras, ToF et autres capteurs, les lasers sont nettement plus précis et sont utilisés pour les applications avec des véhicules en mouvement à grande vitesse tels que les voitures autonomes et les drones. Les valeurs de sortie des capteurs laser sont généralement des données de nuages de points 2D (x, y) ou 3D (x, y, z). Le nuage de points du capteur laser fournit des mesures de distance de haute précision et fonctionne très efficacement pour la construction de cartes avec SLAM. Généralement, le mouvement est estimé séquentiellement en faisant correspondre les nuages de points. Le mouvement calculé (distance parcourue) est utilisé pour localiser le véhicule. Pour l'appariement de nuages de points lidar, des algorithmes de transformation itérative de point le plus proche (ICP) et de distribution normale (NDT) sont utilisés. Les cartes de nuages de points 2D ou 3D peuvent être représentées sous forme de carte quadrillée ou de carte voxel.\\
+Par rapport aux caméras, ToF et autres capteurs, les lasers sont nettement plus précis et sont utilisés pour les applications avec des véhicules en mouvement à grande vitesse tels que les voitures autonomes et les drones. Les valeurs de sortie des capteurs laser sont généralement des données de nuages de points 2D (x, y) ou 3D (x, y, z). Le nuage de points du capteur laser fournit des mesures de distance de haute précision et fonctionne très efficacement pour la construction de cartes avec SLAM. Généralement, le mouvement est estimé séquentiellement en faisant correspondre les nuages de points. Le mouvement calculé (distance parcourue) est utilisé pour localiser le véhicule. Pour l'appariement de nuages de points LiDAR, des algorithmes de transformation itérative de point le plus proche (ICP) et de distribution normale (NDT) sont utilisés. Les cartes de nuages de points 2D ou 3D peuvent être représentées sous forme de carte quadrillée ou de carte voxel.\\
 
-En revanche, les nuages de points ne sont pas aussi finement détaillés que les images en termes de densité et ne fournissent pas toujours des fonctionnalités suffisantes pour l'appariement. Par exemple, dans les endroits où il y a peu d'obstacles, il est difficile d'aligner les nuages de points et cela peut entraîner une perte de trace de l'emplacement du véhicule. De plus, la correspondance de nuages de points nécessite généralement une puissance de traitement élevée, il est donc nécessaire d'optimiser les processus pour améliorer la vitesse. En raison de ces défis, la localisation des véhicules autonomes peut impliquer la fusion d'autres résultats de mesure tels que l'odométrie des roues, le système mondial de navigation par satellite (GNSS) et les données IMU. Pour des applications telles que les robots d'entrepôt, le SLAM lidar 2D est couramment utilisé, tandis que le SLAM utilisant des nuages de points lidar 3D peut être utilisé pour les drones et le stationnement automatisé.
+En revanche, les nuages de points ne sont pas aussi finement détaillés que les images en termes de densité et ne fournissent pas toujours des fonctionnalités suffisantes pour l'appariement, encore moins en cas où on souhaiterait appliquer des fonctions d'AI qui permettraient de rajouter des informations à la carte telles que des données sémantiques. Par exemple, dans les endroits où il y a peu d'obstacles, il est difficile d'aligner les nuages de points et cela peut entraîner une perte de trace de l'emplacement du véhicule. De plus, la correspondance de nuages de points nécessite généralement une puissance de traitement élevée, il est donc nécessaire d'optimiser les processus pour améliorer la vitesse. En raison de ces défis, la localisation des véhicules autonomes peut impliquer la fusion d'autres résultats de mesure tels que l'odométrie des roues, le système mondial de navigation par satellite (GNSS) et les données IMU. Pour des applications telles que les robots d'entrepôt, le SLAM LiDAR 2D est couramment utilisé, tandis que le SLAM utilisant des nuages de points LiDAR 3D peut être utilisé pour les drones, le stationnement automatisé, ou les robots aspirateurs.\\
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\linewidth]{16}
-	\caption{SLAM avec LiDAR 2D}
-	\label{fig:16}
-\end{figure}
+Cela dit, de nos jours les capteurs LiDAR sont aux prémices d'une vulgarisation de masse, en effet, plusieurs marques de smartphones (Galaxy S20 ou iPhone 12 Pro)se sont vu embarquer des capteurs laser dans leurs dispositifs, permettant de faire des scans en 3D et en couleurs.\\
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\linewidth]{18}
-	\caption{SLAM avec 3D LiDAR}
-	\label{fig:18}
+Les capteurs Lidar intégrés aux nouveaux appareils téléphoniques peuvent être utilisés pour numériser des objets ou cartographier des pièces avec une rapidité surprenante. Ils ont une portée de balayage suffisant pour procéder à la télédétection d'objets ou de la plupart des pièces d'une maison. La télédétection étant le procédé qui consiste à mesurer un environnement à l?aide d?un scanner laser 3D ou d'un LiDAR capable de mesurer des millions de points en peu de temps, puis résolvant une opération trigonométrie nécessaire pour calculer la taille de n'importe quel objet, ainsi que sa distance. Il fonctionne à l'intérieur comme à l'extérieur et a une précision de l'ordre du photon et une vitesse de l'ordre de la nanoseconde.\\
+
+\begin{figure}[ht!]
+	\subfloat[\label{16}]{\includegraphics[clip, width=0.48\textwidth]{16}}
+	\hspace{\fill}
+	\subfloat[\label{18}]{
+		\includegraphics[clip, width=0.48\textwidth]{18}}
+	\caption{\label{LiDAR}LiDAR SLAM : (a) SLAM avec LiDAR 2D ; (b) SLAM avec 3D LiDAR}
 \end{figure}
 
 \subsubsection{Fusion}
-Depuis que le rendu des signaux GPS est surpassé dans les environnements \textit{indoor}, ou même en milieu urbain, plusieurs chercheurs se focalisent sur le développement d'algorithmes SLAM en utilisant des capteurs \textit{onboard (portables ?)} pour des robots ou d'autres dispositifs mobiles. De nos jours, les caméras sont des capteurs qui représentent une excellente alternative, appuyée par des facteurs de disponibilité et de moindre coût, ayant fait émergé ainsi le SLAM visuel. Les caméras RGB-D sont certes très disponibles, mais ne sont pas très \textit{on leur fait confiance, reliable, productives} dans le cas d'exposition à la lumière du soleil surtout si celle ci est \textit{puissante}, ces capteurs sont alors aveuglés par la lumière. Le télémètre est souvent considéré comme étant le capteur de cartographie le plus \textit{reliable}, mais il est bien trop énergivore, et \textit{bulky ?} et coûteux pour plusieurs dispositifs mobiles. les dispositifs électroniques, ou certains petits robots, sont contraints d'utiliser une caméra monoculaire notamment du aux contraintes mécaniques architecturales, ou à cause de la contrainte énergétique.
+Depuis que le rendu des signaux GPS est surpassé dans les environnements en intérieur (\textit{indoor}), ou même en milieu urbain, plusieurs chercheurs se focalisent sur le développement d'algorithmes SLAM en utilisant des capteurs embarqués pour des robots ou d'autres dispositifs mobiles. De nos jours, les caméras sont des capteurs qui représentent une excellente alternative, appuyée par des facteurs de disponibilité et de moindre coût, ayant fait émergé ainsi le SLAM visuel.\\
+
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=\linewidth]{fusion}
-	\caption[Exemple de Fusion]{Les entrées de la carte de fusion consistent en une carte 3D de basse qualité générée par un Slam Visuel Monoculaire, et carte prioritaire de haute qualitée gnrée par des méthodes de Lidar Slam. La fsion de cartes va corriger la carte 3D en  The inputs of our map fusion include a low-quality 3D map produced by a monocular visual SLAM, and a high-precision prior map generated by lidar SLAM other methods. The map fusion rectifies the 3D map by leveraging vertical planes commonly available in both maps and outputs a more accurate 3D map.}
+	\includegraphics[width=0.9\linewidth]{fusion}
+	\caption[Exemple de Fusion]{Les entrées de la carte de fusion consistent en une carte 3D de basse qualité générée par un SLAM Visuel Monoculaire, et carte prioritaire de haute qualité générée par des méthodes de LiDAR SLAM. La fusion de cartes va corriger la carte 3D en exploitant les plans verticaux qui sont généralement disponibles dans les deux cartes et génèrent en sortie une carte 3D davantage plus précise et plus proche de la réalité.}
 	\label{fig:fusion}
 \end{figure}
 
-Les algorithmes de Slam Visuel monoculaire génèrent souvent des cartes de basse qualité à cause des difficultés de mise à l'échelle et de \textit{drift} angulaire. Afin de répondre à cette problématique la fusion permet de générer des résultats à partir des deux méthodes qui se complémentent l'une l'autre, comme c'est le cas dans l'exemple de la figure \ref{fig:fusion}. Tout comme on peut effectuer la fusion avec d'autres cartes du même milieu, dans Google maps\texttrademark on trouve souvent des plans exterieurs de batisses\cite{fusion}.
+Les caméras RGB-D sont certes très disponibles, mais ne sont pas très fiables dans le cas d'exposition à la lumière du soleil surtout si celle ci est vive et éblouissante, ces capteurs sont alors aveuglés par la lumière.\\
+
+Le télémètre est souvent considéré comme étant le capteur de cartographie le plus fiable, mais il est bien trop énergivore, et volumineux (encombrant) et coûteux pour plusieurs dispositifs mobiles.\\ 
+
+Les dispositifs électroniques, ou certains petits robots, sont contraints d'utiliser une caméra monoculaire notamment du aux contraintes mécaniques architecturales, ou à cause de la contrainte énergétique.\\
+
+Les algorithmes de SLAM Visuel monoculaire génèrent souvent des cartes de basse qualité à cause des difficultés de mise à l'échelle et de \textit{drift} angulaire. Afin de répondre à cette problématique la fusion permet de générer des résultats à partir des deux méthodes qui se complémentent l'une l'autre, comme c'est le cas dans l'exemple de la figure \ref{fig:fusion}. Tout comme on peut effectuer la fusion avec d'autres cartes du même milieu, dans Google Maps\texttrademark on trouve souvent des plans extérieurs de bâtisses\cite{fusion}.\\
+
+Pour l'instant le LiDAR SLAM a prouvé sa supériorité face au vSLAM, que ce soit du point de vue précision, ou de vitesse, sans parler du fait qu'il n'ait pas besoin d'éclairage, mais les solutions basées uniquement sur la technologie LiDAR sont condamnés à la marginalisation dans le future, lorsque l'électronique aura défi les défis de lourdeur des données à traiter dans le cas du vSLAM, et quand des fonctionnalités plus intéressantes seront accessibles uniquement grâce au format imagé. À lors, le LiDAR représentera un outil d'optimisation une fois fusionné à la vision.\\
+
+\begin{figure}[ht!]
+	\centering
+	\subfloat[\label{dyson}]{\includegraphics[clip, width=0.20\textwidth]{dyson}}
+	\hspace{1cm}
+	\subfloat[\label{ozmo}]{
+		\includegraphics[clip, width=0.20\textwidth]{ozmo}}
+	\caption{\label{dyson_ozmo}Robots Aspirateurs : (a) le Dyson utilise la fusion LiDAR et Vision ; (b) l'Ecovas qui utilise la fusion de deux caméras}
+\end{figure}
+
+C'est ce qu'on peut déjà constater avec les aspirateurs intelligents, qui utilisent soit deux caméras, l'une pour cartographier le plafond et l'autre pour reconnaître les obstacles dans sa trajectoire (Dyson 360 Eye\texttrademark) ou qui utilisent un capteur LiDAR en tant qu'outil de navigation et de cartographie principal et une caméra permettant d'exploiter d'AIVI et de déterminer la nature des obstacles (Deebot Ozmo\texttrademark 960 de la marque Ecovacs) Que ce soit en LiDAR ou en vSLAM, l'avenir réside probablement dans la vision.\\
 \subsection{Back End}
 La partie \textit{back end} de SLAM rentre en jeu à partir du moment où on dispose de la pose relative, et qu'on a une base de donnée solide de scans issus d'un télémètre laser. Les scans, s'ils sont acceptés vont être incorporés das la structure de données du graphe de pose (voir section \ref{sec:graph-slam}), et la trajectoire consiste en une série de n\oe{}uds représentants les positions estimées du robots, tel que chaque pose correspond à un scan qui décrit l'environnement.\\
 
@@ -761,24 +777,29 @@ La MLE reste une solution intéressante grâce à sa simplicité et son efficacité e
 \definecolor{Gray}{gray}{0.85}
 \definecolor{GrayDark}{gray}{0.5}
 \arrayrulecolor{GrayDark}
-	
+
+\definecolor{beau}{HTML}{57B0B1}
+
+\definecolor{beauc}{HTML}{71D7D8}
+
+%\rowcolor[HTML]{beau}{html}{#c3244e}
 \begin{tabular}{|l|l|l|}
 	%\caption{Comparaison entres les méthodes de SLAM}
 	\hline 
-	\rowcolor{Gray}
-	\cellcolor{Gray} & Avantages & Inconvénients \\ 
+	\rowcolor[HTML]{57B0B1}
+	\cellcolor{beau} & Avantages & Inconvénients \\ 
 	\hline 
-	\cellcolor{Gray} Filtre de Kalman &  &  \\ 
+	\cellcolor{beauc} Filtre de Kalman &  &  \\ 
 	\hline 
-	\cellcolor{Gray} Filtre Particulaire &  &  \\ 
+	\cellcolor{beau} Filtre Particulaire &  &  \\ 
 	\hline 
-	\cellcolor{Gray} IML &  &  \\ 
+	\cellcolor{beauc} IML &  &  \\ 
 	\hline 
-	\cellcolor{Gray} Scan Matching &  &  \\ 
+	\cellcolor{beau} Scan Matching &  &  \\ 
 	\hline 
-	\cellcolor{Gray} Scan Matching + Pose Graph &  &  \\ 
+	\cellcolor{beauc} Scan Matching + Pose Graph &  &  \\ 
 	\hline 
-	\cellcolor{Gray} &  &  \\ 
+	\cellcolor{beau} &  &  \\ 
 	\hline 
 \end{tabular} 
 % Reste à developper la comparaison monte catle gmapping ekf ukf kf posegraph 
@@ -1209,7 +1230,7 @@ As we want to work with centered data and we will be iteratively centering the d
 13 FastAndRobust
 Iterative Registered Least Sqaure
 
-L'ICP classqiue mesure l'erreur d'alignement en utilisant la distance $ l_2 $, qui pénalise les larges déviations de n'importe quel point du nuage de point source $ P $ au nuage de point $ Q $. Cette méthode permet effectivement de parvenir à des résultats explicites (dits aussi en forme fermée) dans l'étape de l'alignement, mais peut tout de même amener à des appareillments erronés en cas de 
+L'ICP classqiue mesure l'erreur d'alignement en utilisant la distance $ l_2 $, qui pénalise les larges déviations de n'importe quel point du nuage de point source $ P $ au nuage de point $ Q $. Cette méthode permet effectivement de parvenir à des résultats explicites (dits aussi en forme fermée) dans l'étape de l'alignement, mais peut tout de même amener à des appareillements erronés en cas de 
 \section{ICP Point à Plan}
 
 \begin{figure}[h]
@@ -1221,7 +1242,7 @@ L'ICP classqiue mesure l'erreur d'alignement en utilisant la distance $ l_2 $, q
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=width=0.48]{icp7}
+	\includegraphics[width=0.48\textwidth]{icp7}
 	\caption[bla]{blablabla}
 	\label{fig:icp7}
 \end{figure}
@@ -1544,7 +1565,7 @@ figure Occupancy Binary Grid
  (exempleScanMatching)\\
 1 => NDT\\
 3 => ICP\\
-2 => Full Slam (Lidar SLAM)\\
+2 => Full Slam (LiDAR SLAM)\\
 4 => odometrie
 \begin{figure}[h]
 	\centering
